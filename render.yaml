@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: auto-pilot-ai
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: standard
+    healthCheckPath: /api/info
+    healthCheckIntervalSeconds: 30
+    numInstances: 1
+    envVars:
+      - key: PYTHONUNBUFFERED
+        value: "1"
+      - key: PYTHONDONTWRITEBYTECODE
+        value: "1"
+      - key: APP_ENV
+        value: production
+
+databases:
+  - name: postgres-db
+    databaseName: agent_os
+    user: agent_os_user
+    plan: standard
+
+connections:
+  - service: auto-pilot-ai
+    database: postgres-db
+    envVarPrefix: DATABASE

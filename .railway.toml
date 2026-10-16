@@ -1,0 +1,15 @@
+[build]
+build-command = "pip install -r requirements.txt"
+
+[deploy]
+start-command = "uvicorn app:app --host 0.0.0.0 --port $PORT --log-level info"
+healthcheck-path = "/api/info"
+healthcheck-interval-seconds = 30
+
+[env]
+# 基本環境變數
+PYTHONUNBUFFERED = "1"
+PYTHONDONTWRITEBYTECODE = "1"
+
+# 生產模式（可選）
+# APP_ENV = "production"
