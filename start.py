@@ -41,7 +41,7 @@ def check_deps():
 
 def serve():
     """啟動 API 服務器"""
-    print("啟動 MVP Agent OS 服務器...")
+    print("啟動 StorePilot AI 服務器...")
     print("   API 文檔: http://localhost:8000/docs")
     print("   按 Ctrl+C 停止")
     print("")

@@ -1,5 +1,5 @@
 """
-MVP Agent OS — Configuration
+StorePilot AI — Configuration
 
 基於 Polsia 逆向分析的最小可行原型配置
 """

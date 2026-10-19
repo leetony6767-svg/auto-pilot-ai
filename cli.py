@@ -7,7 +7,7 @@ from loguru import logger
 from app import app
 import uvicorn
 
-cli = typer.Typer(help="MVP Agent OS — 命令行工具")
+cli = typer.Typer(help="StorePilot AI — 命令行工具")
 
 
 @cli.command()
@@ -17,7 +17,7 @@ def serve(
     reload: bool = True,
 ):
     """啟動 API 服務器"""
-    logger.info(f"啟動 MVP Agent OS 服務器: http://{host}:{port}")
+    logger.info(f"啟動 StorePilot AI 服務器: http://{host}:{port}")
     logger.info(f"API 文檔: http://{host}:{port}/docs")
     logger.info(f"重載模式: {'啟用' if reload else '禁用'}")
 

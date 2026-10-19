@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: auto-pilot-ai
+    name: storepilot-ai
     env: docker
     dockerfilePath: ./Dockerfile
     plan: standard
@@ -22,6 +22,6 @@ databases:
     plan: standard
 
 connections:
-  - service: auto-pilot-ai
+  - service: storepilot-ai
     database: postgres-db
     envVarPrefix: DATABASE

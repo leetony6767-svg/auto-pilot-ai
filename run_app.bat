@@ -1,9 +1,9 @@
 @echo off
-title MVP Agent OS - Startup
+title StorePilot AI - Startup
 cd /d "C:\Users\master\WorkBuddy AI\rea逆向的特定功能\mvp-agent-os"
 
 echo ========================================
-echo   MVP Agent OS One-Click Launcher
+echo   StorePilot AI One-Click Launcher
 echo ========================================
 echo.
 
@@ -34,7 +34,7 @@ echo [OK] Port 8000 ready
 echo.
 
 echo [3/3] Starting API server...
-start "MVP Agent OS Server" cmd /c "python -m uvicorn app:app --host 0.0.0.0 --port 8000 --log-level warning"
+start "StorePilot AI Server" cmd /c "python -m uvicorn app:app --host 0.0.0.0 --port 8000 --log-level warning"
 timeout /t 4 /nobreak >nul
 echo [OK] Server started on port 8000
 echo.

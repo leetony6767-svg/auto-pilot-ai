@@ -20,8 +20,8 @@ from agents.orchestrator import OrchestratorAgent
 from config.settings import settings
 
 app = FastAPI(
-    title="MVP Agent OS",
-    description="基於 Polsia 逆向分析的最小可行 AI Agent 營運系統",
+    title="StorePilot AI",
+    description="AI 在你睡覺時替你運營商店的最小可行原型",
     version="0.1.0",
 )
 
@@ -106,9 +106,9 @@ async def broadcast(state: BusinessState):
 @app.get("/api/info")
 async def root():
     return {
-        "service": "MVP Agent OS",
+        "service": "StorePilot AI",
         "version": "0.1.0",
-        "description": "AI 在你睡覺時替你運營公司的最小可行原型",
+        "description": "AI 在你睡覺時替你運營商店的最小可行原型",
         "endpoints": {
             "POST /api/run": "啟動自動化工作流",
             "GET /api/status/{user_id}": "查詢工作流狀態",
