@@ -1268,16 +1268,16 @@
     <!-- 頂部通知走馬燈 -->
     <div class="ticker-bar">
         <div class="ticker-content">
-            <span>🚀 StorePilot AI 系統就緒 — 已為 12,847 家公司提供 AI 自動化營運服務</span>
-            <span>📊 今日新增：3 個新商業構想推薦</span>
-            <span>⚡ Agent 平均響應時間：&lt; 2.3 秒</span>
-            <span>💰 平台營收抽成：20% | 用戶留存：80%</span>
-            <span>🔒 所有外部操作需人工審批</span>
-            <span>🚀 StorePilot AI 系統就緒 — 已為 12,847 家公司提供 AI 自動化營運服務</span>
-            <span>📊 今日新增：3 個新商業構想推薦</span>
-            <span>⚡ Agent 平均響應時間：&lt; 2.3 秒</span>
-            <span>💰 平台營收抽成：20% | 用戶留存：80%</span>
-            <span>🔒 所有外部操作需人工審批</span>
+            <span data-i18n="ticker.message1">🚀 StorePilot AI 系統就緒 — 已為 12,847 家公司提供 AI 自動化營運服務</span>
+            <span data-i18n="ticker.message2">📊 今日新增：3 個新商業構想推薦</span>
+            <span data-i18n="ticker.message3">⚡ Agent 平均響應時間：&lt; 2.3 秒</span>
+            <span data-i18n="ticker.message4">💰 平台營收抽成：20% | 用戶留存：80%</span>
+            <span data-i18n="ticker.message5">🔒 所有外部操作需人工審批</span>
+            <span data-i18n="ticker.message1">🚀 StorePilot AI 系統就緒 — 已為 12,847 家公司提供 AI 自動化營運服務</span>
+            <span data-i18n="ticker.message2">📊 今日新增：3 個新商業構想推薦</span>
+            <span data-i18n="ticker.message3">⚡ Agent 平均響應時間：&lt; 2.3 秒</span>
+            <span data-i18n="ticker.message4">💰 平台營收抽成：20% | 用戶留存：80%</span>
+            <span data-i18n="ticker.message5">🔒 所有外部操作需人工審批</span>
         </div>
     </div>
 
@@ -1292,23 +1292,45 @@
             <span>系統運行中</span>
         </div>
         <div class="navbar-actions">
-            <a href="http://localhost:8000/docs" target="_blank" class="btn btn-secondary">API 文檔</a>
-            <button class="btn btn-secondary" onclick="toggleHunter()">🎯 獵客引擎</button>
-            <button class="btn btn-secondary" onclick="toggleReverse()">🔬 逆向分析</button>
-            <button class="btn btn-primary" onclick="discoverIdeas()">💡 發現構想</button>
+        <!-- 語言切換器 -->
+        <div class="lang-switcher">
+            <button class="lang-button" onclick="toggleLangDropdown()">
+                <span id="current-lang-flag">🇹🇼</span>
+                <span id="current-lang-name">繁體中文</span>
+                <span>▼</span>
+            </button>
+            <div class="lang-dropdown" id="langDropdown">
+                <div class="lang-option active" onclick="setLanguage('zh-TW')" data-lang="zh-TW">
+                    <span class="lang-flag">🇹🇼</span>
+                    <span class="lang-name">繁體中文</span>
+                </div>
+                <div class="lang-option" onclick="setLanguage('en')" data-lang="en">
+                    <span class="lang-flag">🇺🇸</span>
+                    <span class="lang-name">English</span>
+                </div>
+                <div class="lang-option" onclick="setLanguage('id')" data-lang="id">
+                    <span class="lang-flag">🇮🇩</span>
+                    <span class="lang-name">Bahasa Indonesia</span>
+                </div>
+            </div>
+        </div>
+        <a href="http://localhost:8000/docs" target="_blank" class="btn btn-secondary" data-i18n="navbar.docs">API 文檔</a>
+        <button class="btn btn-secondary" onclick="toggleHunter()" data-i18n="navbar.hunter">🎯 獵客引擎</button>
+        <button class="btn btn-secondary" onclick="toggleReverse()" data-i18n="navbar.reverse">🔬 逆向分析</button>
+        <button class="btn btn-primary" onclick="discoverIdeas()" data-i18n="navbar.ideas">💡 發現構想</button>
         </div>
     </nav>
 
     <!-- Hero 區塊 -->
     <section class="hero">
-        <p class="hero-label">AI THAT RUNS YOUR COMPANY WHILE YOU SLEEP</p>
-        <h1 class="hero-title">在你睡覺時<br>替你運營公司的 AI</h1>
-        <p class="hero-subtitle">像 hire 一個員工一樣簡單，但從未疲倦、從未請假。<br>從構想驗證到自動營運，一站式完成。</p>
+        <p class="hero-label" data-i18n="hero.label">AI THAT RUNS YOUR COMPANY WHILE YOU SLEEP</p>
+        <h1 class="hero-title" data-i18n="hero.title">在你睡覺時<br>替你運營公司的 AI</h1>
+        <p class="hero-subtitle" data-i18n="hero.subtitle">像 hire 一個員工一樣簡單，但從未疲倦、從未請假。<br>從構想驗證到自動營運，一站式完成。</p>
         <div class="hero-actions">
-            <button class="btn btn-primary" onclick="scrollToControl()" style="padding: 1rem 2rem; font-size: 1rem;">
+            <button class="btn btn-primary" onclick="scrollToControl()" style="padding: 1rem 2rem; font-size: 1rem;" data-i18n="hero.start">
                 ▶️ 開始使用
             </button>
-            <button class="btn btn-outline" onclick="discoverIdeas()" style="padding: 1rem 2rem; font-size: 1rem;">
+            <button class="btn btn-outline" onclick="discoverIdeas()" style="padding: 1rem 2rem; font-size: 1rem;" data-i18n="hero.demo">
                 💡 探索商業構想
             </button>
         </div>
@@ -1317,70 +1339,70 @@
     <!-- Agent 狀態區 -->
     <section class="section">
         <div class="section-header">
-            <p class="section-label">Your Team</p>
-            <h2 class="section-title">你的 AI 團隊</h2>
-            <p class="section-desc">每個 Agent 都有明確職責，所有外部操作需人工審批</p>
+            <p class="section-label" data-i18n="team.label">YOUR TEAM</p>
+            <h2 class="section-title" data-i18n="team.title">你的 AI 團隊</h2>
+            <p class="section-desc" data-i18n="team.desc">每個 Agent 都有明確職責，所有外部操作需人工審批</p>
         </div>
         <div class="agents-grid" id="agentsGrid">
             <div class="agent-card">
                 <div class="agent-card-header">
                     <div class="agent-icon">💡</div>
                     <div class="agent-info">
-                        <h3>創意發現 Agent</h3>
-                        <p>商業構想推薦</p>
+                        <h3 data-i18n="agent.idea.title">創意發現 Agent</h3>
+                        <p data-i18n="agent.idea.desc">商業構想推薦</p>
                     </div>
                 </div>
-                <span class="agent-status idle" id="agent-idea">就緒</span>
+                <span class="agent-status idle" id="agent-idea" data-i18n="status.idle">就緒</span>
             </div>
             <div class="agent-card">
                 <div class="agent-card-header">
                     <div class="agent-icon">🎯</div>
                     <div class="agent-info">
-                        <h3>規劃 Agent (CEO)</h3>
-                        <p>商業執行計劃</p>
+                        <h3 data-i18n="agent.planner.title">規劃 Agent (CEO)</h3>
+                        <p data-i18n="agent.planner.desc">商業執行計劃</p>
                     </div>
                 </div>
-                <span class="agent-status idle" id="agent-planner">就緒</span>
+                <span class="agent-status idle" id="agent-planner" data-i18n="status.idle">就緒</span>
             </div>
             <div class="agent-card">
                 <div class="agent-card-header">
                     <div class="agent-icon">💻</div>
                     <div class="agent-info">
-                        <h3>技術 Agent</h3>
-                        <p>網站開發部署</p>
+                        <h3 data-i18n="agent.code.title">技術 Agent</h3>
+                        <p data-i18n="agent.code.desc">網站開發部署</p>
                     </div>
                 </div>
-                <span class="agent-status idle" id="agent-code">就緒</span>
+                <span class="agent-status idle" id="agent-code" data-i18n="status.idle">就緒</span>
             </div>
             <div class="agent-card">
                 <div class="agent-card-header">
                     <div class="agent-icon">📢</div>
                     <div class="agent-info">
-                        <h3>營銷 Agent</h3>
-                        <p>社媒內容生成</p>
+                        <h3 data-i18n="agent.marketing.title">營銷 Agent</h3>
+                        <p data-i18n="agent.marketing.desc">社媒內容生成</p>
                     </div>
                 </div>
-                <span class="agent-status idle" id="agent-marketing">就緒</span>
+                <span class="agent-status idle" id="agent-marketing" data-i18n="status.idle">就緒</span>
             </div>
             <div class="agent-card">
                 <div class="agent-card-header">
                     <div class="agent-icon">🤝</div>
                     <div class="agent-info">
-                        <h3>獲客 Agent</h3>
-                        <p>銷售郵件發送</p>
+                        <h3 data-i18n="agent.outreach.title">獲客 Agent</h3>
+                        <p data-i18n="agent.outreach.desc">銷售郵件發送</p>
                     </div>
                 </div>
-                <span class="agent-status idle" id="agent-outreach">就緒</span>
+                <span class="agent-status idle" id="agent-outreach" data-i18n="status.idle">就緒</span>
             </div>
             <div class="agent-card">
                 <div class="agent-card-header">
                     <div class="agent-icon">💰</div>
                     <div class="agent-info">
-                        <h3>財務 Agent</h3>
-                        <p>營收分潤計算</p>
+                        <h3 data-i18n="agent.finance.title">財務 Agent</h3>
+                        <p data-i18n="agent.finance.desc">營收分潤計算</p>
                     </div>
                 </div>
-                <span class="agent-status idle" id="agent-finance">就緒</span>
+                <span class="agent-status idle" id="agent-finance" data-i18n="status.idle">就緒</span>
             </div>
         </div>
     </section>
@@ -1641,9 +1663,93 @@
         <div class="loading-spinner"></div>
     </div>
 
+    <!-- 多語言支援腳本 -->
+    <script src="i18n.js"></script>
+
     <script>
         const API_BASE = 'http://localhost:8000';
         let currentIdeas = [];
+
+        // ═══════════════════════════════════════════════════════════════
+        // 多語言切換功能
+        // ═══════════════════════════════════════════════════════════════
+
+        // 語言配置
+        const langConfig = {
+            "zh-TW": { flag: "🇹🇼", name: "繁體中文", dir: "ltr" },
+            "en": { flag: "🇺🇸", name: "English", dir: "ltr" },
+            "id": { flag: "🇮🇩", name: "Bahasa Indonesia", dir: "ltr" }
+        };
+
+        // 應用翻譯
+        function applyTranslations(lang) {
+            // 更新所有帶有 data-i18n 屬性的元素
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                const translation = translations[lang]?.[key];
+                if (translation) {
+                    if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                        element.placeholder = translation;
+                    } else {
+                        element.innerHTML = translation;
+                    }
+                }
+            });
+
+            // 更新 HTML lang 屬性
+            document.documentElement.lang = lang === "zh-TW" ? "zh-Hant" : lang;
+
+            // 更新頁面標題
+            const titleMap = {
+                "zh-TW": "StorePilot AI — AI 在你睡覺時替你運營商店",
+                "en": "StorePilot AI — AI runs your store while you sleep",
+                "id": "StorePilot AI — AI mengoperasikan toko Anda saat Anda tidur"
+            };
+            document.getElementById("page-title").textContent = titleMap[lang];
+
+            // 更新語言按鈕顯示
+            const config = langConfig[lang];
+            if (config) {
+                document.getElementById("current-lang-flag").textContent = config.flag;
+                document.getElementById("current-lang-name").textContent = config.name;
+            }
+
+            // 更新 active 狀態
+            document.querySelectorAll('.lang-option').forEach(option => {
+                option.classList.toggle('active', option.getAttribute('data-lang') === lang);
+            });
+        }
+
+        // 切換語言
+        function setLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem("storepilot-lang", lang);
+            applyTranslations(lang);
+            closeLangDropdown();
+        }
+
+        // 切換下拉選單
+        function toggleLangDropdown() {
+            const dropdown = document.getElementById("langDropdown");
+            dropdown.classList.toggle("show");
+        }
+
+        // 關閉下拉選單
+        function closeLangDropdown() {
+            const dropdown = document.getElementById("langDropdown");
+            dropdown.classList.remove("show");
+        }
+
+        // 點擊外部關閉下拉選單
+        document.addEventListener('click', function(event) {
+            const switcher = document.querySelector('.lang-switcher');
+            if (switcher && !switcher.contains(event.target)) {
+                closeLangDropdown();
+            }
+        });
+
+        // 初始化語言
+        let currentLang = localStorage.getItem("storepilot-lang") || "zh-TW";
 
         // 更新 Agent 狀態
         function setAgentStatus(agent, status, text) {
