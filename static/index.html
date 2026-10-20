@@ -1952,7 +1952,7 @@
             
             try {
                 const response = await fetch(`${API_BASE}/api/info`, { 
-                    method: 'HEAD',
+                    method: 'GET',
                     signal: AbortSignal.timeout(3000)
                 });
                 
