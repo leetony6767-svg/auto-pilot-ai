@@ -1291,6 +1291,19 @@
                 <input type="text" class="form-input" id="userId" placeholder="例如：zhang-san" value="demo-user">
             </div>
             <div class="form-group">
+                <label class="form-label" data-i18n="control.profit_mode">獲利模式</label>
+                <select class="form-input" id="profitMode" style="width: 100%;">
+                    <option value="">全部模式（自動推薦）</option>
+                    <option value="e-commerce">① 電商自動化</option>
+                    <option value="content-marketing">② 內容營銷</option>
+                    <option value="b2b-sales">③ B2B 獲客開發</option>
+                    <option value="digital-products">④ 數位產品</option>
+                    <option value="data-analysis">⑤ 數據分析</option>
+                    <option value="task-automation">⑥ 任務自動化</option>
+                </select>
+                <p class="form-hint" data-i18n="control.profit_mode_hint">選擇你想執行的獲利模式，或留空讓 AI 自動推薦</p>
+            </div>
+            <div class="form-group">
                 <label class="form-label" data-i18n="control.business_idea">商業構想描述</label>
                 <textarea class="form-input" id="businessIdea" placeholder="描述你想创立的業務，或點擊「發現構想」让我们帮你推薦..."></textarea>
                 <p class="form-hint" data-i18n="control.hint">💡 沒有想法？點擊導航栏的「💡 發現構想」按鈕</p>
@@ -1516,6 +1529,8 @@
                 "control.user_id": "你的身份標識",
                 "control.business_idea": "商業構想描述",
                 "control.hint": "💡 沒有想法？點擊導航栏的「💡 發現構想」按鈕",
+                "control.profit_mode": "獲利模式",
+                "control.profit_mode_hint": "選擇你想執行的獲利模式，或留空讓 AI 自動推薦",
                 "log.waiting": "系统就緒，等待指令...",
                 "ticker.message1": "🚀 StorePilot AI 系统就緒 — 已为 12,847 家公司提供 AI 自动化运营服务",
                 "ticker.message2": "📊 今日新增：3 个新商業構想推薦",
@@ -1579,6 +1594,8 @@
                 "control.user_id": "Your Identity",
                 "control.business_idea": "Business Idea Description",
                 "control.hint": "💡 No idea? Click the 「💡 Discover Ideas」 button in the navbar",
+                "control.profit_mode": "Profit Mode",
+                "control.profit_mode_hint": "Select the revenue model you want to run, or leave empty for AI recommendation",
                 "log.waiting": "System ready, waiting for instructions...",
                 "ticker.message1": "🚀 StorePilot AI System Ready — Serving 12,847 companies with AI automation",
                 "ticker.message2": "📊 Today: 3 new business ideas added",
@@ -1642,6 +1659,8 @@
                 "control.user_id": "Identitasmu",
                 "control.business_idea": "Deskripsi Ide Bisnis",
                 "control.hint": "💡 Tidak ada ide? Klik tombol 「💡 Temukan Ide」 di navbar",
+                "control.profit_mode": "Mode Keuntungan",
+                "control.profit_mode_hint": "Pilih model pendapatan yang ingin kamu jalankan, atau kosongkan untuk rekomendasi AI",
                 "log.waiting": "Sistem siap, menunggu instruksi...",
                 "ticker.message1": "🚀 Sistem StorePilot AI Siap — Melayani 12,847 perusahaan dengan automasi AI",
                 "ticker.message2": "📊 Hari ini: 3 ide bisnis baru ditambahkan",
@@ -1804,15 +1823,21 @@
         // 發現商業構想
         async function discoverIdeas() {
             const overlay = document.getElementById('loadingOverlay');
+            const profitMode = document.getElementById('profitMode')?.value || '';
+
             overlay.classList.add('visible');
             setAgentStatus('idea', 'active', '工作中...');
             addLog('idea_discovery', 'info', '开始發現商業構想...');
 
             try {
-                const response = await fetch(`${API_BASE}/api/ideas?count=3`);
+                let url = `${API_BASE}/api/ideas?count=3`;
+                if (profitMode) {
+                    url += `&profit_mode=${profitMode}`;
+                }
+                const response = await fetch(url);
                 const data = await response.json();
                 currentIdeas = data.ideas;
-                renderIdeas(data.ideas);
+                renderIdeas(data.ideas, data.profit_modes);
                 addLog('idea_discovery', 'success', `已發現 ${data.ideas.length} 个商業構想`);
                 setAgentStatus('idea', 'idle', '完成');
             } catch (error) {
@@ -1824,16 +1849,19 @@
         }
 
         // 渲染構想卡片
-        function renderIdeas(ideas) {
+        function renderIdeas(ideas, profit_modes) {
             const container = document.getElementById('ideasContainer');
             const section = document.getElementById('ideasSection');
 
-            container.innerHTML = ideas.map((idea, index) => `
+            container.innerHTML = ideas.map((idea, index) => {
+                const profitLabel = idea.profit_mode_name || idea.profit_mode || '';
+                return `
                 <div class="idea-card">
                     <div class="idea-header">
                         <h3 class="idea-title">${idea.title}</h3>
                         <span class="idea-difficulty ${idea.difficulty}">${idea.difficulty.toUpperCase()}</span>
                     </div>
+                    ${profitLabel ? `<div class="idea-profit-mode">${profitLabel}</div>` : ''}
                     <p class="idea-description">${idea.description}</p>
                     <div class="idea-metrics">
                         <div class="idea-metric">
@@ -1857,7 +1885,7 @@
                         <button class="btn btn-secondary" onclick="copyIdea(${index})">📋 复制详情</button>
                     </div>
                 </div>
-            `).join('');
+            `}).join('');
 
             section.style.display = 'block';
             section.scrollIntoView({ behavior: 'smooth' });
@@ -1886,6 +1914,7 @@
         async function runDryRun() {
             const userId = document.getElementById('userId').value;
             const businessIdea = document.getElementById('businessIdea').value;
+            const profitMode = document.getElementById('profitMode')?.value || '';
 
             if (!businessIdea) {
                 alert('请先輸入商業構想，或點擊「發現構想」让我们帮你推薦');
@@ -1902,12 +1931,15 @@
 
             addLog('system', 'info', `啟動工作流 - 用戶: ${userId}`);
             addLog('system', 'info', `商業構想: ${businessIdea.substring(0, 50)}...`);
+            if (profitMode) {
+                addLog('system', 'info', `獲利模式: ${profitMode}`);
+            }
 
             try {
                 const response = await fetch(`${API_BASE}/api/run`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ user_id: userId, business_idea: businessIdea, dry_run: true })
+                    body: JSON.stringify({ user_id: userId, business_idea: businessIdea, dry_run: true, profit_mode: profitMode })
                 });
 
                 if (!response.ok) {

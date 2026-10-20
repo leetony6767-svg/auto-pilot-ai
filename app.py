@@ -55,6 +55,7 @@ class BusinessInput(BaseModel):
     user_id: str
     business_idea: str
     dry_run: bool = False  # 乾跑模式：只生成草稿，不實際部署/發送
+    profit_mode: Optional[str] = None  # 獲利模式：e-commerce, content-marketing, b2b-sales, digital-products, data-analysis, task-automation
 
 
 class ApprovalAction(BaseModel):
@@ -133,6 +134,7 @@ async def run_workflow(input_data: BusinessInput):
     initial_state: BusinessState = {
         "user_id": input_data.user_id,
         "business_idea": input_data.business_idea,
+        "profit_mode": input_data.profit_mode,  # 獲利模式
         "business_plan": {},
         "landing_page_code": "",
         "deployment_url": "",
@@ -215,18 +217,19 @@ async def get_cost_summary():
 
 
 @app.get("/api/ideas")
-async def get_business_ideas(count: int = 3, category: Optional[str] = None):
+async def get_business_ideas(count: int = 3, category: Optional[str] = None, profit_mode: Optional[str] = None):
     """
     發現並推薦商業構想
 
     參數：
     - count: 推薦數量（1-6），默認 3
     - category: 可選分類篩選（如 "FinTech", "Media", "B2B"）
+    - profit_mode: 可選獲利模式（e-commerce, content-marketing, b2b-sales, digital-products, data-analysis, task-automation）
     """
     from agents.idea_discovery_agent import IdeaDiscoveryAgent
 
     agent = IdeaDiscoveryAgent()
-    ideas = await agent.discover_ideas(count=count, category=category)
+    ideas = await agent.discover_ideas(count=count, category=category, profit_mode=profit_mode)
     stats = agent.get_stats()
 
     return {
@@ -234,6 +237,7 @@ async def get_business_ideas(count: int = 3, category: Optional[str] = None):
         "stats": stats,
         "total_available": stats["total_ideas_available"],
         "categories": stats["categories"],
+        "profit_modes": stats["profit_modes"],
     }
 
 
