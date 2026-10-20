@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StorePilot AI — AI 在你睡覺時替你運營商店</title>
+    <title>StorePilot AI — AI 在你睡觉时替你运营商店</title>
     <style>
         /* ═══════════════════════════════════════════════════════════════
-           設計主題：Polsia 高端商業風格
-           黑底 + 白字 + 金色點綴 + 極簡排版
+           设计主题：Polsia 高端商业风格
+           黑底 + 白字 + 金色点缀 + 极简排版
            ═══════════════════════════════════════════════════════════════ */
         :root {
             --black: #0a0a0a;
@@ -45,7 +45,7 @@
         }
 
         /* ═══════════════════════════════════════════════════════════════
-           頂部通知走馬燈
+           顶部通知走马灯
            ═══════════════════════════════════════════════════════════════ */
         .ticker-bar {
             background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 100%);
@@ -73,7 +73,7 @@
         }
 
         /* ═══════════════════════════════════════════════════════════════
-           導航列
+           导航列
            ═══════════════════════════════════════════════════════════════ */
         .navbar {
             background: rgba(10, 10, 10, 0.95);
@@ -177,18 +177,80 @@
             background: var(--gray-800);
         }
 
-        .btn-outline {
-            background: transparent;
-            color: var(--gold);
-            border: 1px solid var(--gold);
+        /* ═══════════════════════════════════════════════════════════════
+           语言切换器样式
+           ═══════════════════════════════════════════════════════════════ */
+        .lang-switcher {
+            position: relative;
         }
 
-        .btn-outline:hover {
+        .lang-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            background: var(--gray-800);
+            border: 1px solid var(--gray-700);
+            border-radius: 6px;
+            color: var(--white);
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+        }
+
+        .lang-button:hover {
+            border-color: var(--gold);
+        }
+
+        .lang-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 0.5rem;
+            background: var(--black-card);
+            border: 1px solid var(--gray-700);
+            border-radius: 8px;
+            padding: 0.5rem 0;
+            min-width: 180px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            z-index: 200;
+        }
+
+        .lang-dropdown.show {
+            display: block;
+        }
+
+        .lang-option {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.625rem 1rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            color: var(--gray-300);
+        }
+
+        .lang-option:hover {
+            background: var(--gray-800);
+            color: var(--white);
+        }
+
+        .lang-option.active {
+            color: var(--gold);
             background: rgba(212, 175, 55, 0.1);
         }
 
+        .lang-flag {
+            font-size: 1.25rem;
+        }
+
+        .lang-name {
+            font-size: 0.875rem;
+        }
+
         /* ═══════════════════════════════════════════════════════════════
-           Hero 區塊
+           Hero 区块
            ═══════════════════════════════════════════════════════════════ */
         .hero {
             padding: 6rem 2rem 4rem;
@@ -234,7 +296,7 @@
         }
 
         /* ═══════════════════════════════════════════════════════════════
-           區塊通用樣式
+           区块通用样式
            ═══════════════════════════════════════════════════════════════ */
         .section {
             padding: 4rem 2rem;
@@ -269,7 +331,7 @@
         }
 
         /* ═══════════════════════════════════════════════════════════════
-           Agent 狀態卡片区
+           Agent 状态卡片区
            ═══════════════════════════════════════════════════════════════ */
         .agents-grid {
             display: grid;
@@ -349,7 +411,7 @@
         }
 
         /* ═══════════════════════════════════════════════════════════════
-           商業構想卡片
+           商业构想卡片
            ═══════════════════════════════════════════════════════════════ */
         .ideas-grid {
             display: grid;
@@ -543,7 +605,7 @@
         }
 
         /* ═══════════════════════════════════════════════════════════════
-           審計日誌
+           审计日志
            ═══════════════════════════════════════════════════════════════ */
         .log-panel {
             background: var(--black-card);
@@ -616,7 +678,7 @@
         }
 
         /* ═══════════════════════════════════════════════════════════════
-           付款資訊區塊
+           付款信息区块
            ═══════════════════════════════════════════════════════════════ */
         .payment-container {
             display: grid;
@@ -825,7 +887,7 @@
         }
 
         /* ═══════════════════════════════════════════════════════════════
-           頁尾
+           页尾
            ═══════════════════════════════════════════════════════════════ */
         .footer {
             border-top: 1px solid var(--gray-800);
@@ -858,7 +920,7 @@
         }
 
         /* ═══════════════════════════════════════════════════════════════
-           響應式設計
+           响应式设计
            ═══════════════════════════════════════════════════════════════ */
         @media (max-width: 768px) {
             .navbar {
@@ -889,7 +951,7 @@
         }
 
         /* ═══════════════════════════════════════════════════════════════
-           載入動畫
+           加载动画
            ═══════════════════════════════════════════════════════════════ */
         .loading-overlay {
             position: fixed;
@@ -924,364 +986,26 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-
-        /* ═══════════════════════════════════════════════════════════════
-           AI 獵客引擎樣式
-           ═══════════════════════════════════════════════════════════════ */
-        .hunter-panel,
-        .reverse-panel {
-            background: var(--black-card);
-            border: 1px solid var(--gray-700);
-            border-radius: 12px;
-            padding: 2rem;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .hunter-form,
-        .reverse-form {
-            margin-bottom: 2rem;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .hunter-stats {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding: 1rem;
-            background: var(--gray-800);
-            border-radius: 8px;
-        }
-
-        .stat-item {
-            font-size: 0.9rem;
-            color: var(--gray-300);
-        }
-
-        .stat-item strong {
-            color: var(--gold);
-            font-size: 1.25rem;
-        }
-
-        .leads-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.875rem;
-        }
-
-        .leads-table th,
-        .leads-table td {
-            padding: 0.75rem;
-            text-align: left;
-            border-bottom: 1px solid var(--gray-700);
-        }
-
-        .leads-table th {
-            color: var(--gray-400);
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 0.75rem;
-            letter-spacing: 0.5px;
-        }
-
-        .leads-table tr:hover {
-            background: var(--gray-800);
-        }
-
-        .score-badge {
-            display: inline-block;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-weight: 600;
-            font-size: 0.8rem;
-        }
-
-        .score-high {
-            background: rgba(16, 185, 129, 0.2);
-            color: var(--success);
-        }
-
-        .score-medium {
-            background: rgba(245, 158, 11, 0.2);
-            color: var(--warning);
-        }
-
-        .score-low {
-            background: rgba(239, 68, 68, 0.2);
-            color: var(--error);
-        }
-
-        .email-link {
-            color: var(--gold);
-            text-decoration: none;
-        }
-
-        .email-link:hover {
-            text-decoration: underline;
-        }
-
-        .reason-text {
-            color: var(--gray-400);
-            font-size: 0.8rem;
-        }
-
-        /* ═══════════════════════════════════════════════════════════════
-           逆向分析樣式
-           ═══════════════════════════════════════════════════════════════ */
-        .analysis-summary {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .summary-card {
-            background: var(--gray-800);
-            border-radius: 8px;
-            padding: 1.5rem;
-            text-align: center;
-        }
-
-        .summary-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--gold);
-        }
-
-        .summary-label {
-            font-size: 0.75rem;
-            color: var(--gray-400);
-            text-transform: uppercase;
-            margin-top: 0.5rem;
-        }
-
-        .analysis-tabs {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-            border-bottom: 1px solid var(--gray-700);
-            padding-bottom: 0.5rem;
-        }
-
-        .tab-btn {
-            padding: 0.5rem 1rem;
-            background: transparent;
-            border: none;
-            color: var(--gray-400);
-            cursor: pointer;
-            font-size: 0.875rem;
-            transition: all 0.2s;
-        }
-
-        .tab-btn:hover {
-            color: var(--white);
-        }
-
-        .tab-btn.active {
-            color: var(--gold);
-            border-bottom: 2px solid var(--gold);
-        }
-
-        .tab-content {
-            min-height: 200px;
-        }
-
-        .tech-stack-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1rem;
-        }
-
-        .tech-item {
-            background: var(--gray-800);
-            border-radius: 8px;
-            padding: 1rem;
-        }
-
-        .tech-name {
-            font-weight: 600;
-            color: var(--white);
-            margin-bottom: 0.25rem;
-        }
-
-        .tech-category {
-            font-size: 0.75rem;
-            color: var(--gray-400);
-            text-transform: uppercase;
-            margin-bottom: 0.5rem;
-        }
-
-        .tech-confidence {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .confidence-bar {
-            flex: 1;
-            height: 4px;
-            background: var(--gold);
-            border-radius: 2px;
-        }
-
-        .tech-evidence {
-            font-size: 0.75rem;
-            color: var(--gray-500);
-        }
-
-        .method-badge {
-            display: inline-block;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .method-get { background: rgba(16, 185, 129, 0.2); color: var(--success); }
-        .method-post { background: rgba(59, 130, 246, 0.2); color: #60A5FA; }
-        .method-websocket { background: rgba(168, 85, 247, 0.2); color: #A78BFA; }
-
-        .business-analysis h4 {
-            color: var(--gold);
-            margin: 1.5rem 0 0.75rem;
-            font-size: 0.9rem;
-        }
-
-        .business-analysis h4:first-child {
-            margin-top: 0;
-        }
-
-        .revenue-list,
-        .advantages-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .revenue-list li,
-        .advantages-list li {
-            padding: 0.5rem 0;
-            border-bottom: 1px solid var(--gray-700);
-            color: var(--gray-300);
-        }
-
-        .cost-chart {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-
-        .cost-bar {
-            display: grid;
-            grid-template-columns: 100px 1fr 50px;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .cost-label {
-            color: var(--gray-400);
-            font-size: 0.875rem;
-        }
-
-        .bar-container {
-            height: 8px;
-            background: var(--gray-700);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--gold), var(--gold-light));
-            border-radius: 4px;
-        }
-
-        .cost-value {
-            color: var(--gold);
-            font-size: 0.875rem;
-            font-weight: 600;
-        }
-
-        .recommendations-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .recommendation-item {
-            display: flex;
-            gap: 1rem;
-            padding: 1rem;
-            background: var(--gray-800);
-            border-radius: 8px;
-        }
-
-        .rec-number {
-            width: 28px;
-            height: 28px;
-            background: var(--gold);
-            color: var(--black);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 0.875rem;
-            flex-shrink: 0;
-        }
-
-        .rec-text {
-            color: var(--gray-300);
-            font-size: 0.9rem;
-            line-height: 1.5;
-        }
-
-        /* 響應式設計擴展 */
-        @media (max-width: 768px) {
-            .analysis-summary {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .cost-bar {
-                grid-template-columns: 80px 1fr 40px;
-            }
-
-            .leads-table {
-                font-size: 0.75rem;
-            }
-
-            .leads-table th,
-            .leads-table td {
-                padding: 0.5rem 0.25rem;
-            }
-        }
     </style>
 </head>
 <body>
-    <!-- 頂部通知走馬燈 -->
+    <!-- 顶部通知走马灯 -->
     <div class="ticker-bar">
         <div class="ticker-content">
-            <span data-i18n="ticker.message1">🚀 StorePilot AI 系統就緒 — 已為 12,847 家公司提供 AI 自動化營運服務</span>
-            <span data-i18n="ticker.message2">📊 今日新增：3 個新商業構想推薦</span>
-            <span data-i18n="ticker.message3">⚡ Agent 平均響應時間：&lt; 2.3 秒</span>
-            <span data-i18n="ticker.message4">💰 平台營收抽成：20% | 用戶留存：80%</span>
-            <span data-i18n="ticker.message5">🔒 所有外部操作需人工審批</span>
-            <span data-i18n="ticker.message1">🚀 StorePilot AI 系統就緒 — 已為 12,847 家公司提供 AI 自動化營運服務</span>
-            <span data-i18n="ticker.message2">📊 今日新增：3 個新商業構想推薦</span>
-            <span data-i18n="ticker.message3">⚡ Agent 平均響應時間：&lt; 2.3 秒</span>
-            <span data-i18n="ticker.message4">💰 平台營收抽成：20% | 用戶留存：80%</span>
-            <span data-i18n="ticker.message5">🔒 所有外部操作需人工審批</span>
+            <span data-i18n="ticker.message1">🚀 StorePilot AI 系统就绪 — 已为 12,847 家公司提供 AI 自动化运营服务</span>
+            <span data-i18n="ticker.message2">📊 今日新增：3 个新商业构想推荐</span>
+            <span data-i18n="ticker.message3">⚡ Agent 平均响应时间：&lt; 2.3 秒</span>
+            <span data-i18n="ticker.message4">💰 平台营收抽成：20% | 用户留存：80%</span>
+            <span data-i18n="ticker.message5">🔒 所有外部操作需人工审批</span>
+            <span data-i18n="ticker.message1">🚀 StorePilot AI 系统就绪 — 已为 12,847 家公司提供 AI 自动化运营服务</span>
+            <span data-i18n="ticker.message2">📊 今日新增：3 个新商业构想推荐</span>
+            <span data-i18n="ticker.message3">⚡ Agent 平均响应时间：&lt; 2.3 秒</span>
+            <span data-i18n="ticker.message4">💰 平台营收抽成：20% | 用户留存：80%</span>
+            <span data-i18n="ticker.message5">🔒 所有外部操作需人工审批</span>
         </div>
     </div>
 
-    <!-- 導航列 -->
+    <!-- 导航列 -->
     <nav class="navbar">
         <a href="#" class="navbar-brand">
             <div class="navbar-logo">M</div>
@@ -1289,319 +1013,237 @@
         </a>
         <div class="navbar-status">
             <span class="status-dot"></span>
-            <span>系統運行中</span>
+            <span data-i18n="nav.status">系统运行中</span>
         </div>
         <div class="navbar-actions">
-        <!-- 語言切換器 -->
-        <div class="lang-switcher">
-            <button class="lang-button" onclick="toggleLangDropdown()">
-                <span id="current-lang-flag">🇹🇼</span>
-                <span id="current-lang-name">繁體中文</span>
-                <span>▼</span>
-            </button>
-            <div class="lang-dropdown" id="langDropdown">
-                <div class="lang-option active" onclick="setLanguage('zh-TW')" data-lang="zh-TW">
-                    <span class="lang-flag">🇹🇼</span>
-                    <span class="lang-name">繁體中文</span>
-                </div>
-                <div class="lang-option" onclick="setLanguage('en')" data-lang="en">
-                    <span class="lang-flag">🇺🇸</span>
-                    <span class="lang-name">English</span>
-                </div>
-                <div class="lang-option" onclick="setLanguage('id')" data-lang="id">
-                    <span class="lang-flag">🇮🇩</span>
-                    <span class="lang-name">Bahasa Indonesia</span>
+            <!-- 语言切换器 -->
+            <div class="lang-switcher">
+                <button class="lang-button" onclick="toggleLangDropdown()">
+                    <span id="current-lang-flag">🇹🇼</span>
+                    <span id="current-lang-name">繁體中文</span>
+                    <span>▼</span>
+                </button>
+                <div class="lang-dropdown" id="langDropdown">
+                    <div class="lang-option active" onclick="setLanguage('zh-TW')" data-lang="zh-TW">
+                        <span class="lang-flag">🇹🇼</span>
+                        <span class="lang-name">繁體中文</span>
+                    </div>
+                    <div class="lang-option" onclick="setLanguage('en')" data-lang="en">
+                        <span class="lang-flag">🇺🇸</span>
+                        <span class="lang-name">English</span>
+                    </div>
+                    <div class="lang-option" onclick="setLanguage('id')" data-lang="id">
+                        <span class="lang-flag">🇮🇩</span>
+                        <span class="lang-name">Bahasa Indonesia</span>
+                    </div>
                 </div>
             </div>
-        </div>
-        <a href="http://localhost:8000/docs" target="_blank" class="btn btn-secondary" data-i18n="navbar.docs">API 文檔</a>
-        <button class="btn btn-secondary" onclick="toggleHunter()" data-i18n="navbar.hunter">🎯 獵客引擎</button>
-        <button class="btn btn-secondary" onclick="toggleReverse()" data-i18n="navbar.reverse">🔬 逆向分析</button>
-        <button class="btn btn-primary" onclick="discoverIdeas()" data-i18n="navbar.ideas">💡 發現構想</button>
+            <a href="/docs" target="_blank" class="btn btn-secondary" data-i18n="nav.docs">API 文档</a>
+            <button class="btn btn-primary" onclick="discoverIdeas()" data-i18n="nav.ideas">💡 发现构想</button>
         </div>
     </nav>
 
-    <!-- Hero 區塊 -->
+    <!-- Hero 区块 -->
     <section class="hero">
         <p class="hero-label" data-i18n="hero.label">AI THAT RUNS YOUR COMPANY WHILE YOU SLEEP</p>
-        <h1 class="hero-title" data-i18n="hero.title">在你睡覺時<br>替你運營公司的 AI</h1>
-        <p class="hero-subtitle" data-i18n="hero.subtitle">像 hire 一個員工一樣簡單，但從未疲倦、從未請假。<br>從構想驗證到自動營運，一站式完成。</p>
+        <h1 class="hero-title" data-i18n="hero.title">在你睡觉时<br>替你运营公司的 AI</h1>
+        <p class="hero-subtitle" data-i18n="hero.subtitle">像 hire 一个员工一样简单，但从未疲倦、从未请假。<br>从构想验证到自动运营，一站式完成。</p>
         <div class="hero-actions">
             <button class="btn btn-primary" onclick="scrollToControl()" style="padding: 1rem 2rem; font-size: 1rem;" data-i18n="hero.start">
-                ▶️ 開始使用
+                ▶️ 开始使用
             </button>
             <button class="btn btn-outline" onclick="discoverIdeas()" style="padding: 1rem 2rem; font-size: 1rem;" data-i18n="hero.demo">
-                💡 探索商業構想
+                💡 探索商业构想
             </button>
         </div>
     </section>
 
-    <!-- Agent 狀態區 -->
+    <!-- Agent 状态区 -->
     <section class="section">
         <div class="section-header">
             <p class="section-label" data-i18n="team.label">YOUR TEAM</p>
-            <h2 class="section-title" data-i18n="team.title">你的 AI 團隊</h2>
-            <p class="section-desc" data-i18n="team.desc">每個 Agent 都有明確職責，所有外部操作需人工審批</p>
+            <h2 class="section-title" data-i18n="team.title">你的 AI 团队</h2>
+            <p class="section-desc" data-i18n="team.desc">每个 Agent 都有明确职责，所有外部操作需人工审批</p>
         </div>
         <div class="agents-grid" id="agentsGrid">
             <div class="agent-card">
                 <div class="agent-card-header">
                     <div class="agent-icon">💡</div>
                     <div class="agent-info">
-                        <h3 data-i18n="agent.idea.title">創意發現 Agent</h3>
-                        <p data-i18n="agent.idea.desc">商業構想推薦</p>
+                        <h3 data-i18n="agent.idea.title">创意发现 Agent</h3>
+                        <p data-i18n="agent.idea.desc">商业构想推荐</p>
                     </div>
                 </div>
-                <span class="agent-status idle" id="agent-idea" data-i18n="status.idle">就緒</span>
+                <span class="agent-status idle" id="agent-idea" data-i18n="status.idle">就绪</span>
             </div>
             <div class="agent-card">
                 <div class="agent-card-header">
                     <div class="agent-icon">🎯</div>
                     <div class="agent-info">
-                        <h3 data-i18n="agent.planner.title">規劃 Agent (CEO)</h3>
-                        <p data-i18n="agent.planner.desc">商業執行計劃</p>
+                        <h3 data-i18n="agent.planner.title">规划 Agent (CEO)</h3>
+                        <p data-i18n="agent.planner.desc">商业执行计划</p>
                     </div>
                 </div>
-                <span class="agent-status idle" id="agent-planner" data-i18n="status.idle">就緒</span>
+                <span class="agent-status idle" id="agent-planner" data-i18n="status.idle">就绪</span>
             </div>
             <div class="agent-card">
                 <div class="agent-card-header">
                     <div class="agent-icon">💻</div>
                     <div class="agent-info">
-                        <h3 data-i18n="agent.code.title">技術 Agent</h3>
-                        <p data-i18n="agent.code.desc">網站開發部署</p>
+                        <h3 data-i18n="agent.code.title">技术 Agent</h3>
+                        <p data-i18n="agent.code.desc">网站开发部署</p>
                     </div>
                 </div>
-                <span class="agent-status idle" id="agent-code" data-i18n="status.idle">就緒</span>
+                <span class="agent-status idle" id="agent-code" data-i18n="status.idle">就绪</span>
             </div>
             <div class="agent-card">
                 <div class="agent-card-header">
                     <div class="agent-icon">📢</div>
                     <div class="agent-info">
-                        <h3 data-i18n="agent.marketing.title">營銷 Agent</h3>
-                        <p data-i18n="agent.marketing.desc">社媒內容生成</p>
+                        <h3 data-i18n="agent.marketing.title">营销 Agent</h3>
+                        <p data-i18n="agent.marketing.desc">社媒内容生成</p>
                     </div>
                 </div>
-                <span class="agent-status idle" id="agent-marketing" data-i18n="status.idle">就緒</span>
+                <span class="agent-status idle" id="agent-marketing" data-i18n="status.idle">就绪</span>
             </div>
             <div class="agent-card">
                 <div class="agent-card-header">
                     <div class="agent-icon">🤝</div>
                     <div class="agent-info">
-                        <h3 data-i18n="agent.outreach.title">獲客 Agent</h3>
-                        <p data-i18n="agent.outreach.desc">銷售郵件發送</p>
+                        <h3 data-i18n="agent.outreach.title">获客 Agent</h3>
+                        <p data-i18n="agent.outreach.desc">销售邮件发送</p>
                     </div>
                 </div>
-                <span class="agent-status idle" id="agent-outreach" data-i18n="status.idle">就緒</span>
+                <span class="agent-status idle" id="agent-outreach" data-i18n="status.idle">就绪</span>
             </div>
             <div class="agent-card">
                 <div class="agent-card-header">
                     <div class="agent-icon">💰</div>
                     <div class="agent-info">
-                        <h3 data-i18n="agent.finance.title">財務 Agent</h3>
-                        <p data-i18n="agent.finance.desc">營收分潤計算</p>
+                        <h3 data-i18n="agent.finance.title">财务 Agent</h3>
+                        <p data-i18n="agent.finance.desc">营收分润计算</p>
                     </div>
                 </div>
-                <span class="agent-status idle" id="agent-finance" data-i18n="status.idle">就緒</span>
+                <span class="agent-status idle" id="agent-finance" data-i18n="status.idle">就绪</span>
             </div>
         </div>
     </section>
 
-    <!-- 商業構想區 -->
+    <!-- 商业构想要区 -->
     <section class="section" id="ideasSection" style="display: none;">
         <div class="section-header">
             <p class="section-label">Recommended Ideas</p>
-            <h2 class="section-title">為你發現的商業機會</h2>
-            <p class="section-desc">基於市場趨勢分析，這是最適合起步的微型產品</p>
+            <h2 class="section-title">为你发现的商业机会</h2>
+            <p class="section-desc">基于市场趋势分析，这是最适合起步的微型产品</p>
         </div>
         <div class="ideas-grid" id="ideasContainer"></div>
-    </section>
-
-    <!-- AI 獵客引擎區 -->
-    <section class="section" id="hunterSection" style="display: none;">
-        <div class="section-header">
-            <p class="section-label">AI Hunter Engine</p>
-            <h2 class="section-title">AI 獵客引擎</h2>
-            <p class="section-desc">從多個數據源聚合目標客戶，智能評分與篩選</p>
-        </div>
-        <div class="hunter-panel">
-            <div class="hunter-form">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">搜索关键词</label>
-                        <input type="text" class="form-input" id="hunterKeywords" placeholder="例如：AI, startup, SaaS" value="AI, startup">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">行業篩選</label>
-                        <select class="form-input" id="hunterIndustry">
-                            <option value="">全部行業</option>
-                            <option value="AI/ML">AI/ML</option>
-                            <option value="SaaS">SaaS</option>
-                            <option value="FinTech">FinTech</option>
-                            <option value="EdTech">EdTech</option>
-                            <option value="E-commerce">E-commerce</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">最低匹配分數</label>
-                        <input type="number" class="form-input" id="hunterMinScore" value="60" min="0" max="100">
-                    </div>
-                </div>
-                <button class="btn btn-primary" onclick="searchLeads()">🔍 開始獵客</button>
-            </div>
-            <div class="hunter-results" id="hunterResults" style="display: none;">
-                <div class="hunter-stats">
-                    <span class="stat-item">找到 <strong id="hunterCount">0</strong> 個线索</span>
-                    <span class="stat-item">平均分數 <strong id="hunterAvgScore">0</strong></span>
-                    <button class="btn btn-secondary" onclick="exportLeads()">📥 導出 CSV</button>
-                </div>
-                <div class="leads-table" id="leadsTable"></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 逆向分析區 -->
-    <section class="section" id="reverseSection" style="display: none;">
-        <div class="section-header">
-            <p class="section-label">Reverse Analysis</p>
-            <h2 class="section-title">逆向分析模組</h2>
-            <p class="section-desc">識別技術棧、API 端點、商業模式與競爭優勢</p>
-        </div>
-        <div class="reverse-panel">
-            <div class="reverse-form">
-                <div class="form-row">
-                    <div class="form-group" style="flex: 1;">
-                        <label class="form-label">目標網站 URL</label>
-                        <input type="text" class="form-input" id="reverseUrl" placeholder="例如：https://polsia.ai" value="http://localhost:8000">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">分析深度</label>
-                        <select class="form-input" id="reverseDepth">
-                            <option value="1">快速分析 (Depth 1)</option>
-                            <option value="2">深度分析 (Depth 2)</option>
-                        </select>
-                    </div>
-                </div>
-                <button class="btn btn-primary" onclick="analyzeTarget()">🔬 開始逆向分析</button>
-            </div>
-            <div class="reverse-results" id="reverseResults" style="display: none;">
-                <div class="analysis-summary" id="analysisSummary"></div>
-                <div class="analysis-tabs">
-                    <button class="tab-btn active" onclick="showTab('tech')">技術棧</button>
-                    <button class="tab-btn" onclick="showTab('api')">API 端點</button>
-                    <button class="tab-btn" onclick="showTab('business')">商業模式</button>
-                    <button class="tab-btn" onclick="showTab('recommendations')">優化建議</button>
-                </div>
-                <div class="tab-content" id="tabContent"></div>
-            </div>
-        </div>
     </section>
 
     <!-- 控制面板 -->
     <section class="section">
         <div class="section-header">
             <p class="section-label">Control Center</p>
-            <h2 class="section-title">啟動你的 AI 團隊</h2>
-            <p class="section-desc">描述你想經營的業務，AI 會幫你從零開始運作</p>
+            <h2 class="section-title">启动你的 AI 团队</h2>
+            <p class="section-desc">描述你想经营的业务，AI 会帮你从零开始运作</p>
         </div>
         <div class="control-panel">
             <div class="form-group">
-                <label class="form-label">你的身份標識</label>
+                <label class="form-label" data-i18n="control.user_id">你的身份标识</label>
                 <input type="text" class="form-input" id="userId" placeholder="例如：zhang-san" value="demo-user">
             </div>
             <div class="form-group">
-                <label class="form-label">商業構想描述</label>
-                <textarea class="form-input" id="businessIdea" placeholder="描述你想創立的業務，或點擊「發現構想」讓我們幫你推薦..."></textarea>
-                <p class="form-hint">💡 沒有想法？點擊導航欄的「💡 發現構想」按鈕</p>
+                <label class="form-label" data-i18n="control.business_idea">商业构想描述</label>
+                <textarea class="form-input" id="businessIdea" placeholder="描述你想创立的业务，或点击「发现构想」让我们帮你推荐..."></textarea>
+                <p class="form-hint" data-i18n="control.hint">💡 没有想法？点击导航栏的「💡 发现构想」按钮</p>
             </div>
             <div style="display: flex; gap: 1rem;">
-                <button class="btn btn-primary" onclick="runDryRun()" style="flex: 1;">
-                    ▶️ 執行乾跑測試
+                <button class="btn btn-primary" id="dryRunBtn" style="flex: 1;" onclick="runDryRun()">
+                    ▶️ 执行乾跑测试
                 </button>
                 <button class="btn btn-secondary" onclick="discoverIdeas()">
-                    💡 發現構想
+                    💡 发现构想
                 </button>
             </div>
         </div>
     </section>
 
-    <!-- 審計日誌 -->
+    <!-- 审计日志 -->
     <section class="section">
         <div class="section-header">
             <p class="section-label">Audit Log</p>
-            <h2 class="section-title">Agent 執行日誌</h2>
+            <h2 class="section-title">Agent 执行日志</h2>
         </div>
         <div class="log-panel">
             <div class="log-header">
-                <span class="log-title">系統日誌</span>
+                <span class="log-title">系统日志</span>
                 <button class="log-clear" onclick="clearLogs()">清除</button>
             </div>
             <div class="log-content" id="logContent">
                 <div class="log-entry">
                     <span class="log-time">00:00:00</span>
                     <span class="log-agent">system</span>
-                    <span class="log-message">系統就緒，等待指令...</span>
+                    <span class="log-message" data-i18n="log.waiting">系统就绪，等待指令...</span>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 付款資訊區塊 -->
+    <!-- 付款信息区块 -->
     <section class="section" id="paymentSection">
         <div class="section-header">
             <p class="section-label">Payment Methods</p>
-            <h2 class="section-title">訂閱與付款</h2>
-            <p class="section-desc">選擇適合您的付款方式，支援國內銀行轉帳與國際加密貨幣</p>
+            <h2 class="section-title">订阅与付款</h2>
+            <p class="section-desc">选择适合您的付款方式，支持国内银行转账与国际加密货币</p>
         </div>
         <div class="payment-container">
-            <!-- 國內付款 -->
+            <!-- 国内付款 -->
             <div class="payment-card">
                 <div class="payment-header">
                     <div class="payment-icon">🏦</div>
                     <div class="payment-info">
-                        <h3>國內銀行轉帳</h3>
-                        <p class="payment-region">適用地區：台灣</p>
+                        <h3 data-i18n="payment.bank_title">国内银行转账</h3>
+                        <p class="payment-region" data-i18n="payment.bank_region">适用地区：台湾</p>
                     </div>
                 </div>
                 <div class="payment-details">
                     <div class="price-row">
-                        <span class="price-label">月度訂閱</span>
+                        <span class="price-label" data-i18n="payment.monthly">月度订阅</span>
                         <span class="price-value" id="twdPrice">NT$ 1,568</span>
                     </div>
                     <div class="price-row">
-                        <span class="price-label">年度訂閱</span>
+                        <span class="price-label" data-i18n="payment.yearly">年度订阅</span>
                         <span class="price-value" id="twdYearly">NT$ 15,680</span>
                         <span class="price-discount">省 16.7%</span>
                     </div>
                 </div>
                 <div class="bank-info">
                     <div class="bank-row">
-                        <span class="bank-label">銀行：</span>
-                        <span class="bank-value" id="bankName">國泰世華銀行</span>
+                        <span class="bank-label">银行：</span>
+                        <span class="bank-value" id="bankName">国泰世华银行</span>
                     </div>
                     <div class="bank-row">
-                        <span class="bank-label">代號：</span>
+                        <span class="bank-label">代号：</span>
                         <span class="bank-value" id="bankCode">013</span>
                     </div>
                     <div class="bank-row">
-                        <span class="bank-label">帳號：</span>
+                        <span class="bank-label">账号：</span>
                         <span class="bank-value" id="accountNumber">117-50-605328-0</span>
                     </div>
                     <div class="bank-row">
-                        <span class="bank-label">戶名：</span>
-                        <span class="bank-value" id="accountName">李國榮</span>
+                        <span class="bank-label">户名：</span>
+                        <span class="bank-value" id="accountName">李国荣</span>
                     </div>
                 </div>
-                <button class="btn btn-secondary btn-full" onclick="copyBankInfo()">📋 複製帳號資訊</button>
+                <button class="btn btn-secondary btn-full" onclick="copyBankInfo()">📋 复制账号信息</button>
             </div>
 
-            <!-- 國際加密貨幣付款 -->
+            <!-- 国际加密货币付款 -->
             <div class="payment-card payment-card-crypto">
                 <div class="payment-header">
                     <div class="payment-icon">₿</div>
                     <div class="payment-info">
-                        <h3>OKX USDT 加密貨幣</h3>
-                        <p class="payment-region">適用地區：國際客戶</p>
+                        <h3>OKX USDT 加密货币</h3>
+                        <p class="payment-region" data-i18n="payment.crypto_region">适用地区：国际客户</p>
                     </div>
                     <span class="crypto-badge">USDT</span>
                 </div>
@@ -1610,25 +1252,25 @@
                 </div>
                 <div class="payment-details">
                     <div class="price-row">
-                        <span class="price-label">月度訂閱</span>
+                        <span class="price-label" data-i18n="payment.monthly">月度订阅</span>
                         <span class="price-value crypto-price" id="usdtMonthly">49 USDT</span>
                     </div>
                     <div class="price-row">
-                        <span class="price-label">年度訂閱</span>
+                        <span class="price-label" data-i18n="payment.yearly">年度订阅</span>
                         <span class="price-value crypto-price" id="usdtYearly">490 USDT</span>
                         <span class="price-discount">省 16.7%</span>
                     </div>
                 </div>
                 <div class="network-selector">
-                    <label class="network-label">選擇網路：</label>
+                    <label class="network-label">选择网络：</label>
                     <select id="networkSelect" onchange="switchNetwork()">
-                        <option value="TRC20">TRC20 (Tron) - 推薦</option>
+                        <option value="TRC20">TRC20 (Tron) - 推荐</option>
                         <option value="Polygon">Polygon (MATIC)</option>
                     </select>
                 </div>
                 <div class="wallet-info">
                     <div class="wallet-row">
-                        <span class="wallet-label">網路：</span>
+                        <span class="wallet-label">网络：</span>
                         <span class="wallet-value" id="networkBadge">TRC20</span>
                     </div>
                     <div class="wallet-row">
@@ -1637,56 +1279,195 @@
                     </div>
                 </div>
                 <div class="copy-section">
-                    <button class="btn btn-primary btn-full" onclick="copyWalletAddress()">📋 複製錢包地址</button>
+                    <button class="btn btn-primary btn-full" onclick="copyWalletAddress()">📋 复制钱包地址</button>
                     <p class="copy-hint" id="copyHint"></p>
                 </div>
                 <div class="exchange-note">
-                    <p>💡 建議使用 OKX、Binance、Bybit 或 KuCoin 等主流交易所進行轉換</p>
+                    <p>💡 建议使用 OKX、Binance、Bybit 或 KuCoin 等主流交易所进行转换</p>
                 </div>
             </div>
         </div>
-        <div id="paymentLoading" class="loading-text">載入付款資訊...</div>
+        <div id="paymentLoading" class="loading-text">载入付款信息...</div>
     </section>
 
-    <!-- 頁尾 -->
+    <!-- 页尾 -->
     <footer class="footer">
-        <p class="footer-text">StorePilot AI — 基於 Polsia 逆向分析的最小可行 AI Agent 營運系統</p>
+        <p class="footer-text">StorePilot AI — 基于 Polsia 逆向分析的最小可行 AI Agent 运营系统</p>
         <div class="footer-links">
-            <a href="http://localhost:8000/docs">API 文檔</a>
+            <a href="/docs">API 文档</a>
             <a href="https://github.com" target="_blank">GitHub</a>
-            <a href="mailto:support@mvp-agent-os.local">聯絡我們</a>
+            <a href="mailto:support@storepilot.local">联系我们</a>
         </div>
     </footer>
 
-    <!-- 載入動畫 -->
+    <!-- 加载动画 -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-spinner"></div>
     </div>
 
-    <!-- 多語言支援腳本 -->
-    <script src="i18n.js"></script>
-
     <script>
-        const API_BASE = 'http://localhost:8000';
+        // API 基础 URL - 自动检测当前主机
+        const API_BASE = window.location.origin;
         let currentIdeas = [];
 
         // ═══════════════════════════════════════════════════════════════
-        // 多語言切換功能
+        // 多语言切换功能
         // ═══════════════════════════════════════════════════════════════
 
-        // 語言配置
+        // 翻译字典
+        const translations = {
+            "zh-TW": {
+                "nav.status": "系统运行中",
+                "nav.docs": "API 文档",
+                "nav.ideas": "💡 发现构想",
+                "hero.label": "AI THAT RUNS YOUR COMPANY WHILE YOU SLEEP",
+                "hero.title": "在你睡觉时<br>替你运营公司的 AI",
+                "hero.subtitle": "像 hire 一个员工一样简单，但从未疲倦、从未请假。<br>从构想验证到自动运营，一站式完成。",
+                "hero.start": "▶️ 开始使用",
+                "hero.demo": "💡 探索商业构想",
+                "team.label": "YOUR TEAM",
+                "team.title": "你的 AI 团队",
+                "team.desc": "每个 Agent 都有明确职责，所有外部操作需人工审批",
+                "agent.idea.title": "创意发现 Agent",
+                "agent.idea.desc": "商业构想推荐",
+                "agent.planner.title": "规划 Agent (CEO)",
+                "agent.planner.desc": "商业执行计划",
+                "agent.code.title": "技术 Agent",
+                "agent.code.desc": "网站开发部署",
+                "agent.marketing.title": "营销 Agent",
+                "agent.marketing.desc": "社媒内容生成",
+                "agent.outreach.title": "获客 Agent",
+                "agent.outreach.desc": "销售邮件发送",
+                "agent.finance.title": "财务 Agent",
+                "agent.finance.desc": "营收分润计算",
+                "status.idle": "就绪",
+                "status.running": "工作中...",
+                "status.completed": "完成",
+                "status.error": "错误",
+                "control.user_id": "你的身份标识",
+                "control.business_idea": "商业构想描述",
+                "control.hint": "💡 没有想法？点击导航栏的「💡 发现构想」按钮",
+                "log.waiting": "系统就绪，等待指令...",
+                "ticker.message1": "🚀 StorePilot AI 系统就绪 — 已为 12,847 家公司提供 AI 自动化运营服务",
+                "ticker.message2": "📊 今日新增：3 个新商业构想推荐",
+                "ticker.message3": "⚡ Agent 平均响应时间：&lt; 2.3 秒",
+                "ticker.message4": "💰 平台营收抽成：20% | 用户留存：80%",
+                "ticker.message5": "🔒 所有外部操作需人工审批",
+                "payment.bank_title": "国内银行转账",
+                "payment.bank_region": "适用地区：台湾",
+                "payment.monthly": "月度订阅",
+                "payment.yearly": "年度订阅",
+                "payment.crypto_region": "适用地区：国际客户",
+                "language": "语言"
+            },
+            "en": {
+                "nav.status": "System Online",
+                "nav.docs": "API Docs",
+                "nav.ideas": "💡 Discover Ideas",
+                "hero.label": "AI THAT RUNS YOUR COMPANY WHILE YOU SLEEP",
+                "hero.title": "AI That Runs Your Company<br>While You Sleep",
+                "hero.subtitle": "As simple as hiring an employee, but never tired, never absent.<br>From idea validation to automated operations, one-stop solution.",
+                "hero.start": "▶️ Get Started",
+                "hero.demo": "💡 Explore Business Ideas",
+                "team.label": "YOUR TEAM",
+                "team.title": "Your AI Team",
+                "team.desc": "Each Agent has clear responsibilities, all external operations require human approval",
+                "agent.idea.title": "Idea Discovery Agent",
+                "agent.idea.desc": "Business Idea Recommendations",
+                "agent.planner.title": "Planner Agent (CEO)",
+                "agent.planner.desc": "Business Execution Plan",
+                "agent.code.title": "Code Agent",
+                "agent.code.desc": "Website Development & Deployment",
+                "agent.marketing.title": "Marketing Agent",
+                "agent.marketing.desc": "Social Media Content Generation",
+                "agent.outreach.title": "Outreach Agent",
+                "agent.outreach.desc": "Sales Email Sending",
+                "agent.finance.title": "Finance Agent",
+                "agent.finance.desc": "Revenue Sharing Calculation",
+                "status.idle": "Ready",
+                "status.running": "Working...",
+                "status.completed": "Completed",
+                "status.error": "Error",
+                "control.user_id": "Your Identity",
+                "control.business_idea": "Business Idea Description",
+                "control.hint": "💡 No idea? Click the 「💡 Discover Ideas」 button in the navbar",
+                "log.waiting": "System ready, waiting for instructions...",
+                "ticker.message1": "🚀 StorePilot AI System Ready — Serving 12,847 companies with AI automation",
+                "ticker.message2": "📊 Today: 3 new business ideas added",
+                "ticker.message3": "⚡ Agent avg response time: &lt; 2.3s",
+                "ticker.message4": "💰 Platform revenue share: 20% | User retention: 80%",
+                "ticker.message5": "🔒 All external operations require human approval",
+                "payment.bank_title": "Domestic Bank Transfer",
+                "payment.bank_region": "Region: Taiwan",
+                "payment.monthly": "Monthly Subscription",
+                "payment.yearly": "Annual Subscription",
+                "payment.crypto_region": "Region: International",
+                "language": "Language"
+            },
+            "id": {
+                "nav.status": "Sistem Aktif",
+                "nav.docs": "Dokumen API",
+                "nav.ideas": "💡 Temukan Ide",
+                "hero.label": "AI YANG MENGELOLA PERUSAHAANMU SAAT KAMU TIDUR",
+                "hero.title": "AI Yang Mengelola Perusahaanmu<br>Saat Kamu Tidur",
+                "hero.subtitle": "Semudah merekrut karyawan, tapi tidak pernah lelah, tidak pernah absen.<br>Dari validasi ide hingga operasi otomatis, solusi satu atap.",
+                "hero.start": "▶️ Mulai",
+                "hero.demo": "💡 Jelajahi Ide Bisnis",
+                "team.label": "TIMMU",
+                "team.title": "Tim AI Kamu",
+                "team.desc": "Setiap Agent memiliki tanggung jawab yang jelas, semua operasi eksternal memerlukan persetujuan manusia",
+                "agent.idea.title": "Agent Penemuan Ide",
+                "agent.idea.desc": "Rekomendasi Ide Bisnis",
+                "agent.planner.title": "Agent Perencanaan (CEO)",
+                "agent.planner.desc": "Rencana Eksekusi Bisnis",
+                "agent.code.title": "Agent Kode",
+                "agent.code.desc": "Pengembangan & Deploy Website",
+                "agent.marketing.title": "Agent Pemasaran",
+                "agent.marketing.desc": "Generasi Konten Media Sosial",
+                "agent.outreach.title": "Agent Outreach",
+                "agent.outreach.desc": "Pengiriman Email Penjualan",
+                "agent.finance.title": "Agent Keuangan",
+                "agent.finance.desc": "Perhitungan Bagi Hasil",
+                "status.idle": "Siap",
+                "status.running": "Bekerja...",
+                "status.completed": "Selesai",
+                "status.error": "Kesalahan",
+                "control.user_id": "Identitasmu",
+                "control.business_idea": "Deskripsi Ide Bisnis",
+                "control.hint": "💡 Tidak ada ide? Klik tombol 「💡 Temukan Ide」 di navbar",
+                "log.waiting": "Sistem siap, menunggu instruksi...",
+                "ticker.message1": "🚀 Sistem StorePilot AI Siap — Melayani 12,847 perusahaan dengan automasi AI",
+                "ticker.message2": "📊 Hari ini: 3 ide bisnis baru ditambahkan",
+                "ticker.message3": "⚡ Waktu respons rata-rata Agent: &lt; 2.3 detik",
+                "ticker.message4": "💰 Bagi hasil platform: 20% | Retensi pengguna: 80%",
+                "ticker.message5": "🔒 Semua operasi eksternal memerlukan persetujuan manusia",
+                "payment.bank_title": "Transfer Bank Domestik",
+                "payment.bank_region": "Wilayah: Taiwan",
+                "payment.monthly": "Langganan Bulanan",
+                "payment.yearly": "Langganan Tahunan",
+                "payment.crypto_region": "Wilayah: Internasional",
+                "language": "Bahasa"
+            }
+        };
+
+        // 语言配置
         const langConfig = {
             "zh-TW": { flag: "🇹🇼", name: "繁體中文", dir: "ltr" },
             "en": { flag: "🇺🇸", name: "English", dir: "ltr" },
             "id": { flag: "🇮🇩", name: "Bahasa Indonesia", dir: "ltr" }
         };
 
-        // 應用翻譯
+        // 初始化语言
+        let currentLang = localStorage.getItem("storepilot-lang") || "zh-TW";
+
+        // 应用翻译
         function applyTranslations(lang) {
-            // 更新所有帶有 data-i18n 屬性的元素
+            const dict = translations[lang] || translations["zh-TW"];
+            
+            // 更新所有带有 data-i18n 属性的元素
             document.querySelectorAll('[data-i18n]').forEach(element => {
                 const key = element.getAttribute('data-i18n');
-                const translation = translations[lang]?.[key];
+                const translation = dict[key];
                 if (translation) {
                     if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
                         element.placeholder = translation;
@@ -1696,31 +1477,23 @@
                 }
             });
 
-            // 更新 HTML lang 屬性
+            // 更新 HTML lang 属性
             document.documentElement.lang = lang === "zh-TW" ? "zh-Hant" : lang;
 
-            // 更新頁面標題
-            const titleMap = {
-                "zh-TW": "StorePilot AI — AI 在你睡覺時替你運營商店",
-                "en": "StorePilot AI — AI runs your store while you sleep",
-                "id": "StorePilot AI — AI mengoperasikan toko Anda saat Anda tidur"
-            };
-            document.getElementById("page-title").textContent = titleMap[lang];
-
-            // 更新語言按鈕顯示
+            // 更新语言按钮显示
             const config = langConfig[lang];
             if (config) {
                 document.getElementById("current-lang-flag").textContent = config.flag;
                 document.getElementById("current-lang-name").textContent = config.name;
             }
 
-            // 更新 active 狀態
+            // 更新 active 状态
             document.querySelectorAll('.lang-option').forEach(option => {
                 option.classList.toggle('active', option.getAttribute('data-lang') === lang);
             });
         }
 
-        // 切換語言
+        // 切换语言
         function setLanguage(lang) {
             currentLang = lang;
             localStorage.setItem("storepilot-lang", lang);
@@ -1728,19 +1501,19 @@
             closeLangDropdown();
         }
 
-        // 切換下拉選單
+        // 切换下拉选单
         function toggleLangDropdown() {
             const dropdown = document.getElementById("langDropdown");
             dropdown.classList.toggle("show");
         }
 
-        // 關閉下拉選單
+        // 关闭下拉选单
         function closeLangDropdown() {
             const dropdown = document.getElementById("langDropdown");
             dropdown.classList.remove("show");
         }
 
-        // 點擊外部關閉下拉選單
+        // 点击外部关闭下拉选单
         document.addEventListener('click', function(event) {
             const switcher = document.querySelector('.lang-switcher');
             if (switcher && !switcher.contains(event.target)) {
@@ -1748,18 +1521,19 @@
             }
         });
 
-        // 初始化語言
-        let currentLang = localStorage.getItem("storepilot-lang") || "zh-TW";
+        // ═══════════════════════════════════════════════════════════════
+        // 核心功能
+        // ═══════════════════════════════════════════════════════════════
 
-        // 更新 Agent 狀態
+        // 更新 Agent 状态
         function setAgentStatus(agent, status, text) {
             const el = document.getElementById(`agent-${agent}`);
             if (!el) return;
             el.className = `agent-status ${status}`;
-            el.textContent = text;
+            el.textContent = text || (status === 'active' ? '工作中...' : status === 'idle' ? '就绪' : '错误');
         }
 
-        // 添加日誌
+        // 添加日志
         function addLog(agent, level, message) {
             const now = new Date();
             const time = now.toTimeString().split(' ')[0];
@@ -1777,45 +1551,46 @@
             }
         }
 
-        // 清除日誌
+        // 清除日志
         function clearLogs() {
-            document.getElementById('logContent').innerHTML = `
+            const logContent = document.getElementById('logContent');
+            logContent.innerHTML = `
                 <div class="log-entry">
                     <span class="log-time">${new Date().toTimeString().split(' ')[0]}</span>
                     <span class="log-agent">system</span>
-                    <span class="log-message">日誌已清除</span>
+                    <span class="log-message">日志已清除</span>
                 </div>
             `;
         }
 
-        // 滾動到控制區
+        // 滚动到控制区
         function scrollToControl() {
             document.querySelector('.control-panel').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // 發現商業構想
+        // 发现商业构想
         async function discoverIdeas() {
             const overlay = document.getElementById('loadingOverlay');
             overlay.classList.add('visible');
             setAgentStatus('idea', 'active', '工作中...');
-            addLog('idea_discovery', 'info', '開始發現商業構想...');
+            addLog('idea_discovery', 'info', '开始发现商业构想...');
 
             try {
                 const response = await fetch(`${API_BASE}/api/ideas?count=3`);
                 const data = await response.json();
                 currentIdeas = data.ideas;
                 renderIdeas(data.ideas);
-                addLog('idea_discovery', 'success', `已發現 ${data.ideas.length} 個商業構想`);
+                addLog('idea_discovery', 'success', `已发现 ${data.ideas.length} 个商业构想`);
                 setAgentStatus('idea', 'idle', '完成');
             } catch (error) {
-                addLog('idea_discovery', 'error', `發現失敗: ${error.message}`);
-                setAgentStatus('idea', 'idle', '錯誤');
+                addLog('idea_discovery', 'error', `发现失败: ${error.message}`);
+                setAgentStatus('idea', 'idle', '错误');
             } finally {
                 overlay.classList.remove('visible');
             }
         }
 
-        // 渲染構想卡片
+        // 渲染构想卡片
         function renderIdeas(ideas) {
             const container = document.getElementById('ideasContainer');
             const section = document.getElementById('ideasSection');
@@ -1830,23 +1605,23 @@
                     <div class="idea-metrics">
                         <div class="idea-metric">
                             <div class="idea-metric-value">$${idea.estimated_monthly_revenue.toLocaleString()}</div>
-                            <div class="idea-metric-label">預估月收</div>
+                            <div class="idea-metric-label">预估月收入</div>
                         </div>
                         <div class="idea-metric">
                             <div class="idea-metric-value">$${idea.required_investment.toLocaleString()}</div>
-                            <div class="idea-metric-label">所需投資</div>
+                            <div class="idea-metric-label">所需投资</div>
                         </div>
                         <div class="idea-metric">
-                            <div class="idea-metric-value" style="color: ${idea.market_trend === 'rising' ? 'var(--success)' : 'var(--gray-400)'}">${idea.market_trend === 'rising' ? '↑' : '→'} ${idea.market_trend === 'rising' ? '上升' : '穩定'}</div>
-                            <div class="idea-metric-label">市場趨勢</div>
+                            <div class="idea-metric-value" style="color: ${idea.market_trend === 'rising' ? 'var(--success)' : 'var(--gray-400)'}">${idea.market_trend === 'rising' ? '↑' : '→'} ${idea.market_trend === 'rising' ? '上升' : '稳定'}</div>
+                            <div class="idea-metric-label">市场趋势</div>
                         </div>
                     </div>
                     <div class="idea-features">
                         ${idea.key_features.slice(0, 4).map(f => `<span class="idea-feature-tag">${f}</span>`).join('')}
                     </div>
                     <div class="idea-actions">
-                        <button class="btn btn-primary" onclick="useIdea(${index})">🚀 使用這個構想</button>
-                        <button class="btn btn-secondary" onclick="copyIdea(${index})">📋 複製詳情</button>
+                        <button class="btn btn-primary" onclick="useIdea(${index})">🚀 使用这个构想</button>
+                        <button class="btn btn-secondary" onclick="copyIdea(${index})">📋 复制详情</button>
                     </div>
                 </div>
             `).join('');
@@ -1855,44 +1630,45 @@
             section.scrollIntoView({ behavior: 'smooth' });
         }
 
-        // 使用構想
+        // 使用构想
         function useIdea(index) {
             if (currentIdeas[index]) {
                 document.getElementById('businessIdea').value = currentIdeas[index].title + ' - ' + currentIdeas[index].description;
-                addLog('system', 'success', `已選擇構想: ${currentIdeas[index].title}`);
+                addLog('system', 'success', `已选择构想: ${currentIdeas[index].title}`);
                 scrollToControl();
             }
         }
 
-        // 複製構想詳情
+        // 复制构想详情
         function copyIdea(index) {
             if (currentIdeas[index]) {
                 const text = JSON.stringify(currentIdeas[index], null, 2);
                 navigator.clipboard.writeText(text).then(() => {
-                    addLog('system', 'success', '構想詳情已複製到剪貼簿');
+                    addLog('system', 'success', '构想详情已复制到剪贴板');
                 });
             }
         }
 
-        // 執行乾跑
+        // 执行乾跑
         async function runDryRun() {
             const userId = document.getElementById('userId').value;
             const businessIdea = document.getElementById('businessIdea').value;
 
             if (!businessIdea) {
-                alert('請先輸入商業構想，或點擊「發現構想」讓我們幫你推薦');
+                alert('请先输入商业构想，或点击「发现构想」让我们帮你推荐');
                 return;
             }
 
             const overlay = document.getElementById('loadingOverlay');
             overlay.classList.add('visible');
 
+            // 重置所有 Agent 状态
             ['idea', 'planner', 'code', 'marketing', 'outreach', 'finance'].forEach(agent => {
-                setAgentStatus(agent, 'idle', '就緒');
+                setAgentStatus(agent, 'idle', '就绪');
             });
 
-            addLog('system', 'info', `啟動工作流 - 用戶: ${userId}`);
-            addLog('system', 'info', `商業構想: ${businessIdea.substring(0, 50)}...`);
+            addLog('system', 'info', `启动工作流 - 用户: ${userId}`);
+            addLog('system', 'info', `商业构想: ${businessIdea.substring(0, 50)}...`);
 
             try {
                 const response = await fetch(`${API_BASE}/api/run`, {
@@ -1901,10 +1677,15 @@
                     body: JSON.stringify({ user_id: userId, business_idea: businessIdea, dry_run: true })
                 });
 
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.detail || `HTTP ${response.status}`);
+                }
+
                 const data = await response.json();
-                addLog('orchestrator', 'success', `工作流完成 - 狀態: ${data.status}`);
-                addLog('orchestrator', 'info', `待審批項目: ${data.pending_approvals}`);
-                addLog('orchestrator', 'info', `審計日誌: ${data.audit_log_length} 條記錄`);
+                addLog('orchestrator', 'success', `工作流完成 - 状态: ${data.status}`);
+                addLog('orchestrator', 'info', `待审批项目: ${data.pending_approvals}`);
+                addLog('orchestrator', 'info', `审计日志: ${data.audit_log_length} 条记录`);
 
                 setAgentStatus('planner', 'idle', '完成');
                 setAgentStatus('code', 'idle', '完成');
@@ -1913,21 +1694,25 @@
                 setAgentStatus('finance', 'idle', '完成');
 
             } catch (error) {
-                addLog('system', 'error', `執行失敗: ${error.message}`);
+                addLog('system', 'error', `执行失败: ${error.message}`);
+                console.error('Dry run error:', error);
             } finally {
                 overlay.classList.remove('visible');
             }
         }
 
-        // 頁面載入完成
+        // 页面加载完成
         document.addEventListener('DOMContentLoaded', () => {
-            addLog('system', 'success', 'StorePilot AI 前端已載入');
-            addLog('system', 'success', 'API 端點: http://localhost:8000');
-            addLog('system', 'success', '提示：點擊「發現構想」開始');
+            // 应用初始语言
+            applyTranslations(currentLang);
+            
+            addLog('system', 'success', 'StorePilot AI 前端已载入');
+            addLog('system', 'success', `API 端点: ${API_BASE}`);
+            addLog('system', 'success', '提示：点击「发现构想」开始');
             checkServerConnection();
         });
 
-        // 檢查伺服器連線狀態
+        // 检查服务器连接状态
         async function checkServerConnection() {
             const statusDot = document.querySelector('.status-dot');
             const statusText = document.querySelector('.navbar-status span:last-child');
@@ -1943,9 +1728,9 @@
                         statusDot.style.background = 'var(--success)';
                     }
                     if (statusText) {
-                        statusText.textContent = '系統運行中';
+                        statusText.textContent = currentLang === 'en' ? 'System Online' : currentLang === 'id' ? 'Sistem Aktif' : '系统运行中';
                     }
-                    addLog('system', 'success', '伺服器連線正常');
+                    addLog('system', 'success', '伺服器连线正常');
                 } else {
                     throw new Error(`HTTP ${response.status}`);
                 }
@@ -1954,291 +1739,23 @@
                     statusDot.style.background = 'var(--error)';
                 }
                 if (statusText) {
-                    statusText.textContent = '連線中斷';
+                    statusText.textContent = currentLang === 'en' ? 'Disconnected' : currentLang === 'id' ? 'Terputus' : '连线中断';
                     statusText.style.color = 'var(--error)';
                 }
-                addLog('system', 'error', `伺服器連線失敗: ${error.message}`);
+                addLog('system', 'error', `伺服器连线失败: ${error.message}`);
                 
-                // 30秒後重試
+                // 30秒后重试
                 setTimeout(checkServerConnection, 30000);
             }
         }
 
-        // 切換獵客引擎顯示
-        function toggleHunter() {
-            const section = document.getElementById('hunterSection');
-            section.style.display = section.style.display === 'none' ? 'block' : 'none';
-            if (section.style.display === 'block') {
-                section.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-
-        // 切換逆向分析顯示
-        function toggleReverse() {
-            const section = document.getElementById('reverseSection');
-            section.style.display = section.style.display === 'none' ? 'block' : 'none';
-            if (section.style.display === 'block') {
-                section.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-
-        // 搜索线索
-        async function searchLeads() {
-            const keywords = document.getElementById('hunterKeywords').value.split(',').map(k => k.trim()).filter(k => k);
-            const industry = document.getElementById('hunterIndustry').value || null;
-            const minScore = parseInt(document.getElementById('hunterMinScore').value) || 60;
-
-            if (keywords.length === 0) {
-                alert('請輸入至少一個搜索关键词');
-                return;
-            }
-
-            setAgentStatus('outreach', 'active', '獵客中...');
-            addLog('hunter', 'info', `開始搜索: ${keywords.join(', ')}${industry ? ' | 行業: ' + industry : ''}`);
-
-            try {
-                const response = await fetch(`${API_BASE}/api/hunt`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        keywords: keywords,
-                        industry: industry,
-                        min_score: minScore,
-                        max_results: 20
-                    })
-                });
-
-                const data = await response.json();
-                renderLeads(data.leads, data.stats);
-                addLog('hunter', 'success', `找到 ${data.total_found} 個高匹配线索`);
-                setAgentStatus('outreach', 'idle', '完成');
-            } catch (error) {
-                addLog('hunter', 'error', `搜索失敗: ${error.message}`);
-                setAgentStatus('outreach', 'idle', '錯誤');
-            }
-        }
-
-        // 渲染线索列表
-        function renderLeads(leads, stats) {
-            const resultsDiv = document.getElementById('hunterResults');
-            const countEl = document.getElementById('hunterCount');
-            const avgScoreEl = document.getElementById('hunterAvgScore');
-            const tableDiv = document.getElementById('leadsTable');
-
-            countEl.textContent = leads.length;
-            avgScoreEl.textContent = stats.avg_score.toFixed(1);
-
-            if (leads.length === 0) {
-                tableDiv.innerHTML = '<p style="text-align:center;color:var(--gray-400);padding:2rem;">沒有找到匹配的线索</p>';
-            } else {
-                tableDiv.innerHTML = `
-                    <table class="leads-table">
-                        <thead>
-                            <tr>
-                                <th>分數</th>
-                                <th>姓名</th>
-                                <th>公司</th>
-                                <th>職位</th>
-                                <th>郵件</th>
-                                <th>行業</th>
-                                <th>匹配理由</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${leads.map(l => `
-                                <tr>
-                                    <td><span class="score-badge score-${l.score >= 80 ? 'high' : l.score >= 60 ? 'medium' : 'low'}">${l.score}</span></td>
-                                    <td>${l.name}</td>
-                                    <td>${l.company}</td>
-                                    <td>${l.title}</td>
-                                    <td><a href="mailto:${l.email}" class="email-link">${l.email}</a></td>
-                                    <td>${l.industry}</td>
-                                    <td class="reason-text">${l.match_reason}</td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                `;
-            }
-
-            resultsDiv.style.display = 'block';
-        }
-
-        // 導出线索
-        function exportLeads() {
-            window.open(`${API_BASE}/api/hunt/export?format=csv`, '_blank');
-        }
-
-        // 逆向分析目標網站
-        async function analyzeTarget() {
-            const url = document.getElementById('reverseUrl').value;
-            const depth = parseInt(document.getElementById('reverseDepth').value) || 1;
-
-            if (!url) {
-                alert('請輸入目標網站 URL');
-                return;
-            }
-
-            setAgentStatus('code', 'active', '分析中...');
-            addLog('reverse', 'info', `開始逆向分析: ${url}`);
-
-            try {
-                const response = await fetch(`${API_BASE}/api/reverse/analyze?url=${encodeURIComponent(url)}&depth=${depth}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-
-                const data = await response.json();
-                renderAnalysis(data);
-                addLog('reverse', 'success', `分析完成 - 置信度: ${(data.confidence_score * 100).toFixed(0)}%`);
-                setAgentStatus('code', 'idle', '完成');
-            } catch (error) {
-                addLog('reverse', 'error', `分析失敗: ${error.message}`);
-                setAgentStatus('code', 'idle', '錯誤');
-            }
-        }
-
-        // 渲染逆向分析結果
-        function renderAnalysis(data) {
-            const resultsDiv = document.getElementById('reverseResults');
-            const summaryDiv = document.getElementById('analysisSummary');
-            const tabContent = document.getElementById('tabContent');
-
-            // 顯示摘要
-            summaryDiv.innerHTML = `
-                <div class="summary-card">
-                    <div class="summary-stat">
-                        <div class="summary-value">${(data.confidence_score * 100).toFixed(0)}%</div>
-                        <div class="summary-label">置信度</div>
-                    </div>
-                    <div class="summary-stat">
-                        <div class="summary-value">${data.tech_stack.length}</div>
-                        <div class="summary-label">技術組件</div>
-                    </div>
-                    <div class="summary-stat">
-                        <div class="summary-value">${data.api_endpoints.length}</div>
-                        <div class="summary-label">API 端點</div>
-                    </div>
-                    <div class="summary-stat">
-                        <div class="summary-value">${data.recommendations.length}</div>
-                        <div class="summary-label">優化建議</div>
-                    </div>
-                </div>
-            `;
-
-            // 預加載技術棧標籤頁
-            showTab('tech');
-
-            resultsDiv.style.display = 'block';
-            resultsDiv.dataset.data = JSON.stringify(data);
-        }
-
-        // 顯示分析標籤頁
-        function showTab(tabName) {
-            const data = JSON.parse(document.getElementById('reverseResults').dataset.data);
-            const tabContent = document.getElementById('tabContent');
-
-            // 更新按鈕狀態
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.textContent.includes(tabName === 'tech' ? '技術' : tabName === 'api' ? 'API' : tabName === 'business' ? '商業' : '建議')) {
-                    btn.classList.add('active');
-                }
-            });
-
-            // 渲染內容
-            switch(tabName) {
-                case 'tech':
-                    tabContent.innerHTML = `
-                        <div class="tech-stack-grid">
-                            ${data.tech_stack.map(t => `
-                                <div class="tech-item">
-                                    <div class="tech-name">${t.name}</div>
-                                    <div class="tech-category">${t.category}</div>
-                                    <div class="tech-confidence">
-                                        <div class="confidence-bar" style="width: ${t.confidence * 100}%"></div>
-                                        <span>${(t.confidence * 100).toFixed(0)}%</span>
-                                    </div>
-                                    <div class="tech-evidence">${t.evidence}</div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    `;
-                    break;
-                case 'api':
-                    tabContent.innerHTML = `
-                        <table class="leads-table">
-                            <thead>
-                                <tr>
-                                    <th>方法</th>
-                                    <th>路徑</th>
-                                    <th>描述</th>
-                                    <th>參數</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${data.api_endpoints.map(e => `
-                                    <tr>
-                                        <td><span class="method-badge method-${e.method.toLowerCase()}">${e.method}</span></td>
-                                        <td>${e.path}</td>
-                                        <td>${e.description}</td>
-                                        <td>${e.parameters.join(', ') || '-'}</td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    `;
-                    break;
-                case 'business':
-                    tabContent.innerHTML = `
-                        <div class="business-analysis">
-                            <h4>收入來源</h4>
-                            <ul class="revenue-list">
-                                ${data.business_model.revenue_streams.map(r => `
-                                    <li><strong>${r.description}</strong>: ${r.amount || r.percentage}</li>
-                                `).join('')}
-                            </ul>
-                            <h4>成本結構</h4>
-                            <div class="cost-chart">
-                                ${Object.entries(data.business_model.cost_structure).map(([k, v]) => `
-                                    <div class="cost-bar">
-                                        <span class="cost-label">${k}</span>
-                                        <div class="bar-container">
-                                            <div class="bar-fill" style="width: ${v * 100}%"></div>
-                                        </div>
-                                        <span class="cost-value">${(v * 100).toFixed(0)}%</span>
-                                    </div>
-                                `).join('')}
-                            </div>
-                            <h4>競爭優勢</h4>
-                            <ul class="advantages-list">
-                                ${data.business_model.competitive_advantages.map(a => `<li>${a}</li>`).join('')}
-                            </ul>
-                        </div>
-                    `;
-                    break;
-                case 'recommendations':
-                    tabContent.innerHTML = `
-                        <div class="recommendations-list">
-                            ${data.recommendations.map((r, i) => `
-                                <div class="recommendation-item">
-                                    <span class="rec-number">${i + 1}</span>
-                                    <span class="rec-text">${r}</span>
-                                </div>
-                            `).join('')}
-                        </div>
-                    `;
-                    break;
-            }
-        }
-
-        // 載入付款資訊
+        // 载入付款资讯
         async function loadPaymentInfo() {
             const loading = document.getElementById('paymentLoading');
             if (loading) loading.style.display = 'block';
 
             try {
-                // 載入銀行資訊
+                // 载入银行资讯
                 const bankRes = await fetch(`${API_BASE}/api/bank-account`);
                 const bankData = await bankRes.json();
                 if (bankData.bank_name) document.getElementById('bankName').textContent = bankData.bank_name;
@@ -2246,7 +1763,7 @@
                 if (bankData.account_number) document.getElementById('accountNumber').textContent = bankData.account_number;
                 if (bankData.account_name) document.getElementById('accountName').textContent = bankData.account_name;
 
-                // 載入價格資訊
+                // 载入价格资讯
                 const pricingRes = await fetch(`${API_BASE}/api/pricing`);
                 const pricingData = await pricingRes.json();
                 if (pricingData.prices.twd) {
@@ -2254,7 +1771,7 @@
                     document.getElementById('twdYearly').textContent = `NT$ ${pricingData.prices.twd.yearly.toLocaleString()}`;
                 }
 
-                // 載入加密貨幣資訊
+                // 载入加密货币资讯
                 const cryptoRes = await fetch(`${API_BASE}/api/crypto-payment`);
                 const cryptoData = await cryptoRes.json();
                 if (cryptoData.supported) {
@@ -2270,22 +1787,22 @@
             }
         }
 
-        // 複製銀行資訊
+        // 复制银行资讯
         function copyBankInfo() {
             const bankName = document.getElementById('bankName').textContent;
             const bankCode = document.getElementById('bankCode').textContent;
             const accountNumber = document.getElementById('accountNumber').textContent;
             const accountName = document.getElementById('accountName').textContent;
-            const text = `${bankName} (${bankCode})\n帳號：${accountNumber}\n戶名：${accountName}`;
+            const text = `${bankName} (${bankCode})\n账号：${accountNumber}\n户名：${accountName}`;
 
             navigator.clipboard.writeText(text).then(() => {
-                alert('銀行資訊已複製到剪貼簿！');
+                alert('银行资讯已复制到剪贴板！');
             }).catch(err => {
                 console.error('Copy failed:', err);
             });
         }
 
-        // 切換網路
+        // 切换网络
         function switchNetwork() {
             const network = document.getElementById('networkSelect').value;
             const cryptoData = window.cryptoPaymentData;
@@ -2297,23 +1814,23 @@
             };
 
             document.getElementById('networkBadge').textContent = network;
-            document.getElementById('walletAddress').textContent = walletMap[network] || '請聯繫客服獲取錢包地址';
+            document.getElementById('walletAddress').textContent = walletMap[network] || '请联系客服获取钱包地址';
             document.getElementById('copyHint').textContent = '';
         }
 
-        // 複製錢包地址
+        // 复制钱包地址
         function copyWalletAddress() {
             const address = document.getElementById('walletAddress').textContent;
             const network = document.getElementById('networkBadge').textContent;
 
-            if (!address || address.includes('請聯繫')) {
-                alert('請先選擇網路，或聯繫客服獲取錢包地址');
+            if (!address || address.includes('请联系')) {
+                alert('请先选择网络，或联系客服获取钱包地址');
                 return;
             }
 
             navigator.clipboard.writeText(address).then(() => {
                 const hint = document.getElementById('copyHint');
-                hint.textContent = `✅ ${network} 地址已複製！請在 ${network} 網路下匯款`;
+                hint.textContent = `✅ ${network} 地址已复制！请在 ${network} 网络下汇款`;
                 hint.style.color = '#10B981';
                 setTimeout(() => { hint.textContent = ''; }, 3000);
             }).catch(err => {
@@ -2321,7 +1838,7 @@
             });
         }
 
-        // 頁面載入時載入付款資訊
+        // 页面加载时载入付款资讯
         document.addEventListener('DOMContentLoaded', () => {
             loadPaymentInfo();
         });

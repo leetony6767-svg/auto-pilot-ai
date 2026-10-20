@@ -1,6 +1,7 @@
 # Core Frameworks
 langchain>=0.3.0
-langgraph>=0.4.0
+langchain-core>=0.3.86
+langgraph>=0.4.6
 langchain-anthropic>=0.3.0
 langchain-openai>=0.2.0
 
