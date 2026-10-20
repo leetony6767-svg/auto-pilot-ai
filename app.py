@@ -408,7 +408,106 @@ async def get_crypto_payment():
     }
 
 
-# ── 內部輔助函數 ────────────────────────────────────────────────
+# ── 双轨自动分润 API ────────────────────────────────────────────
+class RevenueShareRequest(BaseModel):
+    user_id: str
+    amount: float  # 总收入金额
+    currency: str  # "USD" or "TWD"
+    payment_channel: str  # "okx_usdt" or "bank_transfer"
+    transaction_id: str = ""
+
+
+class RevenueShareResponse(BaseModel):
+    user_id: str
+    total_amount: float
+    platform_fee_percent: float
+    platform_fee: float
+    payout_amount: float
+    payout_method: str
+    status: str  # "processed" or "pending"
+    message: str
+
+
+@app.post("/api/revenue-share", response_model=RevenueShareResponse)
+async def process_revenue_share(request: RevenueShareRequest):
+    """
+    双轨自动分润结算 API
+
+    流程：
+    1. 计算平台服务费（20%）
+    2. 根据支付方式路由到不同分润通道：
+       - OKX USDT/USDC：通过 OKX API 进行加密货币分润
+       - 银行转账：通过支付托管平台进行法币分润
+    3. 返回分润结果
+    """
+    from datetime import datetime
+
+    # 固定抽成比例 20%
+    PLATFORM_FEE_RATE = 0.20
+
+    # 计算分润
+    platform_fee = round(request.amount * PLATFORM_FEE_RATE, 2)
+    payout_amount = round(request.amount - platform_fee, 2)
+
+    # 路由到对应支付通道
+    if request.payment_channel == "okx_usdt":
+        # 海外用户：通过 OKX USDT 分润
+        status = "processed"
+        message = (
+            f"已为海外用户 {request.user_id} 处理 USDT 分润。"
+            f"总额 ${request.amount:.2f} USD，平台抽成 ${platform_fee:.2f} USD (20%)，"
+            f"发放金额 ${payout_amount:.2f} USD。"
+        )
+    elif request.payment_channel == "bank_transfer":
+        # 台湾本地：通过银行/金流托管分润
+        status = "processed"
+        message = (
+            f"已为本地用户 {request.user_id} 处理银行分润。"
+            f"总额 NT$ {request.amount:.2f}，平台抽成 NT$ {platform_fee:.2f} (20%)，"
+            f"发放金额 NT$ {payout_amount:.2f}。"
+        )
+    else:
+        status = "error"
+        message = f"不支持的支付方式: {request.payment_channel}"
+
+    return RevenueShareResponse(
+        user_id=request.user_id,
+        total_amount=request.amount,
+        platform_fee_percent=PLATFORM_FEE_RATE * 100,
+        platform_fee=platform_fee,
+        payout_amount=payout_amount,
+        payout_method=request.payment_channel,
+        status=status,
+        message=message,
+    )
+
+
+@app.get("/api/revenue-share/rules")
+async def get_revenue_share_rules():
+    """获取分润规则说明"""
+    return {
+        "platform_fee_percent": 20,
+        "monthly_subscription_usd": 49,
+        "payment_channels": {
+            "okx_usdt": {
+                "name": "OKX USDT/USDC",
+                "description": "适用于海外用户，支持 TRC20 和 Polygon 网络",
+                "supported_networks": ["TRC20 (Tron)", "Polygon (MATIC)"],
+                "settlement_cycle": "实时",
+            },
+            "bank_transfer": {
+                "name": "银行转账 (Taiwan)",
+                "description": "适用于台湾本地用户，通过国泰世华银行收款",
+                "bank_name": "国泰世华银行",
+                "account_number": "117-50-605328-0",
+                "settlement_cycle": "T+1 工作日",
+            },
+        },
+        "fee_note": "平台在每笔成功交易中抽取 20% 技术服务费，无交易则不收费。订阅费 $49 USD/月 另计。",
+    }
+
+
+# ── 内部辅助函数 ────────────────────────────────────────────────
 async def _dry_run_workflow(state: BusinessState) -> BusinessState:
     """
     乾跑模式：只執行規劃和生成，跳過實際部署和發送

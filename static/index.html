@@ -205,14 +205,13 @@
         .lang-dropdown {
             display: none;
             position: absolute;
-            top: 100%;
+            top: calc(100% + 8px);
             right: 0;
-            margin-top: 0.5rem;
             background: var(--black-card);
             border: 1px solid var(--gray-700);
             border-radius: 8px;
             padding: 0.5rem 0;
-            min-width: 180px;
+            min-width: 200px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
             z-index: 200;
         }
@@ -229,6 +228,7 @@
             cursor: pointer;
             transition: background 0.2s ease;
             color: var(--gray-300);
+            position: relative;
         }
 
         .lang-option:hover {
@@ -241,12 +241,23 @@
             background: rgba(212, 175, 55, 0.1);
         }
 
+        .lang-option.active .lang-check {
+            opacity: 1;
+        }
+
         .lang-flag {
             font-size: 1.25rem;
         }
 
         .lang-name {
             font-size: 0.875rem;
+            flex: 1;
+        }
+
+        .lang-check {
+            font-size: 0.75rem;
+            opacity: 0;
+            transition: opacity 0.2s ease;
         }
 
         /* ═══════════════════════════════════════════════════════════════
@@ -1153,18 +1164,20 @@
                     <div class="lang-option active" onclick="setLanguage('zh-TW')" data-lang="zh-TW">
                         <span class="lang-flag">🇹🇼</span>
                         <span class="lang-name">繁體中文</span>
+                        <span class="lang-check">✓</span>
                     </div>
                     <div class="lang-option" onclick="setLanguage('en')" data-lang="en">
                         <span class="lang-flag">🇺🇸</span>
                         <span class="lang-name">English</span>
+                        <span class="lang-check">✓</span>
                     </div>
                     <div class="lang-option" onclick="setLanguage('id')" data-lang="id">
                         <span class="lang-flag">🇮🇩</span>
                         <span class="lang-name">Bahasa Indonesia</span>
+                        <span class="lang-check">✓</span>
                     </div>
                 </div>
             </div>
-            <a href="/docs" target="_blank" class="btn btn-secondary" data-i18n="nav.docs">API 文档</a>
             <button class="btn btn-primary" onclick="discoverIdeas()" data-i18n="nav.ideas">💡 发现构想</button>
         </div>
     </nav>
@@ -1452,7 +1465,6 @@
     <footer class="footer">
         <p class="footer-text">StorePilot AI — 基于 Polsia 逆向分析的最小可行 AI Agent 运营系统</p>
         <div class="footer-links">
-            <a href="/docs">API 文档</a>
             <a href="https://github.com" target="_blank">GitHub</a>
             <a href="mailto:support@storepilot.local">联系我们</a>
         </div>
@@ -1476,7 +1488,6 @@
         const translations = {
             "zh-TW": {
                 "nav.status": "系统运行中",
-                "nav.docs": "API 文档",
                 "nav.ideas": "💡 发现构想",
                 "hero.label": "AI THAT RUNS YOUR COMPANY WHILE YOU SLEEP",
                 "hero.title": "在你睡觉时<br>替你运营公司的 AI",
@@ -1528,11 +1539,15 @@
                 "payment.commission_desc": "平台在每笔成功交易中抽取 20% 作为技术服务费，无交易则不收费",
                 "payment.fee_note": "📌 以上费用将在您完成订阅后生效。所有费用均通过安全渠道收取，详情请参阅完整《服务与抽成条款》。",
                 "payment.terms_text": "我已閱讀並同意《服務與抽成條款》（包含 $49 美元月費及 20% 成交抽成規則）。",
-                "language": "语言"
+                "language": "语言",
+                "idea.metric.revenue": "预估月收入",
+                "idea.metric.investment": "初始投资（参考）",
+                "idea.metric.trend": "市场趋势",
+                "idea.trend.rising": "上升",
+                "idea.trend.stable": "稳定"
             },
             "en": {
                 "nav.status": "System Online",
-                "nav.docs": "API Docs",
                 "nav.ideas": "💡 Discover Ideas",
                 "hero.label": "AI THAT RUNS YOUR COMPANY WHILE YOU SLEEP",
                 "hero.title": "AI That Runs Your Company<br>While You Sleep",
@@ -1584,11 +1599,15 @@
                 "payment.commission_desc": "Platform charges 20% service fee on successful transactions. No transaction = no fee.",
                 "payment.fee_note": "📌 Fees take effect after subscription completion. All charges collected via secure channels. See full Terms of Service for details.",
                 "payment.terms_text": "I have read and agree to the Terms of Service & Commission Policy (including $49 USD monthly fee and 20% transaction commission).",
-                "language": "Language"
+                "language": "Language",
+                "idea.metric.revenue": "Estimated Monthly Revenue",
+                "idea.metric.investment": "Initial Investment (Est.)",
+                "idea.metric.trend": "Market Trend",
+                "idea.trend.rising": "Rising",
+                "idea.trend.stable": "Stable"
             },
             "id": {
                 "nav.status": "Sistem Aktif",
-                "nav.docs": "Dokumen API",
                 "nav.ideas": "💡 Temukan Ide",
                 "hero.label": "AI YANG MENGELOLA PERUSAHAANMU SAAT KAMU TIDUR",
                 "hero.title": "AI Yang Mengelola Perusahaanmu<br>Saat Kamu Tidur",
@@ -1640,7 +1659,12 @@
                 "payment.commission_desc": "Platform mengenakan biaya layanan 20% pada transaksi yang berhasil. Tidak ada transaksi = tidak ada biaya.",
                 "payment.fee_note": "📌 Biaya berlaku setelah penyelesaian langganan. Semua pembayaran dilakukan melalui saluran yang aman. Lihat Syarat Layanan lengkap untuk detail.",
                 "payment.terms_text": "Saya telah membaca dan menyetujui Syarat Layanan & Kebijakan Komisi (termasuk biaya bulanan $49 USD dan komisi transaksi 20%).",
-                "language": "Bahasa"
+                "language": "Bahasa",
+                "idea.metric.revenue": "Perkiraan Pendapatan Bulanan",
+                "idea.metric.investment": "Investasi Awal (Perkiraan)",
+                "idea.metric.trend": "Tren Pasar",
+                "idea.trend.rising": "Naik",
+                "idea.trend.stable": "Stabil"
             }
         };
 
@@ -1718,6 +1742,12 @@
         // ═══════════════════════════════════════════════════════════════
         // 核心功能
         // ═══════════════════════════════════════════════════════════════
+
+        // 获取当前语言的翻译（用于动态内容）
+        function t(key) {
+            const dict = translations[currentLang] || translations["zh-TW"];
+            return dict[key] || key;
+        }
 
         // 更新 Agent 状态
         function setAgentStatus(agent, status, text) {
@@ -1799,15 +1829,15 @@
                     <div class="idea-metrics">
                         <div class="idea-metric">
                             <div class="idea-metric-value">$${idea.estimated_monthly_revenue.toLocaleString()}</div>
-                            <div class="idea-metric-label">预估月收入</div>
+                            <div class="idea-metric-label" data-i18n="idea.metric.revenue">预估月收入</div>
                         </div>
                         <div class="idea-metric">
                             <div class="idea-metric-value">$${idea.required_investment.toLocaleString()}</div>
-                            <div class="idea-metric-label">所需投资</div>
+                            <div class="idea-metric-label" data-i18n="idea.metric.investment">初始投资（参考）</div>
                         </div>
                         <div class="idea-metric">
-                            <div class="idea-metric-value" style="color: ${idea.market_trend === 'rising' ? 'var(--success)' : 'var(--gray-400)'}">${idea.market_trend === 'rising' ? '↑' : '→'} ${idea.market_trend === 'rising' ? '上升' : '稳定'}</div>
-                            <div class="idea-metric-label">市场趋势</div>
+                            <div class="idea-metric-value" style="color: ${idea.market_trend === 'rising' ? 'var(--success)' : 'var(--gray-400)'}">${idea.market_trend === 'rising' ? '↑' : '→'} ${idea.market_trend === 'rising' ? t('idea.trend.rising') : t('idea.trend.stable')}</div>
+                            <div class="idea-metric-label" data-i18n="idea.metric.trend">市场趋势</div>
                         </div>
                     </div>
                     <div class="idea-features">
