@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StorePilot AI — AI 在你睡觉时替你运营商店</title>
+    <title>StorePilot AI — AI 在你睡覺時替你運營商店</title>
     <style>
         /* ═══════════════════════════════════════════════════════════════
-           设计主题：Polsia 高端商業风格
-           黑底 + 白字 + 金色点缀 + 极简排版
+           設計主題：Polsia 高端商業風格
+           黑底 + 白字 + 金色點綴 + 極簡排版
            ═══════════════════════════════════════════════════════════════ */
         :root {
             --black: #0a0a0a;
@@ -45,7 +45,7 @@
         }
 
         /* ═══════════════════════════════════════════════════════════════
-           顶部通知走马灯
+           頂部通知走馬燈
            ═══════════════════════════════════════════════════════════════ */
         .ticker-bar {
             background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 100%);
@@ -177,91 +177,18 @@
             background: var(--gray-800);
         }
 
-        /* ═══════════════════════════════════════════════════════════════
-           语言切换器样式
-           ═══════════════════════════════════════════════════════════════ */
-        .lang-switcher {
-            position: relative;
-        }
-
-        .lang-button {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 0.75rem;
-            background: var(--gray-800);
-            border: 1px solid var(--gray-700);
-            border-radius: 6px;
-            color: var(--white);
-            cursor: pointer;
-            font-size: 0.875rem;
-            transition: all 0.2s ease;
-        }
-
-        .lang-button:hover {
-            border-color: var(--gold);
-        }
-
-        .lang-dropdown {
-            display: none;
-            position: absolute;
-            top: calc(100% + 8px);
-            right: 0;
-            background: var(--black-card);
-            border: 1px solid var(--gray-700);
-            border-radius: 8px;
-            padding: 0.5rem 0;
-            min-width: 200px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-            z-index: 200;
-        }
-
-        .lang-dropdown.show {
-            display: block;
-        }
-
-        .lang-option {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.625rem 1rem;
-            cursor: pointer;
-            transition: background 0.2s ease;
-            color: var(--gray-300);
-            position: relative;
-        }
-
-        .lang-option:hover {
-            background: var(--gray-800);
-            color: var(--white);
-        }
-
-        .lang-option.active {
+        .btn-outline {
+            background: transparent;
             color: var(--gold);
+            border: 1px solid var(--gold);
+        }
+
+        .btn-outline:hover {
             background: rgba(212, 175, 55, 0.1);
         }
 
-        .lang-option.active .lang-check {
-            opacity: 1;
-        }
-
-        .lang-flag {
-            font-size: 1.25rem;
-        }
-
-        .lang-name {
-            font-size: 0.875rem;
-            flex: 1;
-        }
-
-        .lang-check {
-            font-size: 0.75rem;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-        }
-
         /* ═══════════════════════════════════════════════════════════════
-           Hero 区块
+           Hero 區塊
            ═══════════════════════════════════════════════════════════════ */
         .hero {
             padding: 6rem 2rem 4rem;
@@ -307,7 +234,7 @@
         }
 
         /* ═══════════════════════════════════════════════════════════════
-           区块通用样式
+           區塊通用樣式
            ═══════════════════════════════════════════════════════════════ */
         .section {
             padding: 4rem 2rem;
@@ -616,7 +543,7 @@
         }
 
         /* ═══════════════════════════════════════════════════════════════
-           审计日誌
+           審計日誌
            ═══════════════════════════════════════════════════════════════ */
         .log-panel {
             background: var(--black-card);
@@ -689,7 +616,7 @@
         }
 
         /* ═══════════════════════════════════════════════════════════════
-           付款資訊区块
+           付款資訊區塊
            ═══════════════════════════════════════════════════════════════ */
         .payment-container {
             display: grid;
@@ -891,132 +818,6 @@
             width: 100%;
         }
 
-        /* ═══════════════════════════════════════════════════════════════
-           收费规则說明卡片
-           ═══════════════════════════════════════════════════════════════ */
-        .fee-rules-card {
-            background: var(--black-card);
-            border: 1px solid var(--gold);
-            border-radius: 12px;
-            padding: 1.5rem;
-            max-width: 800px;
-            margin: 0 auto 2rem auto;
-        }
-
-        .fee-rules-header {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 1.25rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--gray-700);
-        }
-
-        .fee-rules-icon {
-            font-size: 1.5rem;
-        }
-
-        .fee-rules-title {
-            font-size: 1.125rem;
-            font-weight: 700;
-            color: var(--gold);
-        }
-
-        .fee-rules-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 1.25rem;
-        }
-
-        .fee-rule-item {
-            background: var(--gray-800);
-            border-radius: 8px;
-            padding: 1.25rem;
-        }
-
-        .fee-rule-label {
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: var(--gray-400);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 0.5rem;
-        }
-
-        .fee-rule-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--white);
-            margin-bottom: 0.5rem;
-        }
-
-        .fee-rule-desc {
-            font-size: 0.875rem;
-            color: var(--gray-400);
-            line-height: 1.5;
-        }
-
-        .fee-rules-note {
-            background: rgba(212, 175, 55, 0.1);
-            border-left: 3px solid var(--gold);
-            border-radius: 6px;
-            padding: 1rem;
-        }
-
-        .fee-rules-note p {
-            font-size: 0.875rem;
-            color: var(--gray-300);
-            line-height: 1.6;
-        }
-
-        /* 付费确认复选框 */
-        .payment-terms-section {
-            max-width: 800px;
-            margin: 0 auto 1.5rem auto;
-            padding: 1rem 1.25rem;
-            background: var(--black-card);
-            border: 1px solid var(--gray-700);
-            border-radius: 8px;
-        }
-
-        .terms-checkbox-wrapper {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.75rem;
-            cursor: pointer;
-        }
-
-        .terms-checkbox {
-            width: 20px;
-            height: 20px;
-            min-width: 20px;
-            accent-color: var(--gold);
-            cursor: pointer;
-            margin-top: 2px;
-        }
-
-        .terms-checkbox-label {
-            font-size: 0.875rem;
-            color: var(--gray-300);
-            line-height: 1.5;
-            cursor: pointer;
-        }
-
-        .terms-checkbox-label a {
-            color: var(--gold);
-            text-decoration: underline;
-        }
-
-        .terms-checkbox-label a:hover {
-            color: var(--gold-light);
-        }
-
-        .payment-btn-disabled {
-            opacity: 0.5;
-            cursor: not-allowed !important;
-        }
-
         .loading-text {
             text-align: center;
             color: var(--gray-500);
@@ -1024,7 +825,7 @@
         }
 
         /* ═══════════════════════════════════════════════════════════════
-           页尾
+           頁尾
            ═══════════════════════════════════════════════════════════════ */
         .footer {
             border-top: 1px solid var(--gray-800);
@@ -1057,7 +858,7 @@
         }
 
         /* ═══════════════════════════════════════════════════════════════
-           响应式设计
+           響應式設計
            ═══════════════════════════════════════════════════════════════ */
         @media (max-width: 768px) {
             .navbar {
@@ -1088,7 +889,7 @@
         }
 
         /* ═══════════════════════════════════════════════════════════════
-           載入动画
+           載入動畫
            ═══════════════════════════════════════════════════════════════ */
         .loading-overlay {
             position: fixed;
@@ -1123,22 +924,540 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
+        /* ═══════════════════════════════════════════════════════════════
+           AI 獵客引擎樣式
+           ═══════════════════════════════════════════════════════════════ */
+        .hunter-panel,
+        .reverse-panel {
+            background: var(--black-card);
+            border: 1px solid var(--gray-700);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .hunter-form,
+        .reverse-form {
+            margin-bottom: 2rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .hunter-stats {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: var(--gray-800);
+            border-radius: 8px;
+        }
+
+        .stat-item {
+            font-size: 0.9rem;
+            color: var(--gray-300);
+        }
+
+        .stat-item strong {
+            color: var(--gold);
+            font-size: 1.25rem;
+        }
+
+        .leads-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+
+        .leads-table th,
+        .leads-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-700);
+        }
+
+        .leads-table th {
+            color: var(--gray-400);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+
+        .leads-table tr:hover {
+            background: var(--gray-800);
+        }
+
+        .score-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        .score-high {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
+        .score-medium {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning);
+        }
+
+        .score-low {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--error);
+        }
+
+        .email-link {
+            color: var(--gold);
+            text-decoration: none;
+        }
+
+        .email-link:hover {
+            text-decoration: underline;
+        }
+
+        .reason-text {
+            color: var(--gray-400);
+            font-size: 0.8rem;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           逆向分析樣式
+           ═══════════════════════════════════════════════════════════════ */
+        .analysis-summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-card {
+            background: var(--gray-800);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .summary-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        .summary-label {
+            font-size: 0.75rem;
+            color: var(--gray-400);
+            text-transform: uppercase;
+            margin-top: 0.5rem;
+        }
+
+        .analysis-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--gray-700);
+            padding-bottom: 0.5rem;
+        }
+
+        .tab-btn {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: none;
+            color: var(--gray-400);
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover {
+            color: var(--white);
+        }
+
+        .tab-btn.active {
+            color: var(--gold);
+            border-bottom: 2px solid var(--gold);
+        }
+
+        .tab-content {
+            min-height: 200px;
+        }
+
+        .tech-stack-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .tech-item {
+            background: var(--gray-800);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .tech-name {
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: 0.25rem;
+        }
+
+        .tech-category {
+            font-size: 0.75rem;
+            color: var(--gray-400);
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .tech-confidence {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .confidence-bar {
+            flex: 1;
+            height: 4px;
+            background: var(--gold);
+            border-radius: 2px;
+        }
+
+        .tech-evidence {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+
+        .method-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .method-get { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+        .method-post { background: rgba(59, 130, 246, 0.2); color: #60A5FA; }
+        .method-websocket { background: rgba(168, 85, 247, 0.2); color: #A78BFA; }
+
+        .business-analysis h4 {
+            color: var(--gold);
+            margin: 1.5rem 0 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .business-analysis h4:first-child {
+            margin-top: 0;
+        }
+
+        .revenue-list,
+        .advantages-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .revenue-list li,
+        .advantages-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--gray-700);
+            color: var(--gray-300);
+        }
+
+        .cost-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .cost-bar {
+            display: grid;
+            grid-template-columns: 100px 1fr 50px;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .cost-label {
+            color: var(--gray-400);
+            font-size: 0.875rem;
+        }
+
+        .bar-container {
+            height: 8px;
+            background: var(--gray-700);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--gold), var(--gold-light));
+            border-radius: 4px;
+        }
+
+        .cost-value {
+            color: var(--gold);
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .recommendations-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .recommendation-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--gray-800);
+            border-radius: 8px;
+        }
+
+        .rec-number {
+            width: 28px;
+            height: 28px;
+            background: var(--gold);
+            color: var(--black);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.875rem;
+            flex-shrink: 0;
+        }
+
+        .rec-text {
+            color: var(--gray-300);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* 響應式設計擴展 */
+        @media (max-width: 768px) {
+            .analysis-summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .cost-bar {
+                grid-template-columns: 80px 1fr 40px;
+            }
+
+            .leads-table {
+                font-size: 0.75rem;
+            }
+
+            .leads-table th,
+            .leads-table td {
+                padding: 0.5rem 0.25rem;
+            }
+        }
+
+        .result-section {
+            margin-top: 1rem;
+        }
+        
+        .result-card {
+            background: var(--gray-800);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .result-card h3 {
+            color: var(--gold);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .result-card h3 .badge {
+            font-size: 0.75rem;
+            background: var(--gold);
+            color: var(--black);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+        }
+        
+        .plan-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .plan-item {
+            background: var(--black-card);
+            padding: 0.75rem;
+            border-radius: 8px;
+        }
+        
+        .plan-item-label {
+            font-size: 0.75rem;
+            color: var(--gray-400);
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+        }
+        
+        .plan-item-value {
+            color: var(--white);
+            font-size: 0.9rem;
+        }
+        
+        .code-preview {
+            background: var(--black);
+            border: 1px solid var(--gray-700);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.8rem;
+            color: var(--gray-300);
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        
+        .content-item, .email-item {
+            background: var(--black-card);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .content-item h4, .email-item h4 {
+            color: var(--white);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .content-item p, .email-item p {
+            color: var(--gray-400);
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray-500);
+        }
+        
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* 執行成果展示區 */
+        .result-card {
+            background: var(--gray-800);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .result-card h3 {
+            color: var(--gold);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .result-card h3 .badge {
+            font-size: 0.75rem;
+            background: var(--gold);
+            color: var(--black);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        .plan-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .plan-item {
+            background: var(--black-card);
+            padding: 0.75rem;
+            border-radius: 8px;
+        }
+
+        .plan-item-label {
+            font-size: 0.75rem;
+            color: var(--gray-400);
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+        }
+
+        .plan-item-value {
+            color: var(--white);
+            font-size: 0.9rem;
+        }
+
+        .code-preview {
+            background: var(--black);
+            border: 1px solid var(--gray-700);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.8rem;
+            color: var(--gray-300);
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .content-item, .email-item {
+            background: var(--black-card);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .content-item h4, .email-item h4 {
+            color: var(--white);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .content-item p, .email-item p {
+            color: var(--gray-400);
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
     </style>
 </head>
 <body>
-    <!-- 顶部通知走马灯 -->
+    <!-- 頂部通知走馬燈 -->
     <div class="ticker-bar">
         <div class="ticker-content">
-            <span data-i18n="ticker.message1">🚀 StorePilot AI 系统就緒 — 已为 12,847 家公司提供 AI 自动化运营服务</span>
-            <span data-i18n="ticker.message2">📊 今日新增：3 个新商業構想推薦</span>
-            <span data-i18n="ticker.message3">⚡ Agent 平均响应时间：&lt; 2.3 秒</span>
-            <span data-i18n="ticker.message4">💰 平台营收抽成：20% | 用戶留存：80%</span>
-            <span data-i18n="ticker.message5">🔒 所有外部操作需人工审批</span>
-            <span data-i18n="ticker.message1">🚀 StorePilot AI 系统就緒 — 已为 12,847 家公司提供 AI 自动化运营服务</span>
-            <span data-i18n="ticker.message2">📊 今日新增：3 个新商業構想推薦</span>
-            <span data-i18n="ticker.message3">⚡ Agent 平均响应时间：&lt; 2.3 秒</span>
-            <span data-i18n="ticker.message4">💰 平台营收抽成：20% | 用戶留存：80%</span>
-            <span data-i18n="ticker.message5">🔒 所有外部操作需人工审批</span>
+            <span>🚀 StorePilot AI 系統就緒 — 已為 12,847 家公司提供 AI 自動化營運服務</span>
+            <span>📊 今日新增：3 個新商業構想推薦</span>
+            <span>⚡ Agent 平均響應時間：&lt; 2.3 秒</span>
+            <span>💰 平台營收抽成：20% | 用戶留存：80%</span>
+            <span>🔒 所有外部操作需人工審批</span>
+            <span>🚀 StorePilot AI 系統就緒 — 已為 12,847 家公司提供 AI 自動化營運服務</span>
+            <span>📊 今日新增：3 個新商業構想推薦</span>
+            <span>⚡ Agent 平均響應時間：&lt; 2.3 秒</span>
+            <span>💰 平台營收抽成：20% | 用戶留存：80%</span>
+            <span>🔒 所有外部操作需人工審批</span>
         </div>
     </div>
 
@@ -1150,166 +1469,148 @@
         </a>
         <div class="navbar-status">
             <span class="status-dot"></span>
-            <span data-i18n="nav.status">系統運行中</span>
+            <span>系統運行中</span>
         </div>
         <div class="navbar-actions">
-            <!-- 语言切换器 -->
-            <div class="lang-switcher">
-                <button class="lang-button" onclick="toggleLangDropdown()">
-                    <span id="current-lang-flag">🇹🇼</span>
-                    <span id="current-lang-name">繁體中文</span>
-                    <span>▼</span>
-                </button>
-                <div class="lang-dropdown" id="langDropdown">
-                    <div class="lang-option active" onclick="setLanguage('zh-TW')" data-lang="zh-TW">
-                        <span class="lang-flag">🇹🇼</span>
-                        <span class="lang-name">繁體中文</span>
-                        <span class="lang-check">✓</span>
-                    </div>
-                    <div class="lang-option" onclick="setLanguage('en')" data-lang="en">
-                        <span class="lang-flag">🇺🇸</span>
-                        <span class="lang-name">English</span>
-                        <span class="lang-check">✓</span>
-                    </div>
-                    <div class="lang-option" onclick="setLanguage('id')" data-lang="id">
-                        <span class="lang-flag">🇮🇩</span>
-                        <span class="lang-name">Bahasa Indonesia</span>
-                        <span class="lang-check">✓</span>
-                    </div>
-                </div>
-            </div>
-            <button class="btn btn-primary" onclick="discoverIdeas()" data-i18n="nav.ideas">💡 發現構想</button>
+            <a href="http://localhost:8000/docs" target="_blank" class="btn btn-secondary">API 文檔</a>
+            <button class="btn btn-secondary" onclick="toggleHunter()">🎯 獵客引擎</button>
+            <button class="btn btn-secondary" onclick="toggleReverse()">🔬 逆向分析</button>
+            <button class="btn btn-primary" onclick="discoverIdeas()">💡 發現構想</button>
         </div>
     </nav>
 
-    <!-- Hero 区块 -->
+    <!-- Hero 區塊 -->
     <section class="hero">
-        <p class="hero-label" data-i18n="hero.label">AI THAT RUNS YOUR COMPANY WHILE YOU SLEEP</p>
-        <h1 class="hero-title" data-i18n="hero.title">在你睡觉时<br>替你运营公司的 AI</h1>
-        <p class="hero-subtitle" data-i18n="hero.subtitle">像 hire 一个员工一样简单，但从未疲倦、从未请假。<br>从構想验证到自动运营，一站式完成。</p>
+        <p class="hero-label">AI THAT RUNS YOUR COMPANY WHILE YOU SLEEP</p>
+        <h1 class="hero-title">在你睡覺時<br>替你運營公司的 AI</h1>
+        <p class="hero-subtitle">像 hire 一個員工一樣簡單，但從未疲倦、從未請假。<br>從構想驗證到自動營運，一站式完成。</p>
         <div class="hero-actions">
-            <button class="btn btn-primary" onclick="scrollToControl()" style="padding: 1rem 2rem; font-size: 1rem;" data-i18n="hero.start">
+            <button class="btn btn-primary" onclick="scrollToControl()" style="padding: 1rem 2rem; font-size: 1rem;">
                 ▶️ 開始使用
             </button>
-            <button class="btn btn-outline" onclick="discoverIdeas()" style="padding: 1rem 2rem; font-size: 1rem;" data-i18n="hero.demo">
+            <button class="btn btn-outline" onclick="discoverIdeas()" style="padding: 1rem 2rem; font-size: 1rem;">
                 💡 探索商業構想
             </button>
         </div>
     </section>
 
-    <!-- Agent 狀態区 -->
+    <!-- Agent 狀態區 -->
     <section class="section">
         <div class="section-header">
-            <p class="section-label" data-i18n="team.label">YOUR TEAM</p>
-            <h2 class="section-title" data-i18n="team.title">你的 AI 团队</h2>
-            <p class="section-desc" data-i18n="team.desc">每个 Agent 都有明确职责，所有外部操作需人工审批</p>
+            <p class="section-label">Your Team</p>
+            <h2 class="section-title">你的 AI 團隊</h2>
+            <p class="section-desc">每個 Agent 都有明確職責，所有外部操作需人工審批</p>
         </div>
         <div class="agents-grid" id="agentsGrid">
             <div class="agent-card">
                 <div class="agent-card-header">
                     <div class="agent-icon">💡</div>
                     <div class="agent-info">
-                        <h3 data-i18n="agent.idea.title">創意發現 Agent</h3>
-                        <p data-i18n="agent.idea.desc">商業構想推薦</p>
+                        <h3>創意發現 Agent</h3>
+                        <p>商業構想推薦</p>
                     </div>
                 </div>
-                <span class="agent-status idle" id="agent-idea" data-i18n="status.idle">就緒</span>
+                <span class="agent-status idle" id="agent-idea">就緒</span>
             </div>
             <div class="agent-card">
                 <div class="agent-card-header">
                     <div class="agent-icon">🎯</div>
                     <div class="agent-info">
-                        <h3 data-i18n="agent.planner.title">规划 Agent (CEO)</h3>
-                        <p data-i18n="agent.planner.desc">商業執行計劃</p>
+                        <h3>規劃 Agent (CEO)</h3>
+                        <p>商業執行計劃</p>
                     </div>
                 </div>
-                <span class="agent-status idle" id="agent-planner" data-i18n="status.idle">就緒</span>
+                <span class="agent-status idle" id="agent-planner">就緒</span>
             </div>
             <div class="agent-card">
                 <div class="agent-card-header">
                     <div class="agent-icon">💻</div>
                     <div class="agent-info">
-                        <h3 data-i18n="agent.code.title">技术 Agent</h3>
-                        <p data-i18n="agent.code.desc">网站开发部署</p>
+                        <h3>技術 Agent</h3>
+                        <p>網站開發部署</p>
                     </div>
                 </div>
-                <span class="agent-status idle" id="agent-code" data-i18n="status.idle">就緒</span>
+                <span class="agent-status idle" id="agent-code">就緒</span>
             </div>
             <div class="agent-card">
                 <div class="agent-card-header">
                     <div class="agent-icon">📢</div>
                     <div class="agent-info">
-                        <h3 data-i18n="agent.marketing.title">营销 Agent</h3>
-                        <p data-i18n="agent.marketing.desc">社媒内容生成</p>
+                        <h3>營銷 Agent</h3>
+                        <p>社媒內容生成</p>
                     </div>
                 </div>
-                <span class="agent-status idle" id="agent-marketing" data-i18n="status.idle">就緒</span>
+                <span class="agent-status idle" id="agent-marketing">就緒</span>
             </div>
             <div class="agent-card">
                 <div class="agent-card-header">
                     <div class="agent-icon">🤝</div>
                     <div class="agent-info">
-                        <h3 data-i18n="agent.outreach.title">获客 Agent</h3>
-                        <p data-i18n="agent.outreach.desc">销售邮件发送</p>
+                        <h3>獲客 Agent</h3>
+                        <p>銷售郵件發送</p>
                     </div>
                 </div>
-                <span class="agent-status idle" id="agent-outreach" data-i18n="status.idle">就緒</span>
+                <span class="agent-status idle" id="agent-outreach">就緒</span>
             </div>
             <div class="agent-card">
                 <div class="agent-card-header">
                     <div class="agent-icon">💰</div>
                     <div class="agent-info">
-                        <h3 data-i18n="agent.finance.title">财务 Agent</h3>
-                        <p data-i18n="agent.finance.desc">营收分润计算</p>
+                        <h3>財務 Agent</h3>
+                        <p>營收分潤計算</p>
                     </div>
                 </div>
-                <span class="agent-status idle" id="agent-finance" data-i18n="status.idle">就緒</span>
+                <span class="agent-status idle" id="agent-finance">就緒</span>
             </div>
         </div>
     </section>
 
-    <!-- 商業構想要区 -->
+    <!-- 商業構想區 -->
     <section class="section" id="ideasSection" style="display: none;">
         <div class="section-header">
             <p class="section-label">Recommended Ideas</p>
-            <h2 class="section-title">为你發現的商業机会</h2>
-            <p class="section-desc">基于市场趋势分析，这是最适合起步的微型产品</p>
+            <h2 class="section-title">為你發現的商業機會</h2>
+            <p class="section-desc">基於市場趨勢分析，這是最適合起步的微型產品</p>
         </div>
         <div class="ideas-grid" id="ideasContainer"></div>
     </section>
+
+    <!-- AI 獵客引擎區 -->
+
 
     <!-- 控制面板 -->
     <section class="section">
         <div class="section-header">
             <p class="section-label">Control Center</p>
-            <h2 class="section-title">啟動你的 AI 团队</h2>
-            <p class="section-desc">描述你想经营的業務，AI 会帮你从零开始运作</p>
+            <h2 class="section-title">啟動你的 AI 團隊</h2>
+            <p class="section-desc">描述你想經營的業務，AI 會幫你從零開始運作</p>
         </div>
         <div class="control-panel">
-            <div class="form-group">
-                <label class="form-label" data-i18n="control.user_id">你的身份標識</label>
-                <input type="text" class="form-input" id="userId" placeholder="例如：zhang-san" value="demo-user">
+            <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                <div class="form-group">
+                    <label class="form-label">你的身份標識</label>
+                    <input type="text" class="form-input" id="userId" placeholder="例如：zhang-san" value="demo-user">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">獲利模式</label>
+                    <select class="form-input" id="profitMode">
+                        <option value="">自動推薦</option>
+                        <option value="e-commerce">🛒 電商自動化</option>
+                        <option value="content-marketing">📱 內容營銷</option>
+                        <option value="b2b-sales">💼 B2B 獲客開發</option>
+                        <option value="digital-products">📦 數位產品</option>
+                        <option value="data-analysis">📊 數據分析</option>
+                        <option value="task-automation">⚙️ 任務自動化</option>
+                    </select>
+                </div>
             </div>
             <div class="form-group">
-                <label class="form-label" data-i18n="control.profit_mode">獲利模式</label>
-                <select class="form-input" id="profitMode" style="width: 100%;">
-                    <option value="">全部模式（自動推薦）</option>
-                    <option value="e-commerce">① 電商自動化</option>
-                    <option value="content-marketing">② 內容營銷</option>
-                    <option value="b2b-sales">③ B2B 獲客開發</option>
-                    <option value="digital-products">④ 數位產品</option>
-                    <option value="data-analysis">⑤ 數據分析</option>
-                    <option value="task-automation">⑥ 任務自動化</option>
-                </select>
-                <p class="form-hint" data-i18n="control.profit_mode_hint">選擇你想執行的獲利模式，或留空讓 AI 自動推薦</p>
-            </div>
-            <div class="form-group">
-                <label class="form-label" data-i18n="control.business_idea">商業構想描述</label>
-                <textarea class="form-input" id="businessIdea" placeholder="描述你想创立的業務，或點擊「發現構想」让我们帮你推薦..."></textarea>
-                <p class="form-hint" data-i18n="control.hint">💡 沒有想法？點擊導航栏的「💡 發現構想」按鈕</p>
+                <label class="form-label">商業構想描述</label>
+                <textarea class="form-input" id="businessIdea" placeholder="描述你想創立的業務，或點擊「發現構想」讓我們幫你推薦..."></textarea>
+                <p class="form-hint">💡 沒有想法？點擊導航欄的「💡 發現構想」按鈕</p>
             </div>
             <div style="display: flex; gap: 1rem;">
-                <button class="btn btn-primary" id="dryRunBtn" style="flex: 1;" onclick="runDryRun()">
+                <button class="btn btn-primary" onclick="runDryRun()" style="flex: 1;">
                     ▶️ 執行乾跑測試
                 </button>
                 <button class="btn btn-secondary" onclick="discoverIdeas()">
@@ -1319,7 +1620,7 @@
         </div>
     </section>
 
-    <!-- 审计日誌 -->
+    <!-- 審計日誌 -->
     <section class="section">
         <div class="section-header">
             <p class="section-label">Audit Log</p>
@@ -1327,99 +1628,137 @@
         </div>
         <div class="log-panel">
             <div class="log-header">
-                <span class="log-title">系统日誌</span>
+                <span class="log-title">系統日誌</span>
                 <button class="log-clear" onclick="clearLogs()">清除</button>
             </div>
             <div class="log-content" id="logContent">
                 <div class="log-entry">
                     <span class="log-time">00:00:00</span>
                     <span class="log-agent">system</span>
-                    <span class="log-message" data-i18n="log.waiting">系统就緒，等待指令...</span>
+                    <span class="log-message">系統就緒，等待指令...</span>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 付款資訊区块 -->
+    <!-- 執行成果展示區 -->
+    <section class="section" id="resultSection" style="display: none;">
+        <div class="section-header">
+            <p class="section-label">Execution Results</p>
+            <h2 class="section-title">AI 執行成果</h2>
+            <p class="section-desc">以下為 AI 團隊為你生成的商業規劃與執行材料</p>
+        </div>
+        <div class="results-container" id="resultsContainer">
+            <!-- 商業計劃摘要 -->
+            <div class="result-card" id="planCard">
+                <h3>📋 商業執行計劃</h3>
+                <div class="plan-grid" id="planGrid"></div>
+            </div>
+            <!-- Landing Page 預覽 -->
+            <div class="result-card" id="landingCard" style="display: none;">
+                <h3>🌐 網站 Landing Page <span class="badge">HTML</span></h3>
+                <div class="code-preview" id="landingCode"></div>
+            </div>
+            <!-- 營銷內容 -->
+            <div class="result-card" id="marketingCard" style="display: none;">
+                <h3>📱 營銷內容排期</h3>
+                <div id="contentQueue"></div>
+            </div>
+            <!-- 獲客郵件 -->
+            <div class="result-card" id="outreachCard" style="display: none;">
+                <h3>📧 獲客開發郵件</h3>
+                <div id="emailQueue"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 執行成果展示區 -->
+    <section class="section" id="resultSection" style="display: none;">
+        <div class="section-header">
+            <p class="section-label">Execution Results</p>
+            <h2 class="section-title">AI 執行成果</h2>
+            <p class="section-desc">以下為 AI 團隊為你生成的商業規劃與執行材料</p>
+        </div>
+        <div class="results-container" id="resultsContainer">
+            <!-- 商業計劃摘要 -->
+            <div class="result-card" id="planCard">
+                <h3>📋 商業執行計劃</h3>
+                <div class="plan-grid" id="planGrid"></div>
+            </div>
+            <!-- Landing Page 預覽 -->
+            <div class="result-card" id="landingCard" style="display: none;">
+                <h3>🌐 網站 Landing Page <span class="badge">HTML</span></h3>
+                <div class="code-preview" id="landingCode"></div>
+            </div>
+            <!-- 營銷內容 -->
+            <div class="result-card" id="marketingCard" style="display: none;">
+                <h3>📱 營銷內容排期</h3>
+                <div id="contentQueue"></div>
+            </div>
+            <!-- 獲客郵件 -->
+            <div class="result-card" id="outreachCard" style="display: none;">
+                <h3>📧 獲客開發郵件</h3>
+                <div id="emailQueue"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 付款資訊區塊 -->
     <section class="section" id="paymentSection">
         <div class="section-header">
             <p class="section-label">Payment Methods</p>
-            <h2 class="section-title" data-i18n="payment.title">订阅与付款</h2>
-            <p class="section-desc" data-i18n="payment.desc">选择适合您的付款方式，支持国内银行转账与国际加密货币</p>
+            <h2 class="section-title">訂閱與付款</h2>
+            <p class="section-desc">選擇適合您的付款方式，支援國內銀行轉帳與國際加密貨幣</p>
         </div>
-
-        <!-- 收费规则說明卡片 -->
-        <div class="fee-rules-card">
-            <div class="fee-rules-header">
-                <span class="fee-rules-icon">💰</span>
-                <h3 class="fee-rules-title" data-i18n="payment.fee_title">收费规则說明</h3>
-            </div>
-            <div class="fee-rules-grid">
-                <div class="fee-rule-item">
-                    <div class="fee-rule-label" data-i18n="payment.service_fee_label">系统基础服务费</div>
-                    <div class="fee-rule-value">$49 <span data-i18n="payment.currency_label">美元</span> / <span data-i18n="payment.period_label">月</span></div>
-                    <div class="fee-rule-desc" data-i18n="payment.service_fee_desc">每月固定费用，覆盖 AI Agent 运营、伺服器及技术维护成本</div>
-                </div>
-                <div class="fee-rule-item">
-                    <div class="fee-rule-label" data-i18n="payment.commission_label">商業成交抽成</div>
-                    <div class="fee-rule-value">20% <span data-i18n="payment.commission_of_label">交易服务费</span></div>
-                    <div class="fee-rule-desc" data-i18n="payment.commission_desc">平台在每笔成功交易中抽取 20% 作为技术服务费，无交易则不收费</div>
-                </div>
-            </div>
-            <div class="fee-rules-note">
-                <p data-i18n="payment.fee_note">📌 以上费用将在您完成订阅后生效。所有费用均通过安全渠道收取，详情请参阅完整《服务与抽成条款》。</p>
-            </div>
-        </div>
-
         <div class="payment-container">
-            <!-- 国内付款 -->
+            <!-- 國內付款 -->
             <div class="payment-card">
                 <div class="payment-header">
                     <div class="payment-icon">🏦</div>
                     <div class="payment-info">
-                        <h3 data-i18n="payment.bank_title">国内银行转账</h3>
-                        <p class="payment-region" data-i18n="payment.bank_region">适用地区：台湾</p>
+                        <h3>國內銀行轉帳</h3>
+                        <p class="payment-region">適用地區：台灣</p>
                     </div>
                 </div>
                 <div class="payment-details">
                     <div class="price-row">
-                        <span class="price-label" data-i18n="payment.monthly">月度订阅</span>
+                        <span class="price-label">月度訂閱</span>
                         <span class="price-value" id="twdPrice">NT$ 1,568</span>
                     </div>
                     <div class="price-row">
-                        <span class="price-label" data-i18n="payment.yearly">年度订阅</span>
+                        <span class="price-label">年度訂閱</span>
                         <span class="price-value" id="twdYearly">NT$ 15,680</span>
                         <span class="price-discount">省 16.7%</span>
                     </div>
                 </div>
                 <div class="bank-info">
                     <div class="bank-row">
-                        <span class="bank-label">银行：</span>
-                        <span class="bank-value" id="bankName">国泰世华银行</span>
+                        <span class="bank-label">銀行：</span>
+                        <span class="bank-value" id="bankName">國泰世華銀行</span>
                     </div>
                     <div class="bank-row">
-                        <span class="bank-label">代号：</span>
+                        <span class="bank-label">代號：</span>
                         <span class="bank-value" id="bankCode">013</span>
                     </div>
                     <div class="bank-row">
-                        <span class="bank-label">账号：</span>
+                        <span class="bank-label">帳號：</span>
                         <span class="bank-value" id="accountNumber">117-50-605328-0</span>
                     </div>
                     <div class="bank-row">
-                        <span class="bank-label">户名：</span>
-                        <span class="bank-value" id="accountName">李国荣</span>
+                        <span class="bank-label">戶名：</span>
+                        <span class="bank-value" id="accountName">李國榮</span>
                     </div>
                 </div>
-                <button class="btn btn-secondary btn-full" id="btnCopyBank" onclick="copyBankInfo()">📋 复制账号資訊</button>
+                <button class="btn btn-secondary btn-full" onclick="copyBankInfo()">📋 複製帳號資訊</button>
             </div>
 
-            <!-- 国际加密货币付款 -->
+            <!-- 國際加密貨幣付款 -->
             <div class="payment-card payment-card-crypto">
                 <div class="payment-header">
                     <div class="payment-icon">₿</div>
                     <div class="payment-info">
-                        <h3>OKX USDT 加密货币</h3>
-                        <p class="payment-region" data-i18n="payment.crypto_region">适用地区：国际客户</p>
+                        <h3>OKX USDT 加密貨幣</h3>
+                        <p class="payment-region">適用地區：國際客戶</p>
                     </div>
                     <span class="crypto-badge">USDT</span>
                 </div>
@@ -1428,17 +1767,17 @@
                 </div>
                 <div class="payment-details">
                     <div class="price-row">
-                        <span class="price-label" data-i18n="payment.monthly">月度订阅</span>
+                        <span class="price-label">月度訂閱</span>
                         <span class="price-value crypto-price" id="usdtMonthly">49 USDT</span>
                     </div>
                     <div class="price-row">
-                        <span class="price-label" data-i18n="payment.yearly">年度订阅</span>
+                        <span class="price-label">年度訂閱</span>
                         <span class="price-value crypto-price" id="usdtYearly">490 USDT</span>
                         <span class="price-discount">省 16.7%</span>
                     </div>
                 </div>
                 <div class="network-selector">
-                    <label class="network-label">选择网络：</label>
+                    <label class="network-label">選擇網路：</label>
                     <select id="networkSelect" onchange="switchNetwork()">
                         <option value="TRC20">TRC20 (Tron) - 推薦</option>
                         <option value="Polygon">Polygon (MATIC)</option>
@@ -1446,7 +1785,7 @@
                 </div>
                 <div class="wallet-info">
                     <div class="wallet-row">
-                        <span class="wallet-label">网络：</span>
+                        <span class="wallet-label">網路：</span>
                         <span class="wallet-value" id="networkBadge">TRC20</span>
                     </div>
                     <div class="wallet-row">
@@ -1455,334 +1794,42 @@
                     </div>
                 </div>
                 <div class="copy-section">
-                    <button class="btn btn-primary btn-full" id="btnCopyWallet" onclick="copyWalletAddress()">📋 复制钱包地址</button>
+                    <button class="btn btn-primary btn-full" onclick="copyWalletAddress()">📋 複製錢包地址</button>
                     <p class="copy-hint" id="copyHint"></p>
                 </div>
                 <div class="exchange-note">
-                    <p>💡 建议使用 OKX、Binance、Bybit 或 KuCoin 等主流交易所进行转换</p>
+                    <p>💡 建議使用 OKX、Binance、Bybit 或 KuCoin 等主流交易所進行轉換</p>
                 </div>
             </div>
         </div>
-        <div id="paymentLoading" class="loading-text">载入付款資訊...</div>
-
-        <!-- 付费前确认机制 -->
-        <div class="payment-terms-section" id="termsSection" style="display: none;">
-            <label class="terms-checkbox-wrapper">
-                <input type="checkbox" class="terms-checkbox" id="termsCheckbox" onchange="togglePaymentButtons()">
-                <span class="terms-checkbox-label" data-i18n="payment.terms_text">我已閱讀並同意《服務與抽成條款》（包含 $49 美元月費及 20% 成交抽成規則）。</span>
-            </label>
-        </div>
+        <div id="paymentLoading" class="loading-text">載入付款資訊...</div>
     </section>
 
-        <!-- 页尾 -->
+    <!-- 頁尾 -->
     <footer class="footer">
-        <p class="footer-text" data-i18n="footer.slogan">StorePilot AI — AI 驱动的商業运营自动化平台</p>
+        <p class="footer-text">StorePilot AI — AI 驅動的商業运营自动化平台</p>
         <div class="footer-links">
+            <a href="http://localhost:8000/docs">API 文檔</a>
             <a href="https://github.com" target="_blank">GitHub</a>
-            <a href="mailto:support@storepilot.local">联系我们</a>
+            <a href="mailto:support@mvp-agent-os.local">聯絡我們</a>
         </div>
     </footer>
 
-    <!-- 載入动画 -->
+    <!-- 載入動畫 -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-spinner"></div>
     </div>
 
     <script>
-        // API 基础 URL - 自动检测当前主机
-        const API_BASE = window.location.origin;
+        const API_BASE = 'http://localhost:8000';
         let currentIdeas = [];
-
-        // ═══════════════════════════════════════════════════════════════
-        // 多语言切换功能
-        // ═══════════════════════════════════════════════════════════════
-
-        // 翻译字典
-        const translations = {
-            "zh-TW": {
-                "nav.status": "系統運行中",
-                "nav.ideas": "💡 發現構想",
-                "hero.label": "AI THAT RUNS YOUR COMPANY WHILE YOU SLEEP",
-                "hero.title": "在你睡觉时<br>替你运营公司的 AI",
-                "hero.subtitle": "像 hire 一个员工一样简单，但从未疲倦、从未请假。<br>从構想验证到自动运营，一站式完成。",
-                "hero.start": "▶️ 開始使用",
-                "hero.demo": "💡 探索商業構想",
-                "team.label": "YOUR TEAM",
-                "team.title": "你的 AI 团队",
-                "team.desc": "每个 Agent 都有明确职责，所有外部操作需人工审批",
-                "agent.idea.title": "創意發現 Agent",
-                "agent.idea.desc": "商業構想推薦",
-                "agent.planner.title": "规划 Agent (CEO)",
-                "agent.planner.desc": "商業執行計劃",
-                "agent.code.title": "技术 Agent",
-                "agent.code.desc": "网站开发部署",
-                "agent.marketing.title": "营销 Agent",
-                "agent.marketing.desc": "社媒内容生成",
-                "agent.outreach.title": "获客 Agent",
-                "agent.outreach.desc": "销售邮件发送",
-                "agent.finance.title": "财务 Agent",
-                "agent.finance.desc": "营收分润计算",
-                "status.idle": "就緒",
-                "status.running": "工作中...",
-                "status.completed": "完成",
-                "status.error": "錯誤",
-                "control.user_id": "你的身份標識",
-                "control.business_idea": "商業構想描述",
-                "control.hint": "💡 沒有想法？點擊導航栏的「💡 發現構想」按鈕",
-                "control.profit_mode": "獲利模式",
-                "control.profit_mode_hint": "選擇你想執行的獲利模式，或留空讓 AI 自動推薦",
-                "log.waiting": "系统就緒，等待指令...",
-                "ticker.message1": "🚀 StorePilot AI 系统就緒 — 已为 12,847 家公司提供 AI 自动化运营服务",
-                "ticker.message2": "📊 今日新增：3 个新商業構想推薦",
-                "ticker.message3": "⚡ Agent 平均响应时间：&lt; 2.3 秒",
-                "ticker.message4": "💰 平台营收抽成：20% | 用戶留存：80%",
-                "ticker.message5": "🔒 所有外部操作需人工审批",
-                "payment.title": "订阅与付款",
-                "payment.desc": "选择适合您的付款方式，支持国内银行转账与国际加密货币",
-                "payment.bank_title": "国内银行转账",
-                "payment.bank_region": "适用地区：台湾",
-                "payment.monthly": "月度订阅",
-                "payment.yearly": "年度订阅",
-                "payment.crypto_region": "适用地区：国际客户",
-                "payment.fee_title": "收费规则說明",
-                "payment.service_fee_label": "系统基础服务费",
-                "payment.usd_label": "USD",
-                "payment.month_label": "月",
-                "payment.currency_label": "美元",
-                "payment.period_label": "月",
-                "payment.service_fee_desc": "每月固定费用，覆盖 AI Agent 运营、伺服器及技术维护成本",
-                "payment.commission_label": "商業成交抽成",
-                "payment.commission_of_label": "交易服务费",
-                "payment.commission_desc": "平台在每笔成功交易中抽取 20% 作为技术服务费，无交易则不收费",
-                "payment.fee_note": "📌 以上费用将在您完成订阅后生效。所有费用均通过安全渠道收取，详情请参阅完整《服务与抽成条款》。",
-                "payment.terms_text": "我已閱讀並同意《服務與抽成條款》（包含 $49 美元月費及 20% 成交抽成規則）。",
-                "language": "语言",
-                "idea.metric.revenue": "预估月收入",
-                "idea.metric.investment": "初始投资（参考）",
-                "idea.metric.trend": "市场趋势",
-                "idea.trend.rising": "上升",
-                "idea.trend.stable": "稳定",
-                "footer.slogan": "StorePilot AI — AI 驱动的商業运营自动化平台"
-            },
-            "en": {
-                "nav.status": "System Online",
-                "nav.ideas": "💡 Discover Ideas",
-                "hero.label": "AI THAT RUNS YOUR COMPANY WHILE YOU SLEEP",
-                "hero.title": "AI That Runs Your Company<br>While You Sleep",
-                "hero.subtitle": "As simple as hiring an employee, but never tired, never absent.<br>From idea validation to automated operations, one-stop solution.",
-                "hero.start": "▶️ Get Started",
-                "hero.demo": "💡 Explore Business Ideas",
-                "team.label": "YOUR TEAM",
-                "team.title": "Your AI Team",
-                "team.desc": "Each Agent has clear responsibilities, all external operations require human approval",
-                "agent.idea.title": "Idea Discovery Agent",
-                "agent.idea.desc": "Business Idea Recommendations",
-                "agent.planner.title": "Planner Agent (CEO)",
-                "agent.planner.desc": "Business Execution Plan",
-                "agent.code.title": "Code Agent",
-                "agent.code.desc": "Website Development & Deployment",
-                "agent.marketing.title": "Marketing Agent",
-                "agent.marketing.desc": "Social Media Content Generation",
-                "agent.outreach.title": "Outreach Agent",
-                "agent.outreach.desc": "Sales Email Sending",
-                "agent.finance.title": "Finance Agent",
-                "agent.finance.desc": "Revenue Sharing Calculation",
-                "status.idle": "Ready",
-                "status.running": "Working...",
-                "status.completed": "Completed",
-                "status.error": "Error",
-                "control.user_id": "Your Identity",
-                "control.business_idea": "Business Idea Description",
-                "control.hint": "💡 No idea? Click the 「💡 Discover Ideas」 button in the navbar",
-                "control.profit_mode": "Profit Mode",
-                "control.profit_mode_hint": "Select the revenue model you want to run, or leave empty for AI recommendation",
-                "log.waiting": "System ready, waiting for instructions...",
-                "ticker.message1": "🚀 StorePilot AI System Ready — Serving 12,847 companies with AI automation",
-                "ticker.message2": "📊 Today: 3 new business ideas added",
-                "ticker.message3": "⚡ Agent avg response time: &lt; 2.3s",
-                "ticker.message4": "💰 Platform revenue share: 20% | User retention: 80%",
-                "ticker.message5": "🔒 All external operations require human approval",
-                "payment.title": "Subscription & Payment",
-                "payment.desc": "Choose your preferred payment method, supporting domestic bank transfer and international cryptocurrency",
-                "payment.bank_title": "Domestic Bank Transfer",
-                "payment.bank_region": "Region: Taiwan",
-                "payment.monthly": "Monthly Subscription",
-                "payment.yearly": "Annual Subscription",
-                "payment.crypto_region": "Region: International",
-                "payment.fee_title": "Fee Structure",
-                "payment.service_fee_label": "Platform Service Fee",
-                "payment.usd_label": "USD",
-                "payment.month_label": "month",
-                "payment.currency_label": "USD",
-                "payment.period_label": "Month",
-                "payment.service_fee_desc": "Fixed monthly fee covering AI Agent operations, server infrastructure, and technical maintenance",
-                "payment.commission_label": "Transaction Commission",
-                "payment.commission_of_label": "of transaction value",
-                "payment.commission_desc": "Platform charges 20% service fee on successful transactions. No transaction = no fee.",
-                "payment.fee_note": "📌 Fees take effect after subscription completion. All charges collected via secure channels. See full Terms of Service for details.",
-                "payment.terms_text": "I have read and agree to the Terms of Service & Commission Policy (including $49 USD monthly fee and 20% transaction commission).",
-                "language": "Language",
-                "idea.metric.revenue": "Estimated Monthly Revenue",
-                "idea.metric.investment": "Initial Investment (Est.)",
-                "idea.metric.trend": "Market Trend",
-                "idea.trend.rising": "Rising",
-                "idea.trend.stable": "Stable",
-                "footer.slogan": "StorePilot AI — AI-Powered Business Automation Platform"
-            },
-            "id": {
-                "nav.status": "Sistem Aktif",
-                "nav.ideas": "💡 Temukan Ide",
-                "hero.label": "AI YANG MENGELOLA PERUSAHAANMU SAAT KAMU TIDUR",
-                "hero.title": "AI Yang Mengelola Perusahaanmu<br>Saat Kamu Tidur",
-                "hero.subtitle": "Semudah merekrut karyawan, tapi tidak pernah lelah, tidak pernah absen.<br>Dari validasi ide hingga operasi otomatis, solusi satu atap.",
-                "hero.start": "▶️ Mulai",
-                "hero.demo": "💡 Jelajahi Ide Bisnis",
-                "team.label": "TIMMU",
-                "team.title": "Tim AI Kamu",
-                "team.desc": "Setiap Agent memiliki tanggung jawab yang jelas, semua operasi eksternal memerlukan persetujuan manusia",
-                "agent.idea.title": "Agent Penemuan Ide",
-                "agent.idea.desc": "Rekomendasi Ide Bisnis",
-                "agent.planner.title": "Agent Perencanaan (CEO)",
-                "agent.planner.desc": "Rencana Eksekusi Bisnis",
-                "agent.code.title": "Agent Kode",
-                "agent.code.desc": "Pengembangan & Deploy Website",
-                "agent.marketing.title": "Agent Pemasaran",
-                "agent.marketing.desc": "Generasi Konten Media Sosial",
-                "agent.outreach.title": "Agent Outreach",
-                "agent.outreach.desc": "Pengiriman Email Penjualan",
-                "agent.finance.title": "Agent Keuangan",
-                "agent.finance.desc": "Perhitungan Bagi Hasil",
-                "status.idle": "Siap",
-                "status.running": "Bekerja...",
-                "status.completed": "Selesai",
-                "status.error": "Kesalahan",
-                "control.user_id": "Identitasmu",
-                "control.business_idea": "Deskripsi Ide Bisnis",
-                "control.hint": "💡 Tidak ada ide? Klik tombol 「💡 Temukan Ide」 di navbar",
-                "control.profit_mode": "Mode Keuntungan",
-                "control.profit_mode_hint": "Pilih model pendapatan yang ingin kamu jalankan, atau kosongkan untuk rekomendasi AI",
-                "log.waiting": "Sistem siap, menunggu instruksi...",
-                "ticker.message1": "🚀 Sistem StorePilot AI Siap — Melayani 12,847 perusahaan dengan automasi AI",
-                "ticker.message2": "📊 Hari ini: 3 ide bisnis baru ditambahkan",
-                "ticker.message3": "⚡ Waktu respons rata-rata Agent: &lt; 2.3 detik",
-                "ticker.message4": "💰 Bagi hasil platform: 20% | Retensi pengguna: 80%",
-                "ticker.message5": "🔒 Semua operasi eksternal memerlukan persetujuan manusia",
-                "payment.title": "Langganan & Pembayaran",
-                "payment.desc": "Pilih metode pembayaran yang Anda inginkan, mendukung transfer bank domestik dan kripto internasional",
-                "payment.bank_title": "Transfer Bank Domestik",
-                "payment.bank_region": "Wilayah: Taiwan",
-                "payment.monthly": "Langganan Bulanan",
-                "payment.yearly": "Langganan Tahunan",
-                "payment.crypto_region": "Wilayah: Internasional",
-                "payment.fee_title": "Struktur Biaya",
-                "payment.service_fee_label": "Biaya Layanan Platform",
-                "payment.usd_label": "USD",
-                "payment.month_label": "bulan",
-                "payment.currency_label": "Dolar",
-                "payment.period_label": "Bulan",
-                "payment.service_fee_desc": "Biaya bulanan tetap untuk operasional AI Agent, infrastruktur server, dan pemeliharaan teknis",
-                "payment.commission_label": "Komisi Transaksi",
-                "payment.commission_of_label": "dari nilai transaksi",
-                "payment.commission_desc": "Platform mengenakan biaya layanan 20% pada transaksi yang berhasil. Tidak ada transaksi = tidak ada biaya.",
-                "payment.fee_note": "📌 Biaya berlaku setelah penyelesaian langganan. Semua pembayaran dilakukan melalui saluran yang aman. Lihat Syarat Layanan lengkap untuk detail.",
-                "payment.terms_text": "Saya telah membaca dan menyetujui Syarat Layanan & Kebijakan Komisi (termasuk biaya bulanan $49 USD dan komisi transaksi 20%).",
-                "language": "Bahasa",
-                "idea.metric.revenue": "Perkiraan Pendapatan Bulanan",
-                "idea.metric.investment": "Investasi Awal (Perkiraan)",
-                "idea.metric.trend": "Tren Pasar",
-                "idea.trend.rising": "Naik",
-                "idea.trend.stable": "Stabil",
-                "footer.slogan": "StorePilot AI — Platform Otomasi Bisnis Berbasis AI"
-            }
-        };
-
-        // 语言配置
-        const langConfig = {
-            "zh-TW": { flag: "🇹🇼", name: "繁體中文", dir: "ltr" },
-            "en": { flag: "🇺🇸", name: "English", dir: "ltr" },
-            "id": { flag: "🇮🇩", name: "Bahasa Indonesia", dir: "ltr" }
-        };
-
-        // 初始化语言
-        let currentLang = localStorage.getItem("storepilot-lang") || "zh-TW";
-
-        // 应用翻译
-        function applyTranslations(lang) {
-            const dict = translations[lang] || translations["zh-TW"];
-            
-            // 更新所有带有 data-i18n 属性的元素
-            document.querySelectorAll('[data-i18n]').forEach(element => {
-                const key = element.getAttribute('data-i18n');
-                const translation = dict[key];
-                if (translation) {
-                    if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
-                        element.placeholder = translation;
-                    } else {
-                        element.innerHTML = translation;
-                    }
-                }
-            });
-
-            // 更新 HTML lang 属性
-            document.documentElement.lang = lang === "zh-TW" ? "zh-Hant" : lang;
-
-            // 更新语言按鈕顯示
-            const config = langConfig[lang];
-            if (config) {
-                document.getElementById("current-lang-flag").textContent = config.flag;
-                document.getElementById("current-lang-name").textContent = config.name;
-            }
-
-            // 更新 active 狀態
-            document.querySelectorAll('.lang-option').forEach(option => {
-                option.classList.toggle('active', option.getAttribute('data-lang') === lang);
-            });
-        }
-
-        // 切换语言
-        function setLanguage(lang) {
-            currentLang = lang;
-            localStorage.setItem("storepilot-lang", lang);
-            applyTranslations(lang);
-            closeLangDropdown();
-        }
-
-        // 切换下拉选单
-        function toggleLangDropdown() {
-            const dropdown = document.getElementById("langDropdown");
-            dropdown.classList.toggle("show");
-        }
-
-        // 关闭下拉选单
-        function closeLangDropdown() {
-            const dropdown = document.getElementById("langDropdown");
-            dropdown.classList.remove("show");
-        }
-
-        // 點擊外部关闭下拉选单
-        document.addEventListener('click', function(event) {
-            const switcher = document.querySelector('.lang-switcher');
-            if (switcher && !switcher.contains(event.target)) {
-                closeLangDropdown();
-            }
-        });
-
-        // ═══════════════════════════════════════════════════════════════
-        // 核心功能
-        // ═══════════════════════════════════════════════════════════════
-
-        // 获取当前语言的翻译（用于动态内容）
-        function t(key) {
-            const dict = translations[currentLang] || translations["zh-TW"];
-            return dict[key] || key;
-        }
 
         // 更新 Agent 狀態
         function setAgentStatus(agent, status, text) {
             const el = document.getElementById(`agent-${agent}`);
             if (!el) return;
             el.className = `agent-status ${status}`;
-            el.textContent = text || (status === 'active' ? '工作中...' : status === 'idle' ? '就緒' : '錯誤');
+            el.textContent = text;
         }
 
         // 添加日誌
@@ -1805,8 +1852,7 @@
 
         // 清除日誌
         function clearLogs() {
-            const logContent = document.getElementById('logContent');
-            logContent.innerHTML = `
+            document.getElementById('logContent').innerHTML = `
                 <div class="log-entry">
                     <span class="log-time">${new Date().toTimeString().split(' ')[0]}</span>
                     <span class="log-agent">system</span>
@@ -1815,7 +1861,7 @@
             `;
         }
 
-        // 滚动到控制区
+        // 滾動到控制區
         function scrollToControl() {
             document.querySelector('.control-panel').scrollIntoView({ behavior: 'smooth' });
         }
@@ -1823,22 +1869,20 @@
         // 發現商業構想
         async function discoverIdeas() {
             const overlay = document.getElementById('loadingOverlay');
-            const profitMode = document.getElementById('profitMode')?.value || '';
-
             overlay.classList.add('visible');
             setAgentStatus('idea', 'active', '工作中...');
-            addLog('idea_discovery', 'info', '开始發現商業構想...');
+            addLog('idea_discovery', 'info', '開始發現商業構想...');
+
+            const profitMode = document.getElementById('profitMode').value;
+            let url = '${API_BASE}/api/ideas?count=3';
+            if (profitMode) url += `&profit_mode=${profitMode}`;
 
             try {
-                let url = `${API_BASE}/api/ideas?count=3`;
-                if (profitMode) {
-                    url += `&profit_mode=${profitMode}`;
-                }
                 const response = await fetch(url);
                 const data = await response.json();
                 currentIdeas = data.ideas;
-                renderIdeas(data.ideas, data.profit_modes);
-                addLog('idea_discovery', 'success', `已發現 ${data.ideas.length} 个商業構想`);
+                renderIdeas(data.ideas);
+                addLog('idea_discovery', 'success', `已發現 ${data.ideas.length} 個商業構想`);
                 setAgentStatus('idea', 'idle', '完成');
             } catch (error) {
                 addLog('idea_discovery', 'error', `發現失敗: ${error.message}`);
@@ -1849,43 +1893,40 @@
         }
 
         // 渲染構想卡片
-        function renderIdeas(ideas, profit_modes) {
+        function renderIdeas(ideas) {
             const container = document.getElementById('ideasContainer');
             const section = document.getElementById('ideasSection');
 
-            container.innerHTML = ideas.map((idea, index) => {
-                const profitLabel = idea.profit_mode_name || idea.profit_mode || '';
-                return `
+            container.innerHTML = ideas.map((idea, index) => `
                 <div class="idea-card">
                     <div class="idea-header">
                         <h3 class="idea-title">${idea.title}</h3>
                         <span class="idea-difficulty ${idea.difficulty}">${idea.difficulty.toUpperCase()}</span>
                     </div>
-                    ${profitLabel ? `<div class="idea-profit-mode">${profitLabel}</div>` : ''}
                     <p class="idea-description">${idea.description}</p>
                     <div class="idea-metrics">
                         <div class="idea-metric">
                             <div class="idea-metric-value">$${idea.estimated_monthly_revenue.toLocaleString()}</div>
-                            <div class="idea-metric-label" data-i18n="idea.metric.revenue">预估月收入</div>
+                            <div class="idea-metric-label">預估月收</div>
                         </div>
                         <div class="idea-metric">
                             <div class="idea-metric-value">$${idea.required_investment.toLocaleString()}</div>
-                            <div class="idea-metric-label" data-i18n="idea.metric.investment">初始投资（参考）</div>
+                            <div class="idea-metric-label">所需投資</div>
                         </div>
                         <div class="idea-metric">
-                            <div class="idea-metric-value" style="color: ${idea.market_trend === 'rising' ? 'var(--success)' : 'var(--gray-400)'}">${idea.market_trend === 'rising' ? '↑' : '→'} ${idea.market_trend === 'rising' ? t('idea.trend.rising') : t('idea.trend.stable')}</div>
-                            <div class="idea-metric-label" data-i18n="idea.metric.trend">市场趋势</div>
+                            <div class="idea-metric-value" style="color: ${idea.market_trend === 'rising' ? 'var(--success)' : 'var(--gray-400)'}">${idea.market_trend === 'rising' ? '↑' : '→'} ${idea.market_trend === 'rising' ? '上升' : '穩定'}</div>
+                            <div class="idea-metric-label">市場趨勢</div>
                         </div>
                     </div>
                     <div class="idea-features">
                         ${idea.key_features.slice(0, 4).map(f => `<span class="idea-feature-tag">${f}</span>`).join('')}
                     </div>
                     <div class="idea-actions">
-                        <button class="btn btn-primary" onclick="useIdea(${index})">🚀 使用这个構想</button>
-                        <button class="btn btn-secondary" onclick="copyIdea(${index})">📋 复制详情</button>
+                        <button class="btn btn-primary" onclick="useIdea(${index})">🚀 使用這個構想</button>
+                        <button class="btn btn-secondary" onclick="copyIdea(${index})">📋 複製詳情</button>
                     </div>
                 </div>
-            `}).join('');
+            `).join('');
 
             section.style.display = 'block';
             section.scrollIntoView({ behavior: 'smooth' });
@@ -1895,17 +1936,17 @@
         function useIdea(index) {
             if (currentIdeas[index]) {
                 document.getElementById('businessIdea').value = currentIdeas[index].title + ' - ' + currentIdeas[index].description;
-                addLog('system', 'success', `已选择構想: ${currentIdeas[index].title}`);
+                addLog('system', 'success', `已選擇構想: ${currentIdeas[index].title}`);
                 scrollToControl();
             }
         }
 
-        // 复制構想详情
+        // 複製構想詳情
         function copyIdea(index) {
             if (currentIdeas[index]) {
                 const text = JSON.stringify(currentIdeas[index], null, 2);
                 navigator.clipboard.writeText(text).then(() => {
-                    addLog('system', 'success', '構想详情已复制到剪贴板');
+                    addLog('system', 'success', '構想詳情已複製到剪貼簿');
                 });
             }
         }
@@ -1914,17 +1955,16 @@
         async function runDryRun() {
             const userId = document.getElementById('userId').value;
             const businessIdea = document.getElementById('businessIdea').value;
-            const profitMode = document.getElementById('profitMode')?.value || '';
+            const profitMode = document.getElementById('profitMode').value;
 
             if (!businessIdea) {
-                alert('请先輸入商業構想，或點擊「發現構想」让我们帮你推薦');
+                alert('請先輸入商業構想，或點擊「發現構想」讓我們幫你推薦');
                 return;
             }
 
             const overlay = document.getElementById('loadingOverlay');
             overlay.classList.add('visible');
 
-            // 重置所有 Agent 狀態
             ['idea', 'planner', 'code', 'marketing', 'outreach', 'finance'].forEach(agent => {
                 setAgentStatus(agent, 'idle', '就緒');
             });
@@ -1950,13 +1990,15 @@
                 const data = await response.json();
                 addLog('orchestrator', 'success', `工作流完成 - 狀態: ${data.status}`);
                 addLog('orchestrator', 'info', `待審批項目: ${data.pending_approvals}`);
-                addLog('orchestrator', 'info', `审计日誌: ${data.audit_log_length} 条記錄`);
+                addLog('orchestrator', 'info', `審計日誌: ${data.audit_log_length} 條記錄`);
 
                 setAgentStatus('planner', 'idle', '完成');
                 setAgentStatus('code', 'idle', '完成');
                 setAgentStatus('marketing', 'idle', '完成');
                 setAgentStatus('outreach', 'idle', '完成');
                 setAgentStatus('finance', 'idle', '完成');
+
+                renderResults(data);
 
             } catch (error) {
                 addLog('system', 'error', `執行失敗: ${error.message}`);
@@ -1966,18 +2008,61 @@
             }
         }
 
+        function renderResults(data) {
+            const section = document.getElementById('resultSection');
+
+            if (data.business_plan && Object.keys(data.business_plan).length > 0) {
+                const plan = data.business_plan;
+                document.getElementById('planGrid').innerHTML =
+                    '<div class="plan-item"><div class="plan-item-label">產品名稱</div><div class="plan-item-value">' + (plan.product_name || 'N/A') + '</div></div>' +
+                    '<div class="plan-item"><div class="plan-item-label">定位</div><div class="plan-item-value">' + (plan.positioning || 'N/A') + '</div></div>' +
+                    '<div class="plan-item"><div class="plan-item-label">目標客戶</div><div class="plan-item-value">' + (plan.target_audience || 'N/A') + '</div></div>' +
+                    '<div class="plan-item"><div class="plan-item-label">定價</div><div class="plan-item-value" style="color:var(--gold)">' + (plan.pricing || 'N/A') + '</div></div>';
+                document.getElementById('planCard').style.display = 'block';
+            } else {
+                document.getElementById('planCard').style.display = 'none';
+            }
+
+            if (data.landing_page_code && data.landing_page_code !== '') {
+                let code = data.landing_page_code;
+                if (code.length > 500) code = code.substring(0, 500) + '\n... (已截斷，完整代碼在審計日誌中)';
+                document.getElementById('landingCode').textContent = code;
+                document.getElementById('landingCard').style.display = 'block';
+            } else {
+                document.getElementById('landingCard').style.display = 'none';
+            }
+
+            if (data.content_queue && data.content_queue.length > 0) {
+                document.getElementById('contentQueue').innerHTML = data.content_queue.slice(0, 5).map(item =>
+                    '<div class="content-item"><h4>' + (item.day || '') + ' - ' + (item.title || item.subject || '') + '</h4><p>' + ((item.content || '').substring(0, 200)) + ((item.content || '').length > 200 ? '...' : '') + '</p></div>'
+                ).join('');
+                document.getElementById('marketingCard').style.display = 'block';
+            } else {
+                document.getElementById('marketingCard').style.display = 'none';
+            }
+
+            if (data.outreach_emails && data.outreach_emails.length > 0) {
+                document.getElementById('emailQueue').innerHTML = data.outreach_emails.slice(0, 5).map(item =>
+                    '<div class="email-item"><h4>致：' + (item.to || '潛在客戶') + '</h4><p>主題：' + (item.subject || '') + '</p><p>' + ((item.body || '').substring(0, 200)) + ((item.body || '').length > 200 ? '...' : '') + '</p></div>'
+                ).join('');
+                document.getElementById('outreachCard').style.display = 'block';
+            } else {
+                document.getElementById('outreachCard').style.display = 'none';
+            }
+
+            section.style.display = 'block';
+            section.scrollIntoView({ behavior: 'smooth' });
+        }
+
         // 頁面載入完成
         document.addEventListener('DOMContentLoaded', () => {
-            // 应用初始语言
-            applyTranslations(currentLang);
-            
-            addLog('system', 'success', 'StorePilot AI 前端已载入');
-            addLog('system', 'success', `API 端点: ${API_BASE}`);
-            addLog('system', 'success', '提示：點擊「發現構想」开始');
+            addLog('system', 'success', 'StorePilot AI 前端已載入');
+            addLog('system', 'success', 'API 端點: http://localhost:8000');
+            addLog('system', 'success', '提示：點擊「發現構想」開始');
             checkServerConnection();
         });
 
-        // 检查伺服器連線狀態
+        // 檢查伺服器連線狀態
         async function checkServerConnection() {
             const statusDot = document.querySelector('.status-dot');
             const statusText = document.querySelector('.navbar-status span:last-child');
@@ -1993,7 +2078,7 @@
                         statusDot.style.background = 'var(--success)';
                     }
                     if (statusText) {
-                        statusText.textContent = currentLang === 'en' ? 'System Online' : currentLang === 'id' ? 'Sistem Aktif' : '系統運行中';
+                        statusText.textContent = '系統運行中';
                     }
                     addLog('system', 'success', '伺服器連線正常');
                 } else {
@@ -2004,23 +2089,24 @@
                     statusDot.style.background = 'var(--error)';
                 }
                 if (statusText) {
-                    statusText.textContent = currentLang === 'en' ? 'Disconnected' : currentLang === 'id' ? 'Terputus' : '連線中斷';
+                    statusText.textContent = '連線中斷';
                     statusText.style.color = 'var(--error)';
                 }
                 addLog('system', 'error', `伺服器連線失敗: ${error.message}`);
                 
-                // 30秒后重试
+                // 30秒後重試
                 setTimeout(checkServerConnection, 30000);
             }
         }
 
-        // 载入付款资讯
+        // 搜索线索
+        // 載入付款資訊
         async function loadPaymentInfo() {
             const loading = document.getElementById('paymentLoading');
             if (loading) loading.style.display = 'block';
 
             try {
-                // 载入银行资讯
+                // 載入銀行資訊
                 const bankRes = await fetch(`${API_BASE}/api/bank-account`);
                 const bankData = await bankRes.json();
                 if (bankData.bank_name) document.getElementById('bankName').textContent = bankData.bank_name;
@@ -2028,7 +2114,7 @@
                 if (bankData.account_number) document.getElementById('accountNumber').textContent = bankData.account_number;
                 if (bankData.account_name) document.getElementById('accountName').textContent = bankData.account_name;
 
-                // 载入价格资讯
+                // 載入價格資訊
                 const pricingRes = await fetch(`${API_BASE}/api/pricing`);
                 const pricingData = await pricingRes.json();
                 if (pricingData.prices.twd) {
@@ -2036,7 +2122,7 @@
                     document.getElementById('twdYearly').textContent = `NT$ ${pricingData.prices.twd.yearly.toLocaleString()}`;
                 }
 
-                // 载入加密货币资讯
+                // 載入加密貨幣資訊
                 const cryptoRes = await fetch(`${API_BASE}/api/crypto-payment`);
                 const cryptoData = await cryptoRes.json();
                 if (cryptoData.supported) {
@@ -2049,46 +2135,25 @@
                 console.error('Failed to load payment info:', e);
             } finally {
                 if (loading) loading.style.display = 'none';
-                // 顯示条款确认区
-                const termsSection = document.getElementById('termsSection');
-                if (termsSection) termsSection.style.display = 'block';
             }
         }
 
-        // 切换按鈕可用狀態
-        function togglePaymentButtons() {
-            const checked = document.getElementById('termsCheckbox').checked;
-            const btnCopyBank = document.getElementById('btnCopyBank');
-            const btnCopyWallet = document.getElementById('btnCopyWallet');
-            if (checked) {
-                if (btnCopyBank) btnCopyBank.classList.remove('payment-btn-disabled');
-                if (btnCopyWallet) btnCopyWallet.classList.remove('payment-btn-disabled');
-            } else {
-                if (btnCopyBank) btnCopyBank.classList.add('payment-btn-disabled');
-                if (btnCopyWallet) btnCopyWallet.classList.add('payment-btn-disabled');
-            }
-        }
-
-        // 复制银行资讯
+        // 複製銀行資訊
         function copyBankInfo() {
-            if (!document.getElementById('termsCheckbox').checked) {
-                alert(currentLang === 'en' ? 'Please check the terms checkbox first' : currentLang === 'id' ? 'Silakan centang kolom persyaratan terlebih dahulu' : '请先勾选服务条款复选框');
-                return;
-            }
             const bankName = document.getElementById('bankName').textContent;
             const bankCode = document.getElementById('bankCode').textContent;
             const accountNumber = document.getElementById('accountNumber').textContent;
             const accountName = document.getElementById('accountName').textContent;
-            const text = `${bankName} (${bankCode})\n账号：${accountNumber}\n户名：${accountName}`;
+            const text = `${bankName} (${bankCode})\n帳號：${accountNumber}\n戶名：${accountName}`;
 
             navigator.clipboard.writeText(text).then(() => {
-                alert('银行资讯已复制到剪贴板！');
+                alert('銀行資訊已複製到剪貼簿！');
             }).catch(err => {
                 console.error('Copy failed:', err);
             });
         }
 
-        // 切换网络
+        // 切換網路
         function switchNetwork() {
             const network = document.getElementById('networkSelect').value;
             const cryptoData = window.cryptoPaymentData;
@@ -2100,27 +2165,23 @@
             };
 
             document.getElementById('networkBadge').textContent = network;
-            document.getElementById('walletAddress').textContent = walletMap[network] || '请联系客服获取钱包地址';
+            document.getElementById('walletAddress').textContent = walletMap[network] || '請聯繫客服獲取錢包地址';
             document.getElementById('copyHint').textContent = '';
         }
 
-        // 复制钱包地址
+        // 複製錢包地址
         function copyWalletAddress() {
-            if (!document.getElementById('termsCheckbox').checked) {
-                alert(currentLang === 'en' ? 'Please check the terms checkbox first' : currentLang === 'id' ? 'Silakan centang kolom persyaratan terlebih dahulu' : '请先勾选服务条款复选框');
-                return;
-            }
             const address = document.getElementById('walletAddress').textContent;
             const network = document.getElementById('networkBadge').textContent;
 
-            if (!address || address.includes('请联系')) {
-                alert('请先选择网络，或联系客服获取钱包地址');
+            if (!address || address.includes('請聯繫')) {
+                alert('請先選擇網路，或聯繫客服獲取錢包地址');
                 return;
             }
 
             navigator.clipboard.writeText(address).then(() => {
                 const hint = document.getElementById('copyHint');
-                hint.textContent = `✅ ${network} 地址已复制！请在 ${network} 网络下汇款`;
+                hint.textContent = `✅ ${network} 地址已複製！請在 ${network} 網路下匯款`;
                 hint.style.color = '#10B981';
                 setTimeout(() => { hint.textContent = ''; }, 3000);
             }).catch(err => {
@@ -2128,7 +2189,7 @@
             });
         }
 
-        // 頁面載入时载入付款资讯
+        // 頁面載入時載入付款資訊
         document.addEventListener('DOMContentLoaded', () => {
             loadPaymentInfo();
         });

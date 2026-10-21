@@ -69,6 +69,11 @@ class WorkflowStatus(BaseModel):
     metrics: dict
     pending_approvals: int
     audit_log_length: int
+    business_plan: dict = {}
+    landing_page_code: str = ""
+    deployment_url: str = ""
+    content_queue: list = []
+    outreach_emails: list = []
 
 
 # ── WebSocket 實時推送 ──────────────────────────────────────────
@@ -160,6 +165,11 @@ async def run_workflow(input_data: BusinessInput):
             metrics=result.get("metrics", {}),
             pending_approvals=len(result.get("pending_approval", [])),
             audit_log_length=len(result.get("audit_log", [])),
+            business_plan=result.get("business_plan", {}),
+            landing_page_code=result.get("landing_page_code", ""),
+            deployment_url=result.get("deployment_url", ""),
+            content_queue=result.get("content_queue", []),
+            outreach_emails=result.get("outreach_emails", []),
         )
 
     except Exception as e:
