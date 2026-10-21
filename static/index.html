@@ -187,6 +187,47 @@
             background: rgba(212, 175, 55, 0.1);
         }
 
+        .btn-copy {
+            background: rgba(212, 175, 55, 0.15);
+            color: var(--gold);
+            border: 1px solid var(--gold);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+        }
+
+        .btn-copy:hover {
+            background: rgba(212, 175, 55, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .finance-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .finance-item {
+            background: var(--gray-800);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .finance-label {
+            color: var(--gray-400);
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .finance-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
         /* ═══════════════════════════════════════════════════════════════
            Hero 區塊
            ═══════════════════════════════════════════════════════════════ */
@@ -1352,7 +1393,7 @@
             </div>
             <div style="display: flex; gap: 1rem;">
                 <button class="btn btn-primary" onclick="runDryRun()" style="flex: 1;">
-                    ▶️ 執行乾跑測試
+                    🚀 啟動 ROE 商業引擎
                 </button>
                 <button class="btn btn-secondary" onclick="discoverIdeas()">
                     💡 發現構想
@@ -1361,54 +1402,50 @@
         </div>
     </section>
 
-    <!-- 審計日誌 -->
-    <section class="section">
+    <!-- 審計日誌（後台專用，前台不顯示） -->
+    <section class="section" id="auditLogSection" style="display: none;">
         <div class="section-header">
-            <p class="section-label">Audit Log</p>
-            <h2 class="section-title">Agent 執行日誌</h2>
+            <h2 class="section-title">後台系統日誌</h2>
         </div>
         <div class="log-panel">
-            <div class="log-header">
-                <span class="log-title">系統日誌</span>
-                <button class="log-clear" onclick="clearLogs()">清除</button>
-            </div>
-            <div class="log-content" id="logContent">
-                <div class="log-entry">
-                    <span class="log-time">00:00:00</span>
-                    <span class="log-agent">system</span>
-                    <span class="log-message">系統就緒，等待指令...</span>
-                </div>
-            </div>
+            <div class="log-content" id="logContent"></div>
         </div>
     </section>
 
     <!-- 執行成果展示區 -->
     <section class="section" id="resultSection" style="display: none;">
         <div class="section-header">
-            <p class="section-label">Execution Results</p>
-            <h2 class="section-title">AI 執行成果</h2>
-            <p class="section-desc">以下為 AI 團隊為你生成的商業規劃與執行材料</p>
+            <p class="section-label">Your Business Assets</p>
+            <h2 class="section-title">🎉 你的商業資產已準備就緒</h2>
+            <p class="section-desc">以下是 ROE 引擎為你打造的全套賺錢工具，直接可用</p>
         </div>
         <div class="results-container" id="resultsContainer">
             <!-- 商業計劃摘要 -->
             <div class="result-card" id="planCard">
-                <h3>📋 商業執行計劃</h3>
+                <h3>💼 商業執行藍圖</h3>
                 <div class="plan-grid" id="planGrid"></div>
             </div>
             <!-- Landing Page 預覽 -->
             <div class="result-card" id="landingCard" style="display: none;">
-                <h3>🌐 網站 Landing Page <span class="badge">HTML</span></h3>
-                <div class="code-preview" id="landingCode"></div>
+                <h3>🌐 商用 Landing Page <span class="badge">HTML</span></h3>
+                <div class="code-preview" id="landingCode">
+                    <button class="btn btn-copy" onclick="copyLandingCode()" style="margin-bottom:0.5rem;">📋 複製完整 Landing Page 代碼</button>
+                </div>
             </div>
-            <!-- 營銷內容 -->
+            <!-- 短影音行銷腳本 -->
             <div class="result-card" id="marketingCard" style="display: none;">
-                <h3>📱 營銷內容排期</h3>
+                <h3>🎬 爆款短影音行銷腳本</h3>
                 <div id="contentQueue"></div>
             </div>
             <!-- 獲客郵件 -->
             <div class="result-card" id="outreachCard" style="display: none;">
-                <h3>📧 獲客開發郵件</h3>
+                <h3>📧 B2B 開發郵件模板</h3>
                 <div id="emailQueue"></div>
+            </div>
+            <!-- 分潤看板 -->
+            <div class="result-card" id="financeCard" style="display: none;">
+                <h3>💰 20% 平台分潤試算</h3>
+                <div id="financeContent"></div>
             </div>
         </div>
     </section>
@@ -1659,7 +1696,7 @@
             }
         }
 
-        // 執行乾跑
+        // 啟動商業引擎
         async function runDryRun() {
             const userId = document.getElementById('userId').value;
             const businessIdea = document.getElementById('businessIdea').value;
@@ -1698,7 +1735,6 @@
                 const data = await response.json();
                 addLog('orchestrator', 'success', `工作流完成 - 狀態: ${data.status}`);
                 addLog('orchestrator', 'info', `待審批項目: ${data.pending_approvals}`);
-                addLog('orchestrator', 'info', `審計日誌: ${data.audit_log_length} 條記錄`);
 
                 setAgentStatus('planner', 'idle', '完成');
                 setAgentStatus('code', 'idle', '完成');
@@ -1733,8 +1769,9 @@
 
             if (data.landing_page_code && data.landing_page_code !== '') {
                 let code = data.landing_page_code;
-                if (code.length > 500) code = code.substring(0, 500) + '\n... (已截斷，完整代碼在審計日誌中)';
+                if (code.length > 500) code = code.substring(0, 500) + '\n... (點擊複製按鈕取得完整版)';
                 document.getElementById('landingCode').textContent = code;
+                document.getElementById('landingCode').dataset.fullCode = data.landing_page_code;
                 document.getElementById('landingCard').style.display = 'block';
             } else {
                 document.getElementById('landingCard').style.display = 'none';
@@ -1751,15 +1788,65 @@
 
             if (data.outreach_emails && data.outreach_emails.length > 0) {
                 document.getElementById('emailQueue').innerHTML = data.outreach_emails.slice(0, 5).map(item =>
-                    '<div class="email-item"><h4>致：' + (item.to || '潛在客戶') + '</h4><p>主題：' + (item.subject || '') + '</p><p>' + ((item.body || '').substring(0, 200)) + ((item.body || '').length > 200 ? '...' : '') + '</p></div>'
+                    '<div class="email-item"><h4>致：' + (item.to || '潛在客戶') + '</h4><p>主題：' + (item.subject || '') + '</p><p>' + ((item.body || '').substring(0, 200)) + ((item.body || '').length > 200 ? '...' : '') + '</p><button class="btn btn-copy" onclick="copyEmail(this)" data-body="' + encodeURIComponent(item.body || '') + '">📋 複製郵件</button></div>'
                 ).join('');
                 document.getElementById('outreachCard').style.display = 'block';
             } else {
                 document.getElementById('outreachCard').style.display = 'none';
             }
 
+            // 分潤試算
+            if (data.business_plan && data.business_plan.pricing) {
+                const pricing = data.business_plan.pricing;
+                const monthlyRevenue = parseFloat(pricing.replace(/[^0-9.]/g, '')) || 49;
+                const platformFee = (monthlyRevenue * 0.20).toFixed(2);
+                const userPayout = (monthlyRevenue * 0.80).toFixed(2);
+                document.getElementById('financeContent').innerHTML = `
+                    <div class="finance-grid">
+                        <div class="finance-item">
+                            <div class="finance-label">訂閱收入（每月）</div>
+                            <div class="finance-value" style="color:var(--gold)">$${monthlyRevenue}</div>
+                        </div>
+                        <div class="finance-item">
+                            <div class="finance-label">平台服務費（20%）</div>
+                            <div class="finance-value" style="color:var(--error)">-$${platformFee}</div>
+                        </div>
+                        <div class="finance-item">
+                            <div class="finance-label">你的淨收入</div>
+                            <div class="finance-value" style="color:var(--success)">+$${userPayout}/月</div>
+                        </div>
+                    </div>
+                    <p style="font-size:0.85rem;color:var(--gray-400);margin-top:1rem">
+                        💡 平台在每筆成功交易中抽取 20% 技術服務費，無交易則不收費。
+                    </p>
+                `;
+                document.getElementById('financeCard').style.display = 'block';
+            } else {
+                document.getElementById('financeCard').style.display = 'none';
+            }
+
             section.style.display = 'block';
             section.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 複製 Landing Page 代碼
+        function copyLandingCode() {
+            const el = document.getElementById('landingCode');
+            const code = el.dataset.fullCode || el.textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = el.parentElement.querySelector('.btn-copy');
+                if (btn) { btn.textContent = '✅ 已複製！'; setTimeout(() => btn.textContent = '📋 複製完整代碼', 2000); }
+            });
+        }
+
+        // 複製單封郵件
+        function copyEmail(btn) {
+            const body = decodeURIComponent(btn.dataset.body);
+            navigator.clipboard.writeText(body).then(() => {
+                const original = btn.textContent;
+                btn.textContent = '✅ 已複製！';
+                setTimeout(() => btn.textContent = original, 2000);
+            });
         }
 
         // 頁面載入完成
