@@ -30,12 +30,10 @@ STATIC_DIR = Path(__file__).parent / "static"
 STATIC_DIR.mkdir(exist_ok=True)
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
-
 @app.get("/", include_in_schema=False)
 async def root():
     """返回前端 Dashboard"""
     return FileResponse(str(STATIC_DIR / "index.html"))
-
 
 # CORS 配置
 app.add_middleware(
@@ -49,7 +47,6 @@ app.add_middleware(
 # 活跃的 WebSocket 連接
 active_connections: List[WebSocket] = []
 
-
 # ── API 數據模型 ────────────────────────────────────────────────
 class BusinessInput(BaseModel):
     user_id: str
@@ -57,12 +54,10 @@ class BusinessInput(BaseModel):
     dry_run: bool = False  # 乾跑模式：只生成草稿，不實際部署/發送
     profit_mode: Optional[str] = None  # 獲利模式：e-commerce, content-marketing, b2b-sales, digital-products, data-analysis, task-automation
 
-
 class ApprovalAction(BaseModel):
     approval_id: str
     approved: bool
     comment: str = ""
-
 
 class WorkflowStatus(BaseModel):
     status: str
@@ -74,7 +69,6 @@ class WorkflowStatus(BaseModel):
     deployment_url: str = ""
     content_queue: list = []
     outreach_emails: list = []
-
 
 # ── WebSocket 實時推送 ──────────────────────────────────────────
 @app.websocket("/ws/{user_id}")
@@ -89,7 +83,6 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str):
     except WebSocketDisconnect:
         if websocket in active_connections:
             active_connections.remove(websocket)
-
 
 async def broadcast(state: BusinessState):
     """向所有連接的客戶端廣播狀態更新"""
@@ -107,7 +100,6 @@ async def broadcast(state: BusinessState):
                 if connection in active_connections:
                     active_connections.remove(connection)
 
-
 # ── API 端點 ────────────────────────────────────────────────────
 @app.get("/api/info")
 async def root():
@@ -124,7 +116,6 @@ async def root():
             "GET /api/cost-summary": "獲取成本統計",
         }
     }
-
 
 @app.post("/api/run", response_model=WorkflowStatus)
 async def run_workflow(input_data: BusinessInput):
@@ -175,7 +166,6 @@ async def run_workflow(input_data: BusinessInput):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @app.get("/api/status/{user_id}")
 async def get_workflow_status(user_id: str):
     """查詢指定用戶的工作流狀態（需接入持久化存儲）"""
@@ -184,7 +174,6 @@ async def get_workflow_status(user_id: str):
         "status": "not_found",
         "message": "狀態查詢接口（需接入 PostgreSQL 持久化存儲）"
     }
-
 
 @app.post("/api/approve")
 async def handle_approval(action: ApprovalAction):
@@ -196,7 +185,6 @@ async def handle_approval(action: ApprovalAction):
         "processed_at": datetime.now().isoformat(),
     }
 
-
 @app.get("/api/approvals/{user_id}")
 async def get_pending_approvals(user_id: str):
     """獲取指定用戶的待審批列表（需接入持久化存儲）"""
@@ -205,7 +193,6 @@ async def get_pending_approvals(user_id: str):
         "approvals": [],
         "message": "審批列表接口（需接入 PostgreSQL 持久化存儲）"
     }
-
 
 @app.get("/api/cost-summary")
 async def get_cost_summary():
@@ -224,7 +211,6 @@ async def get_cost_summary():
             cost_tracker.estimate_cost(budget.global_daily_usage, "deepseek-chat"), 4
         ),
     }
-
 
 @app.get("/api/ideas")
 async def get_business_ideas(count: int = 3, category: Optional[str] = None, profit_mode: Optional[str] = None):
@@ -250,116 +236,7 @@ async def get_business_ideas(count: int = 3, category: Optional[str] = None, pro
         "profit_modes": stats["profit_modes"],
     }
 
-
 # ── AI 獵客引擎端點 ─────────────────────────────────────────────
-class HuntRequest(BaseModel):
-    keywords: List[str]
-    industry: Optional[str] = None
-    company_size: Optional[str] = None
-    location: Optional[str] = None
-    min_score: int = 60
-    max_results: int = 50
-
-
-@app.post("/api/hunt")
-async def search_leads(request: HuntRequest):
-    """
-    AI 獵客引擎 — 搜索高價值线索
-
-    從多個數據源聚合目標客戶信息，並進行智能評分
-    """
-    from agents.hunter_engine import AIHunterEngine, SearchQuery
-
-    engine = AIHunterEngine()
-    query = SearchQuery(
-        keywords=request.keywords,
-        industry=request.industry,
-        company_size=request.company_size,
-        location=request.location,
-        min_score=request.min_score,
-        max_results=request.max_results,
-    )
-
-    leads = await engine.search_leads(query)
-    stats = engine.get_stats()
-
-    return {
-        "leads": [
-            {
-                "id": l.id,
-                "name": l.name,
-                "company": l.company,
-                "title": l.title,
-                "email": l.email,
-                "industry": l.industry,
-                "source": l.source,
-                "score": l.score,
-                "match_reason": l.match_reason,
-            }
-            for l in leads
-        ],
-        "stats": stats,
-        "total_found": len(leads),
-    }
-
-
-@app.get("/api/hunt/stats")
-async def get_hunt_stats():
-    """獲取 AI 獵客引擎統計信息"""
-    from agents.hunter_engine import AIHunterEngine
-
-    engine = AIHunterEngine()
-    return engine.get_stats()
-
-
-@app.get("/api/hunt/export")
-async def export_leads(format: str = "json"):
-    """導出已搜索的线索數據"""
-    from agents.hunter_engine import AIHunterEngine
-
-    engine = AIHunterEngine()
-    data = engine.export_leads(format=format)
-    return {"format": format, "data": data}
-
-
-# ── 逆向分析模組端點 ────────────────────────────────────────────
-@app.post("/api/reverse/analyze")
-async def analyze_target(url: str, depth: int = 1):
-    """
-    逆向分析指定網站
-
-    識別技術棧、API 端點、商業模式、SEO、安全等
-    """
-    from agents.reverse_module import ReverseAnalysisModule
-
-    module = ReverseAnalysisModule()
-    result = await module.analyze_url(url, depth=depth)
-
-    return {
-        "target_url": result.target_url,
-        "analyzed_at": result.analyzed_at,
-        "confidence_score": result.confidence_score,
-        "tech_stack": result.tech_stack,
-        "api_endpoints": result.api_endpoints,
-        "business_model": result.business_model,
-        "seo_analysis": result.seo_analysis,
-        "security_analysis": result.security_analysis,
-        "performance_metrics": result.performance_metrics,
-        "recommendations": result.recommendations,
-    }
-
-
-@app.get("/api/reverse/history")
-async def get_reverse_history(limit: int = 10):
-    """獲取逆向分析歷史記錄"""
-    from agents.reverse_module import ReverseAnalysisModule
-
-    module = ReverseAnalysisModule()
-    history = module.get_history(limit=limit)
-    stats = module.get_stats()
-
-    return {"history": history, "stats": stats}
-
 
 # ── 訂閱價格與收款資訊端點 ────────────────────────────────────────
 @app.get("/api/pricing")
@@ -388,7 +265,6 @@ async def get_pricing():
         "exchange_rate": settings.exchange_rate_twd_usd,
     }
 
-
 @app.get("/api/bank-account")
 async def get_bank_account():
     """獲取收款銀行帳戶資訊"""
@@ -400,7 +276,6 @@ async def get_bank_account():
         "account_number": settings.account_number,
         "account_name": settings.account_name,
     }
-
 
 @app.get("/api/crypto-payment")
 async def get_crypto_payment():
@@ -421,7 +296,6 @@ async def get_crypto_payment():
         "supported_exchanges": ["OKX", "Binance", "Bybit", "KuCoin"],
     }
 
-
 # ── 双轨自动分润 API ────────────────────────────────────────────
 class RevenueShareRequest(BaseModel):
     user_id: str
@@ -429,7 +303,6 @@ class RevenueShareRequest(BaseModel):
     currency: str  # "USD" or "TWD"
     payment_channel: str  # "okx_usdt" or "bank_transfer"
     transaction_id: str = ""
-
 
 class RevenueShareResponse(BaseModel):
     user_id: str
@@ -440,7 +313,6 @@ class RevenueShareResponse(BaseModel):
     payout_method: str
     status: str  # "processed" or "pending"
     message: str
-
 
 @app.post("/api/revenue-share", response_model=RevenueShareResponse)
 async def process_revenue_share(request: RevenueShareRequest):
@@ -495,7 +367,6 @@ async def process_revenue_share(request: RevenueShareRequest):
         message=message,
     )
 
-
 @app.get("/api/revenue-share/rules")
 async def get_revenue_share_rules():
     """获取分润规则说明"""
@@ -519,7 +390,6 @@ async def get_revenue_share_rules():
         },
         "fee_note": "平台在每笔成功交易中抽取 20% 技术服务费，无交易则不收费。订阅费 $49 USD/月 另计。",
     }
-
 
 # ── 内部辅助函数 ────────────────────────────────────────────────
 async def _dry_run_workflow(state: BusinessState) -> BusinessState:
