@@ -82,12 +82,13 @@ class OrchestratorAgent(BaseAgent):
             marketing_result = await marketer.run()
             self._merge_state(marketing_result)
 
-            # Phase 4: 獲客（ Outreach Agent）
-            self.active_agent = "outreach"
-            logger.info("[Phase 4/5] 獲客階段：生成開發郵件")
-            outreach = OutreachAgent(self.state)
-            outreach_result = await outreach.run()
-            self._merge_state(outreach_result)
+            # Phase 4: 獲客（Outreach Agent）- 已禁用，需要線索數據
+            # self.active_agent = "outreach"
+            # logger.info("[Phase 4/5] 獲客階段：生成開發郵件")
+            # outreach = OutreachAgent(self.state)
+            # outreach_result = await outreach.run()
+            # self._merge_state(outreach_result)
+            self.log(status="outreach_skipped", reason="需要線索數據")
 
             # 完成報告
             self.state["metrics"] = {

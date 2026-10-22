@@ -10,19 +10,19 @@ import os
 
 class Settings(BaseSettings):
     # ── LLM Provider ──────────────────────────────────────────────
-    # 優先使用 OpenRouter（聚合多模型，自動降級）
-    openrouter_api_key: str = os.getenv("OPENROUTER_API_KEY", "")
-    anthropic_api_key: str = os.getenv("ANTHROPIC_API_KEY", "")
-    openai_api_key: str = os.getenv("OPENAI_API_KEY", "")
+    # Agnes AI（OpenAI 相容格式）
+    agnes_api_key: str = os.getenv("AGNES_API_KEY", "")
+    agnes_base_url: str = os.getenv("AGNES_BASE_URL", "https://apihub.agnes-ai.com/v1")
+    agnes_model: str = os.getenv("AGNES_MODEL", "agnes-2.5-flash")
 
     # 模型路由配置（成本控制核心）
     # 簡單任務 → 便宜模型，複雜推理 → 強模型
     model_routing: dict[str, str] = {
-        "planning": "anthropic/claude-sonnet-4-20250514",   # 需要強推理
-        "coding": "deepseek/deepseek-chat",                  # 代碼生成，便宜模型足夠
-        "content": "anthropic/claude-haiku-4-20250514",     # 創意內容，低成本模型
-        "customer_service": "minimax/minimax-text-01",      # 高頻簡單任務
-        "routing": "deepseek/deepseek-r1-distill-qwen-32b", # 調度用最小模型
+        "planning": "agnes-2.5-flash",           # 規劃需要較強推理
+        "coding": "agnes-2.5-flash",              # 代碼生成
+        "content": "agnes-2.5-flash",             # 創意內容
+        "customer_service": "agnes-2.5-flash",    # 高頻簡單任務
+        "routing": "agnes-2.5-flash",             # 調度用
     }
 
     # ── 數據庫 ─────────────────────────────────────────────────────
@@ -55,7 +55,7 @@ class Settings(BaseSettings):
     user_revenue_share: float = 0.80          # 用戶留存比例 80%
     ad_spend_share: float = 0.20              # 廣告支出抽成 20%
     subscription_fee_monthly: float = 49.0    # 月度訂閱費 $49
-    currency: str = "USD"                     # 幣別
+    currency: str = "TWD"                     # 主要幣別（台灣市場）
 
     # ── 雙幣別訂閱價格配置 ─────────────────────────────────────────
     # 台灣市場定價

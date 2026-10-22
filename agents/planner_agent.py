@@ -18,20 +18,14 @@ class PlannerAgent(BaseAgent):
 
     name = "planner_agent"
     permission_level = PermissionLevel.EXECUTE
-    cost_model = "anthropic/claude-sonnet-4-20250514"  # 規劃需要較強推理能力
+    cost_model = settings.agnes_model  # 使用 Agnes AI 模型
 
     async def run(self) -> dict:
         """主入口：分析商業構想，生成執行計劃"""
         logger.info(f"[{self.name}] 開始分析商業構想: {self.state['business_idea'][:50]}...")
 
         try:
-            from langchain_anthropic import ChatAnthropic
-
-            llm = ChatAnthropic(
-                model=self.cost_model,
-                api_key=settings.anthropic_api_key,
-                temperature=0.2,  # 規劃需要確定性
-            )
+            from openai import AsyncOpenAI
 
             prompt = f"""你是一位經驗豐富的創業顧問和產品經理。
             用戶想要創辦一家公司，想法是：
@@ -47,6 +41,9 @@ class PlannerAgent(BaseAgent):
               "core_features": ["核心功能1", "核心功能2", "核心功能3"],
               "value_proposition": "價值主張",
               "pricing": "定價策略",
+              "price_twd_monthly": 1280,
+              "price_usd_monthly": 42,
+              "currency": "TWD",
               "brand_tone": "品牌調性",
               "brand_colors": "推薦配色方案",
               "go_to_market": "Go-to-Market 策略",
@@ -57,21 +54,37 @@ class PlannerAgent(BaseAgent):
 
             請確保計劃具體、可執行，並針對該商業領域提出專業建議。"""
 
-            response = await llm.ainvoke([
-                {"role": "system", "content": "你是 Top-tier 創業顧問，幫助創始人將想法轉化為可執行的商業計劃。輸出精確、具體、可操作。"},
-                {"role": "user", "content": prompt},
-            ])
+            client = AsyncOpenAI(
+                api_key=settings.agnes_api_key,
+                base_url=settings.agnes_base_url,
+            )
 
-            tokens = response.usage.total_tokens if hasattr(response, 'usage') else 0
+            response = await client.chat.completions.create(
+                model=self.cost_model,  # agnes-2.5-flash
+                messages=[
+                    {"role": "system", "content": "你是 Top-tier 創業顧問，幫助創始人將想法轉化為可執行的商業計劃。輸出精確、具體、可操作。"},
+                    {"role": "user", "content": prompt},
+                ],
+                temperature=0.2,
+            )
+
+            tokens = response.usage.total_tokens if response.usage else 0
             cost_tracker.record_usage(self.name, self.state["user_id"], tokens)
 
-            # 解析 JSON
-            content = response.content
-            match = re.search(r'\{[\s\S]*\}', content)
+            # 解析 JSON（處理 markdown 程式碼塊包裹）
+            content = response.choices[0].message.content if response.choices else ""
+            # 移除 markdown 程式碼塊
+            import re as _re
+            json_str = _re.sub(r'^```(?:json)?\s*|\s*```$', '', content.strip(), flags=_re.MULTILINE)
+            match = _re.search(r'\{[\s\S]*\}', json_str)
             if match:
-                plan = json.loads(match.group())
+                try:
+                    plan = json.loads(match.group())
+                except json.JSONDecodeError:
+                    # 嘗試找到最外層 JSON
+                    plan = {"raw_response": json_str}
             else:
-                plan = {"raw_response": content}
+                plan = {"raw_response": json_str}
 
             self.log(tokens=tokens, status="plan_generated")
             logger.info(f"[{self.name}] 計劃生成完成: {plan.get('product_name', '未知產品')}")
@@ -82,13 +95,13 @@ class PlannerAgent(BaseAgent):
             }
 
         except ImportError:
-            logger.warning(f"[{self.name}] langchain-anthropic 未安裝，使用 fallback 模式")
+            logger.warning(f"[{self.name}] LLM client unavailable, using fallback mode")
             return await self._fallback_run()
-        except (ImportError, ValueError, Exception) as e:
+        except (ValueError, Exception) as e:
             error_str = str(e)
             # 檢查是否是認證錯誤（缺少 API Key）
-            if "authentication" in error_str.lower() or "api_key" in error_str.lower() or not settings.anthropic_api_key:
-                logger.warning(f"[{self.name}] 未配置 Anthropic API Key，使用 Fallback 模式")
+            if "authentication" in error_str.lower() or "api_key" in error_str.lower() or not settings.agnes_api_key:
+                logger.warning(f"[{self.name}] 未配置 Agnes API Key，使用 Fallback 模式")
                 return await self._fallback_run()
             logger.warning(f"[{self.name}] LLM 调用失败: {e}，使用 Fallback 模式")
             return await self._fallback_run()
@@ -97,25 +110,32 @@ class PlannerAgent(BaseAgent):
         """Fallback 模式：當 LLM 不可用時使用模板生成計劃"""
         logger.info(f"[{self.name}] 使用 Fallback 模式生成計劃")
 
+        # 根據用戶的商業構想生成相關性更高的模板
+        idea = self.state.get("business_idea", "")
+
         plan = {
-            "product_name": "MyAIProduct",
-            "positioning": "AI-powered autonomous company operating system",
-            "target_market": "Solo founders and small teams",
-            "target_audience": "Technical entrepreneurs, indie hackers",
+            "product_name": self._extract_product_name(idea),
+            "positioning": self._generate_positioning(idea),
+            "target_market": "對該產品/服務有興趣的潛在客戶群",
+            "target_audience": self._extract_target_audience(idea),
             "core_features": [
-                "Auto code generation & deployment",
-                "Automated marketing & ads",
-                "AI customer support",
-                "Financial tracking & invoicing"
+                f"基於 '{idea}' 的核心功能 1",
+                f"針對目標受眾的功能 2",
+                f"提升用戶體驗的功能 3",
             ],
-            "value_proposition": "Run a complete company with AI agents while you sleep",
-            "pricing": "$49/month",
-            "brand_tone": "professional but approachable",
-            "brand_colors": "#3B82F6 (blue), #10B981 (green)",
-            "go_to_market": "Product-led growth + viral social media",
-            "day1_actions": ["Set up business idea", "Generate execution plan", "Create landing page"],
-            "day7_actions": ["Launch marketing campaign", "Deploy MVP", "Set up analytics dashboard"],
-            "success_metrics": ["Monthly recurring revenue", "Customer acquisition cost", "Churn rate"],
+            "value_proposition": f"為 {self._extract_target_audience(idea)} 提供專業的 {idea} 解決方案",
+            "pricing": "NT$ 1,280/月（台灣市場）或 $42/月（國際市場）",
+            "price_twd_monthly": 1280,
+            "price_usd_monthly": 42,
+            "currency": "TWD",
+            "brand_tone": "專業且親切",
+            "brand_colors": "#3B82F6 (藍色), #10B981 (綠色)",
+            "go_to_market": "內容營銷 + 社交媒體 + SEO",
+            "day1_actions": ["確認商業構想細節", "生成執行計劃", "創建 Landing Page"],
+            "day7_actions": ["啟動營銷活動", "上線 MVP", "設置數據分析儀表板"],
+            "success_metrics": ["月收入增長", "客戶獲取成本", "用戶留存率"],
+            "mode": "fallback",
+            "note": "此為模板模式，建議配置 Agnes API Key 以獲取真實 AI 生成內容",
         }
 
         self.log(tokens=0, status="plan_generated_fallback")
@@ -124,3 +144,27 @@ class PlannerAgent(BaseAgent):
             "tokens": 0,
             "mode": "fallback",
         }
+
+    @staticmethod
+    def _extract_product_name(idea: str) -> str:
+        """從商業構想中提取產品名稱"""
+        # 簡單邏輯：提取關鍵詞
+        keywords = idea.split()
+        if len(keywords) >= 2:
+            return " ".join(keywords[:3]).title()
+        return idea.title() if idea else "MyProduct"
+
+    @staticmethod
+    def _generate_positioning(idea: str) -> str:
+        """根據構想生成產品定位"""
+        return f"專業的 {idea} 解決方案"
+
+    @staticmethod
+    def _extract_target_audience(idea: str) -> str:
+        """從構想中提取目標受眾"""
+        # 簡單邏輯：提取「給」之後的內容
+        if "給" in idea:
+            return idea.split("給")[-1].strip()
+        elif "向" in idea:
+            return idea.split("向")[-1].strip()
+        return "潛在客戶"

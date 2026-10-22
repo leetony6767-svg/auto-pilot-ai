@@ -23,7 +23,7 @@ class MarketingAgent(BaseAgent):
 
     name = "marketing_agent"
     permission_level = PermissionLevel.EXECUTE
-    cost_model = "anthropic/claude-haiku-4-20250514"  # 內容生成用低成本模型
+    cost_model = settings.agnes_model  # 使用 Agnes AI 模型
 
     # 各平台字符限制
     PLATFORM_LIMITS = {
@@ -68,7 +68,7 @@ class MarketingAgent(BaseAgent):
 
     async def _generate_content_plan(self, days: int = 7) -> list[dict]:
         """生成 N 天的社媒內容排期"""
-        from langchain_anthropic import ChatAnthropic
+        from openai import AsyncOpenAI
 
         brand_tone = self.plan.get("brand_tone", "專業但有親和力")
         product_name = self.plan.get("product_name", "AgentOS")
@@ -114,22 +114,22 @@ class MarketingAgent(BaseAgent):
   }}
 }}]"""
 
-        llm = ChatAnthropic(
-            model=self.cost_model,
-            api_key=settings.anthropic_api_key,
-            temperature=0.8,  # 內容生成需要創造性
+        client = AsyncOpenAI(
+            api_key=settings.agnes_api_key,
+            base_url=settings.agnes_base_url,
         )
 
-        response = await llm.ainvoke([
-            {"role": "system", "content": "你是 Social Media 內容專家，擅長創建高互動率社媒內容。"},
-            {"role": "user", "content": prompt},
-        ])
+        response = await client.chat.completions.create(
+            model=self.cost_model,
+            messages=[
+                {"role": "system", "content": "你是 Social Media 內容專家，擅長創建高互動率社媒內容。"},
+                {"role": "user", "content": prompt},
+            ],
+            temperature=0.8,
+        )
 
-        tokens = response.usage.total_tokens if hasattr(response, 'usage') else 0
-        cost_tracker.record_usage(self.name, self.state["user_id"], tokens)
-
-        # 解析 JSON
-        content = response.content
+        tokens = response.usage.total_tokens if response.usage else 0
+        content = response.choices[0].message.content if response.choices else ""
         match = re.search(r'\[[\s\S]*\]', content)
         if match:
             content_plan = json.loads(match.group())

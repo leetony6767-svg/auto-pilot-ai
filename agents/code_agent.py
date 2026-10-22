@@ -22,7 +22,7 @@ class CodeAgent(BaseAgent):
 
     name = "code_agent"
     permission_level = PermissionLevel.EXECUTE
-    cost_model = "deepseek/deepseek-chat"  # 代碼生成用低成本模型
+    cost_model = settings.agnes_model  # 使用 Agnes AI 模型
 
     def __init__(self, state: BusinessState):
         super().__init__(state)
@@ -69,19 +69,19 @@ class CodeAgent(BaseAgent):
 
     async def _generate_code(self) -> str:
         """使用 LLM 生成 Next.js Landing Page 代碼"""
-        from langchain_openai import ChatOpenAI
+        from openai import AsyncOpenAI
 
         prompt = self._build_code_prompt()
 
-        llm = ChatOpenAI(
-            model=self.cost_model,
-            api_key=settings.openrouter_api_key,
-            base_url="https://openrouter.ai/api/v1",
-            temperature=0.3,
+        client = AsyncOpenAI(
+            api_key=settings.agnes_api_key,
+            base_url=settings.agnes_base_url,
         )
 
-        response = await llm.ainvoke([
-            {"role": "system", "content": """你是全棧開發專家。
+        response = await client.chat.completions.create(
+            model=self.cost_model,
+            messages=[
+                {"role": "system", "content": """你是全棧開發專家。
             請生成一個完整的 Next.js 14 Landing Page，要求：
             1. 使用 App Router + TypeScript
             2. 使用 Tailwind CSS 樣式
@@ -89,11 +89,13 @@ class CodeAgent(BaseAgent):
             4. 響應式設計，移動端友好
             5. 現代化 UI，漸變色和微動畫
             只返回 app/page.tsx 的完整代碼，不需要解釋。"""},
-            {"role": "user", "content": prompt},
-        ])
+                {"role": "user", "content": prompt},
+            ],
+            temperature=0.3,
+        )
 
-        code = response.content
-        tokens = response.usage.token_usage.total_tokens if hasattr(response, 'usage') and response.usage else 0
+        code = response.choices[0].message.content if response.choices else ""
+        tokens = response.usage.total_tokens if response.usage else 0
 
         # 成本控制：記錄 Token 消耗
         cost_tracker.record_usage(self.name, self.state["user_id"], tokens)

@@ -15,7 +15,6 @@ from datetime import datetime
 from pathlib import Path
 
 from agents.base import BusinessState
-from agents.graph import workflow_graph
 from agents.orchestrator import OrchestratorAgent
 from config.settings import settings
 
@@ -156,7 +155,10 @@ async def run_workflow(input_data: BusinessInput):
         if input_data.dry_run:
             result = await _dry_run_workflow(initial_state)
         else:
-            result = await workflow_graph.ainvoke(initial_state)
+            # 非乾跑模式：直接使用 Orchestrator（LangGraph 相容性問題時繞過）
+            from agents.orchestrator import OrchestratorAgent
+            orchestrator = OrchestratorAgent(initial_state)
+            result = await orchestrator.run()
 
         await broadcast(result)
 

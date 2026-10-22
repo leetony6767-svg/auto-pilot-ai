@@ -584,6 +584,28 @@
         }
 
         /* ═══════════════════════════════════════════════════════════════
+           模式標記樣式
+           ═══════════════════════════════════════════════════════════════ */
+        .mode-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .mode-live {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+        .mode-fallback {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning);
+            border: 1px solid var(--warning);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
            審計日誌
            ═══════════════════════════════════════════════════════════════ */
         .log-panel {
@@ -1385,6 +1407,14 @@
                         <option value="task-automation">⚙️ 任務自動化</option>
                     </select>
                 </div>
+                <div class="form-group">
+                    <label class="form-label">運行模式</label>
+                    <select class="form-input" id="runMode">
+                        <option value="true">🧪 乾跑模式（測試）</option>
+                        <option value="false">⚡ 真實模式（生產）</option>
+                    </select>
+                    <p class="form-hint">乾跑模式：生成草稿，不實際部署；真實模式：完整執行流程（需配置 Agnes API Key）</p>
+                </div>
             </div>
             <div class="form-group">
                 <label class="form-label">商業構想描述</label>
@@ -1444,7 +1474,7 @@
             </div>
             <!-- 分潤看板 -->
             <div class="result-card" id="financeCard" style="display: none;">
-                <h3>💰 20% 平台分潤試算</h3>
+                <h3>💰 平台分潤試算</h3>
                 <div id="financeContent"></div>
             </div>
         </div>
@@ -1701,6 +1731,8 @@
             const userId = document.getElementById('userId').value;
             const businessIdea = document.getElementById('businessIdea').value;
             const profitMode = document.getElementById('profitMode').value;
+            const runMode = document.getElementById('runMode').value;
+            const isDryRun = runMode === 'true';
 
             if (!businessIdea) {
                 alert('請先輸入商業構想，或點擊「發現構想」讓我們幫你推薦');
@@ -1719,12 +1751,13 @@
             if (profitMode) {
                 addLog('system', 'info', `獲利模式: ${profitMode}`);
             }
+            addLog('system', isDryRun ? 'warning' : 'success', `運行模式: ${isDryRun ? '🧪 乾跑模式' : '⚡ 真實模式'}`);
 
             try {
                 const response = await fetch(`${API_BASE}/api/run`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ user_id: userId, business_idea: businessIdea, dry_run: true, profit_mode: profitMode })
+                    body: JSON.stringify({ user_id: userId, business_idea: businessIdea, dry_run: isDryRun, profit_mode: profitMode })
                 });
 
                 if (!response.ok) {
@@ -1755,9 +1788,17 @@
         function renderResults(data) {
             const section = document.getElementById('resultSection');
 
+            // 添加模式指示器
+            const plan = data.business_plan || {};
+            const isFallback = plan.mode === 'fallback' || data.tokens === 0;
+            const modeBadge = isFallback ?
+                '<span class="mode-badge mode-fallback">🧪 模板模式（Agnes API Key 未配置）</span>' :
+                '<span class="mode-badge mode-live">⚡ 真實 Agnes AI 模式</span>';
+
             if (data.business_plan && Object.keys(data.business_plan).length > 0) {
                 const plan = data.business_plan;
                 document.getElementById('planGrid').innerHTML =
+                    modeBadge +
                     '<div class="plan-item"><div class="plan-item-label">產品名稱</div><div class="plan-item-value">' + (plan.product_name || 'N/A') + '</div></div>' +
                     '<div class="plan-item"><div class="plan-item-label">定位</div><div class="plan-item-value">' + (plan.positioning || 'N/A') + '</div></div>' +
                     '<div class="plan-item"><div class="plan-item-label">目標客戶</div><div class="plan-item-value">' + (plan.target_audience || 'N/A') + '</div></div>' +
@@ -1796,28 +1837,59 @@
             }
 
             // 分潤試算
-            if (data.business_plan && data.business_plan.pricing) {
-                const pricing = data.business_plan.pricing;
-                const monthlyRevenue = parseFloat(pricing.replace(/[^0-9.]/g, '')) || 49;
-                const platformFee = (monthlyRevenue * 0.20).toFixed(2);
-                const userPayout = (monthlyRevenue * 0.80).toFixed(2);
+            if (data.business_plan) {
+                const plan = data.business_plan;
+                // 優先使用結構化數值，fallback 到文字解析
+                let priceMonthly = null;
+                let currency = plan.currency || 'TWD';
+                let platformFeePercent = parseFloat(plan.platform_fee_percent) || settings ? parseFloat(settings.platform_revenue_share) * 100 : 20;
+
+                if (plan.price_twd_monthly && !isNaN(plan.price_twd_monthly)) {
+                    priceMonthly = parseFloat(plan.price_twd_monthly);
+                } else if (plan.price_usd_monthly && !isNaN(plan.price_usd_monthly)) {
+                    priceMonthly = parseFloat(plan.price_usd_monthly);
+                } else if (plan.pricing) {
+                    // fallback: 從文字解析數字
+                    const numericMatch = plan.pricing.match(/(\d+\.?\d*)/);
+                    priceMonthly = numericMatch ? parseFloat(numericMatch[1]) : 1280;
+                } else {
+                    priceMonthly = 1280;
+                }
+
+                const platformFee = (priceMonthly * (platformFeePercent / 100)).toFixed(2);
+                const userPayout = (priceMonthly * (1 - platformFeePercent / 100)).toFixed(2);
+                const symbol = currency === 'TWD' ? 'NT$' : '$';
+                const currencyLabel = currency === 'TWD' ? '新台幣' : '美元';
+
                 document.getElementById('financeContent').innerHTML = `
                     <div class="finance-grid">
                         <div class="finance-item">
-                            <div class="finance-label">訂閱收入（每月）</div>
-                            <div class="finance-value" style="color:var(--gold)">$${monthlyRevenue}</div>
+                            <div class="finance-label">預估月銷量</div>
+                            <div class="finance-value" style="color:var(--gold)">50 件</div>
                         </div>
                         <div class="finance-item">
-                            <div class="finance-label">平台服務費（20%）</div>
-                            <div class="finance-value" style="color:var(--error)">-$${platformFee}</div>
+                            <div class="finance-label">單價（${currencyLabel}）</div>
+                            <div class="finance-value" style="color:var(--gold)">${symbol}${priceMonthly.toLocaleString()}</div>
                         </div>
                         <div class="finance-item">
-                            <div class="finance-label">你的淨收入</div>
-                            <div class="finance-value" style="color:var(--success)">+$${userPayout}/月</div>
+                            <div class="finance-label">月營收</div>
+                            <div class="finance-value" style="color:var(--gold)">${symbol}${(priceMonthly * 50).toLocaleString()}</div>
+                        </div>
+                        <div class="finance-item">
+                            <div class="finance-label">平台服務費（${platformFeePercent.toFixed(0)}%）</div>
+                            <div class="finance-value" style="color:var(--error)">-${symbol}${platformFee}</div>
+                        </div>
+                        <div class="finance-item">
+                            <div class="finance-label">你的淨收入（每月）</div>
+                            <div class="finance-value" style="color:var(--success)">${symbol}${userPayout}</div>
+                        </div>
+                        <div class="finance-item">
+                            <div class="finance-label">年淨收入（估算）</div>
+                            <div class="finance-value" style="color:var(--success)">${symbol}${(parseFloat(userPayout) * 12).toLocaleString()}</div>
                         </div>
                     </div>
                     <p style="font-size:0.85rem;color:var(--gray-400);margin-top:1rem">
-                        💡 平台在每筆成功交易中抽取 20% 技術服務費，無交易則不收費。
+                        💡 以上為 AI 估算，僅供參考，非真實數據。實際收益取決於真實銷售量與平台費率。
                     </p>
                 `;
                 document.getElementById('financeCard').style.display = 'block';

@@ -141,4 +141,4 @@ def build_simple_workflow():
 
 
 # ── 導出供外部使用 ─────────────────────────────────────────────
-workflow_graph = build_workflow_graph()
+workflow_graph = build_workflow_graph().compile()
