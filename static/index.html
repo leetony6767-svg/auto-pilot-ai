@@ -1751,6 +1751,13 @@
             el.textContent = text;
         }
 
+        // 重置所有 Agent 狀態為「就緒」
+        function resetAgents() {
+            ['planner', 'code', 'marketing', 'outreach', 'finance'].forEach(agent => {
+                setAgentStatus(agent, 'idle', '就緒');
+            });
+        }
+
         // 添加日誌
         function addLog(agent, level, message) {
             const now = new Date();
@@ -1909,7 +1916,10 @@
                 return;
             }
 
-            // 重置 Agent 狀態
+            // 重置 Agent 狀態（清除上一次的「錯誤」標記）
+            resetAgents();
+
+            // 開始執行 - 所有 Agent 進入「工作中」狀態
             ['idea', 'planner', 'code', 'marketing', 'outreach', 'finance'].forEach(agent => {
                 setAgentStatus(agent, 'active', '工作中...');
             });
