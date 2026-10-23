@@ -414,6 +414,25 @@ async def get_revenue_share_rules():
 
 
 # ── 内部辅助函数 ────────────────────────────────────────────────
+# ── 内部辅助：安全合并 Agent 返回结果到状态 ───────────────────────────
+_SAFE_AGENT_KEYS = {"error", "tokens", "code_generated", "code_length",
+                    "days", "posts_count", "emails_generated", "skipped"}
+
+def _merge_agent_result(state: dict, result: dict) -> None:
+    """将 Agent 结果合并到 state，避免覆盖列表类型字段"""
+    for key, value in result.items():
+        if key == "audit_log" and isinstance(value, list):
+            state["audit_log"].extend(value)
+        elif key == "pending_approval":
+            if isinstance(value, list):
+                state["pending_approval"].extend(value)
+            # bool(True) 是 agent 标记"有待审批"的信号，忽略即可
+        elif key == "approved_items" and isinstance(value, list):
+            state["approved_items"].extend(value)
+        elif key not in _SAFE_AGENT_KEYS:
+            state[key] = value
+
+
 async def _dry_run_workflow(state: BusinessState) -> BusinessState:
     """
     乾跑模式：只執行規劃和生成，跳過實際部署和發送
@@ -427,7 +446,7 @@ async def _dry_run_workflow(state: BusinessState) -> BusinessState:
     # Phase 1: 規劃
     planner = PlannerAgent(state)
     plan_result = await planner.run()
-    state.update(plan_result)
+    _merge_agent_result(state, plan_result)
 
     if "error" in plan_result:
         state["metrics"] = {"workflow_status": "error", "error": plan_result["error"]}
@@ -443,12 +462,12 @@ async def _dry_run_workflow(state: BusinessState) -> BusinessState:
     # Phase 3: 內容
     marketer = MarketingAgent(state)
     marketing_result = await marketer.run()
-    state.update(marketing_result)
+    _merge_agent_result(state, marketing_result)
 
     # Phase 4: 獲客
     outreach = OutreachAgent(state)
     outreach_result = await outreach.run()
-    state.update(outreach_result)
+    _merge_agent_result(state, outreach_result)
 
     # 完成報告
     total_tokens = sum(e.get("tokens", 0) for e in state["audit_log"])

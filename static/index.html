@@ -203,6 +203,13 @@
             transform: translateY(-1px);
         }
 
+        .btn:disabled,
+        .btn-disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
         .finance-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -1739,11 +1746,18 @@
                 return;
             }
 
+            const btn = document.querySelector('button[onclick="runDryRun()"]');
+            if (btn) {
+                btn.disabled = true;
+                btn.classList.add('btn-disabled');
+                btn.textContent = '⏳ 執行中...';
+            }
+
             const overlay = document.getElementById('loadingOverlay');
             overlay.classList.add('visible');
 
             ['idea', 'planner', 'code', 'marketing', 'outreach', 'finance'].forEach(agent => {
-                setAgentStatus(agent, 'idle', '就緒');
+                setAgentStatus(agent, 'active', '工作中...');
             });
 
             addLog('system', 'info', `啟動工作流 - 用戶: ${userId}`);
@@ -1780,8 +1794,17 @@
             } catch (error) {
                 addLog('system', 'error', `執行失敗: ${error.message}`);
                 console.error('Dry run error:', error);
+                setAgentStatus('planner', 'error', '錯誤');
+                setAgentStatus('code', 'error', '錯誤');
+                setAgentStatus('marketing', 'error', '錯誤');
+                setAgentStatus('finance', 'error', '錯誤');
             } finally {
                 overlay.classList.remove('visible');
+                if (btn) {
+                    btn.disabled = false;
+                    btn.classList.remove('btn-disabled');
+                    btn.textContent = '🚀 啟動 ROE 商業引擎';
+                }
             }
         }
 
