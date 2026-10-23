@@ -429,6 +429,9 @@ def _merge_agent_result(state: dict, result: dict) -> None:
             # bool(True) 是 agent 标记"有待审批"的信号，忽略即可
         elif key == "approved_items" and isinstance(value, list):
             state["approved_items"].extend(value)
+        elif key == "content_plan" and isinstance(value, list):
+            # marketing_agent 返回 content_plan，统一映射为 content_queue
+            state["content_queue"] = value
         elif key not in _SAFE_AGENT_KEYS:
             state[key] = value
 
