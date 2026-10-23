@@ -57,6 +57,7 @@ class CodeAgent(BaseAgent):
 
             return {
                 "code_generated": True,
+                "code": code,
                 "code_length": len(code),
                 "framework": "nextjs",
                 "pending_approval": True,

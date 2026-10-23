@@ -17,7 +17,12 @@ from pathlib import Path
 
 from agents.base import BusinessState
 from agents.orchestrator import OrchestratorAgent
+from agents.planner_agent import PlannerAgent
+from agents.code_agent import CodeAgent
+from agents.marketing_agent import MarketingAgent
+from agents.outreach_agent import OutreachAgent
 from config.settings import settings
+from loguru import logger
 
 # ── Job 存儲（內存，實際部署建議用 Redis/PostgreSQL）─────────────────────
 _jobs: Dict[str, Dict[str, Any]] = {}
@@ -254,10 +259,15 @@ def _merge_agent_result(state: dict, result: dict) -> None:
         elif key == "pending_approval":
             if isinstance(value, list):
                 state["pending_approval"].extend(value)
+            # bool(True) 是 agent 标记"有待审批"的信号，忽略即可
         elif key == "approved_items" and isinstance(value, list):
             state["approved_items"].extend(value)
         elif key == "content_plan" and isinstance(value, list):
+            # marketing_agent 返回 content_plan，统一映射为 content_queue
             state["content_queue"] = value
+        elif key == "code" and isinstance(value, str):
+            # code_agent 返回的 code 直接存入 landing_page_code
+            state["landing_page_code"] = value
         elif key not in {"error", "tokens", "code_generated", "code_length",
                          "days", "posts_count", "emails_generated", "skipped"}:
             state[key] = value
