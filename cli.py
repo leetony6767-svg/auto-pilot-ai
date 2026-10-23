@@ -51,7 +51,6 @@ def dry_run(
         "landing_page_code": "",
         "deployment_url": "",
         "content_queue": [],
-        "outreach_emails": [],
         "leads": [],
         "pending_approval": [],
         "approved_items": [],

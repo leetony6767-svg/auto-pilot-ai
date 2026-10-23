@@ -23,7 +23,6 @@ class BusinessState(TypedDict):
     landing_page_code: str
     deployment_url: str
     content_queue: list[dict]
-    outreach_emails: list[dict]
     leads: list[dict]
 
     # 人工審批隊列
@@ -113,7 +112,6 @@ def route_by_task(task: str) -> str:
         "plan": "planner",
         "code": "coder",
         "content": "marketer",
-        "outreach": "outreach",
         "analyze": "analyst",
     }
     return routing_map.get(task, "planner")

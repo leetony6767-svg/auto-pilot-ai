@@ -1454,16 +1454,6 @@
             </div>
             <div class="agent-card">
                 <div class="agent-card-header">
-                    <div class="agent-icon">🤝</div>
-                    <div class="agent-info">
-                        <h3>獲客 Agent</h3>
-                        <p>銷售郵件發送</p>
-                    </div>
-                </div>
-                <span class="agent-status idle" id="agent-outreach">就緒</span>
-            </div>
-            <div class="agent-card">
-                <div class="agent-card-header">
                     <div class="agent-icon">💰</div>
                     <div class="agent-info">
                         <h3>財務 Agent</h3>
@@ -1566,12 +1556,7 @@
                 <div class="progress-step" id="step-marketing">
                     <span>📢</span>
                     <span>內容</span>
-                </div>
-                <div class="progress-step" id="step-outreach">
-                    <span>🤝</span>
-                    <span>獲客</span>
-                </div>
-                <div class="progress-step" id="step-finance">
+                </div>                <div class="progress-step" id="step-finance">
                     <span>💰</span>
                     <span>財務</span>
                 </div>
@@ -1609,11 +1594,6 @@
             <div class="result-card" id="marketingCard" style="display: none;">
                 <h3>🎬 爆款短影音行銷腳本</h3>
                 <div id="contentQueue"></div>
-            </div>
-            <!-- 獲客郵件 -->
-            <div class="result-card" id="outreachCard" style="display: none;">
-                <h3>📧 B2B 開發郵件模板</h3>
-                <div id="emailQueue"></div>
             </div>
             <!-- 分潤看板 -->
             <div class="result-card" id="financeCard" style="display: none;">
@@ -1753,7 +1733,7 @@
 
         // 重置所有 Agent 狀態為「就緒」
         function resetAgents() {
-            ['planner', 'code', 'marketing', 'outreach', 'finance'].forEach(agent => {
+            ['planner', 'code', 'marketing', 'finance'].forEach(agent => {
                 setAgentStatus(agent, 'idle', '就緒');
             });
         }
@@ -1920,7 +1900,7 @@
             resetAgents();
 
             // 開始執行 - 所有 Agent 進入「工作中」狀態
-            ['idea', 'planner', 'code', 'marketing', 'outreach', 'finance'].forEach(agent => {
+            ['idea', 'planner', 'code', 'marketing', 'finance'].forEach(agent => {
                 setAgentStatus(agent, 'active', '工作中...');
             });
 
@@ -1981,8 +1961,7 @@
                     setAgentStatus('planner', 'idle', '完成');
                     setAgentStatus('code', 'idle', '完成');
                     setAgentStatus('marketing', 'idle', '完成');
-                    setAgentStatus('outreach', 'idle', '完成');
-                    setAgentStatus('finance', 'idle', '完成');
+                        setAgentStatus('finance', 'idle', '完成');
 
                     renderResults(jobData);
                 } else {
@@ -2033,12 +2012,12 @@
         }
 
         function updateProgressSteps(currentPhase) {
-            const steps = ['planner', 'code', 'marketing', 'outreach', 'finance'];
+            const steps = ['planner', 'code', 'marketing', 'finance'];
             const phaseMap = {
                 '🎯 商業規劃': 0,
                 '💻 網站開發': 1,
                 '📢 內容生成': 2,
-                '🤝 獲客策略': 3,
+                '💰 財務預測': 3,
                 '✅ 完成': 4
             };
 
@@ -2059,7 +2038,7 @@
         }
 
         function resetProgressSteps() {
-            ['planner', 'code', 'marketing', 'outreach', 'finance'].forEach(step => {
+            ['planner', 'code', 'marketing', 'finance'].forEach(step => {
                 const el = document.getElementById(`step-${step}`);
                 if (el) {
                     el.classList.remove('active', 'completed');
@@ -2114,13 +2093,6 @@
                 document.getElementById('marketingCard').style.display = 'none';
             }
 
-            if (data.outreach_emails && data.outreach_emails.length > 0) {
-                document.getElementById('emailQueue').innerHTML = data.outreach_emails.slice(0, 5).map(item =>
-                    '<div class="email-item"><h4>致：' + (item.to || '潛在客戶') + '</h4><p>主題：' + (item.subject || '') + '</p><p>' + ((item.body || '').substring(0, 200)) + ((item.body || '').length > 200 ? '...' : '') + '</p><button class="btn btn-copy" onclick="copyEmail(this)" data-body="' + encodeURIComponent(item.body || '') + '">📋 複製郵件</button></div>'
-                ).join('');
-                document.getElementById('outreachCard').style.display = 'block';
-            } else {
-                document.getElementById('outreachCard').style.display = 'none';
             }
 
             // 分潤試算

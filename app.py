@@ -20,7 +20,6 @@ from agents.orchestrator import OrchestratorAgent
 from agents.planner_agent import PlannerAgent
 from agents.code_agent import CodeAgent
 from agents.marketing_agent import MarketingAgent
-from agents.outreach_agent import OutreachAgent
 from config.settings import settings
 from loguru import logger
 
@@ -84,7 +83,6 @@ class JobStatus(BaseModel):
     landing_page_code: str = ""
     deployment_url: str = ""
     content_queue: list = []
-    outreach_emails: list = []
     error: str = ""
     metrics: dict = {}
 
@@ -155,7 +153,6 @@ async def run_workflow(input_data: BusinessInput):
         "landing_page_code": "",
         "deployment_url": "",
         "content_queue": [],
-        "outreach_emails": [],
         "leads": [],
         "pending_approval": [],
         "approved_items": [],
@@ -222,11 +219,6 @@ async def _execute_workflow(job_id: str):
         marketing_result = await marketer.run()
         _merge_agent_result(state, marketing_result)
 
-        # Phase 4: 獲客 (90%)
-        set_phase("🤝 獲客策略", 90, "正在生成開發郵件...")
-        outreach = OutreachAgent(state)
-        outreach_result = await outreach.run()
-        _merge_agent_result(state, outreach_result)
 
         # 完成 (100%)
         set_phase("✅ 完成", 100, "工作流執行完畢！")
@@ -293,7 +285,7 @@ async def get_job_status(job_id: str):
             landing_page_code=result.get("landing_page_code", ""),
             deployment_url=result.get("deployment_url", ""),
             content_queue=result.get("content_queue", []),
-            outreach_emails=result.get("outreach_emails", []),
+
             metrics=result.get("metrics", {}),
         )
     elif job["status"] == "failed":
@@ -571,8 +563,7 @@ async def _dry_run_workflow(state: BusinessState) -> BusinessState:
     from agents.planner_agent import PlannerAgent
     from agents.code_agent import CodeAgent
     from agents.marketing_agent import MarketingAgent
-    from agents.outreach_agent import OutreachAgent
-
+    
     # Phase 1: 規劃
     planner = PlannerAgent(state)
     plan_result = await planner.run()
@@ -594,10 +585,6 @@ async def _dry_run_workflow(state: BusinessState) -> BusinessState:
     marketing_result = await marketer.run()
     _merge_agent_result(state, marketing_result)
 
-    # Phase 4: 獲客
-    outreach = OutreachAgent(state)
-    outreach_result = await outreach.run()
-    _merge_agent_result(state, outreach_result)
 
     # 完成報告
     total_tokens = sum(e.get("tokens", 0) for e in state["audit_log"])

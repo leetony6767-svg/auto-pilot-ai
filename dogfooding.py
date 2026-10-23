@@ -10,7 +10,6 @@ from agents.idea_discovery_agent import IdeaDiscoveryAgent
 from agents.planner_agent import PlannerAgent
 from agents.code_agent import CodeAgent
 from agents.marketing_agent import MarketingAgent
-from agents.outreach_agent import OutreachAgent
 from agents.finance_agent import FinanceAgent
 from config.settings import settings
 
@@ -56,7 +55,6 @@ async def run_dogfooding():
         "landing_page_code": "",
         "deployment_url": "",
         "content_queue": [],
-        "outreach_emails": [],
         "leads": [],
         "pending_approval": [],
         "approved_items": [],
@@ -143,22 +141,6 @@ async def run_dogfooding():
     print(f"  已保存到: output/revenue_split.json")
     print()
 
-    # Step 7: 獲取客階段 (可选)
-    print("[Step 6] 獲客階段 — Outreach Agent...")
-    outreach = OutreachAgent(state)
-    outreach_result = await outreach.run()
-    state.update(outreach_result)
-
-    if "error" not in outreach_result:
-        emails_count = outreach_result.get("emails_generated", 0)
-        print(f"  已生成 {emails_count} 封開發郵件")
-        print()
-
-        # 保存 outreach 內容
-        with open(output_dir / "outreach_emails.json", "w", encoding="utf-8") as f:
-            json.dump(state.get("outreach_emails", []), f, ensure_ascii=False, indent=2)
-        print(f"  已保存到: output/outreach_emails.json")
-
     print()
     print("=" * 70)
     print("Dogfooding 完成!")
@@ -169,8 +151,6 @@ async def run_dogfooding():
     print(f"  - output/landing_page.html")
     print(f"  - output/marketing_content.json")
     print(f"  - output/revenue_split.json")
-    if outreach_result.get("emails_generated", 0) > 0:
-        print(f"  - output/outreach_emails.json")
     print()
     print("財務分潤摘要:")
     print(f"  總營收: ${report['gross_revenue']:,.2f}/月")

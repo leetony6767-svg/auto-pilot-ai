@@ -10,7 +10,6 @@ from agents.base import BaseAgent, BusinessState, PermissionLevel, approval_rout
 from agents.planner_agent import PlannerAgent
 from agents.code_agent import CodeAgent
 from agents.marketing_agent import MarketingAgent
-from agents.outreach_agent import OutreachAgent
 from agents.idea_discovery_agent import IdeaDiscoveryAgent
 from config.cost_control import cost_tracker
 
@@ -27,7 +26,6 @@ class OrchestratorAgent(BaseAgent):
             "planner": PlannerAgent,
             "code": CodeAgent,
             "marketing": MarketingAgent,
-            "outreach": OutreachAgent,
         }
         self.active_agent = None
 
@@ -82,13 +80,13 @@ class OrchestratorAgent(BaseAgent):
             marketing_result = await marketer.run()
             self._merge_state(marketing_result)
 
-            # Phase 4: 獲客（Outreach Agent）- 已禁用，需要線索數據
-            # self.active_agent = "outreach"
-            # logger.info("[Phase 4/5] 獲客階段：生成開發郵件")
-            # outreach = OutreachAgent(self.state)
-            # outreach_result = await outreach.run()
-            # self._merge_state(outreach_result)
-            self.log(status="outreach_skipped", reason="需要線索數據")
+            # Phase 4: 財務（Finance Agent）
+            self.active_agent = "finance"
+            logger.info("[Phase 4/4] 財務階段：生成財務預測")
+            from agents.finance_agent import FinanceAgent
+            finance = FinanceAgent(self.state)
+            finance_result = await finance.run()
+            self._merge_state(finance_result)
 
             # 完成報告
             self.state["metrics"] = {
