@@ -2188,6 +2188,24 @@
             section.scrollIntoView({ behavior: 'smooth' });
         }
 
+        // 全屏预览切换
+        function toggleFullscreenPreview() {
+            const preview = document.getElementById('landingPreview');
+            if (!preview || !preview.querySelector('iframe')) {
+                alert('暂无预览内容');
+                return;
+            }
+            const iframe = preview.querySelector('iframe');
+            if (iframe.srcdoc) {
+                // 创建新窗口显示完整页面
+                const newWindow = window.open('', '_blank');
+                if (newWindow) {
+                    newWindow.document.write(iframe.srcdoc);
+                    newWindow.document.close();
+                }
+            }
+        }
+
         // 複製 Landing Page 代碼
         function copyLandingCode() {
             const el = document.getElementById('landingCode');
