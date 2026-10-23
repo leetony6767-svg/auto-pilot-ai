@@ -1562,6 +1562,7 @@
                 </div>
             </div>
             <p id="progressMessage" style="margin-top: 1rem; color: var(--gray-400); font-size: 0.875rem; text-align: center;"></p>
+            <div id="errorDisplay" style="display:none;margin-top:0.5rem;padding:0.75rem 1rem;background:rgba(239,68,68,0.1);border:1px solid var(--error);border-radius:8px;color:var(--error);font-size:0.875rem;text-align:center;"></div>
         </div>
     </section>
 
@@ -1976,6 +1977,11 @@
                 setAgentStatus('code', 'error', '錯誤');
                 setAgentStatus('marketing', 'error', '錯誤');
                 setAgentStatus('finance', 'error', '錯誤');
+                const errEl = document.getElementById('errorDisplay');
+                if (errEl) {
+                    errEl.textContent = '❌ ' + error.message;
+                    errEl.style.display = 'block';
+                }
             } finally {
                 if (btn) {
                     btn.disabled = false;
@@ -2093,15 +2099,13 @@
                 document.getElementById('marketingCard').style.display = 'none';
             }
 
-            }
-
             // 分潤試算
             if (data.business_plan) {
                 const plan = data.business_plan;
                 // 優先使用結構化數值，fallback 到文字解析
                 let priceMonthly = null;
                 let currency = plan.currency || 'TWD';
-                let platformFeePercent = parseFloat(plan.platform_fee_percent) || settings ? parseFloat(settings.platform_revenue_share) * 100 : 20;
+                let platformFeePercent = parseFloat(plan.platform_fee_percent) || 20;
 
                 if (plan.price_twd_monthly && !isNaN(plan.price_twd_monthly)) {
                     priceMonthly = parseFloat(plan.price_twd_monthly);
