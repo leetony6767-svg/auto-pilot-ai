@@ -894,6 +894,101 @@
             padding: 2rem;
         }
 
+        /* Progress bar styles */
+        .progress-container {
+            background: var(--black-card);
+            border: 1px solid var(--gray-700);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 600px;
+            margin: 2rem auto;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .progress-phase {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .progress-percent {
+            color: var(--gray-400);
+        }
+
+        .progress-bar-bg {
+            background: var(--gray-800);
+            border-radius: 10px;
+            height: 12px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 100%);
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .progress-step.active {
+            color: var(--gold);
+        }
+
+        .progress-step.completed {
+            color: var(--success);
+        }
+
+        /* Landing page preview */
+        .landing-preview {
+            background: var(--black-card);
+            border: 1px solid var(--gray-700);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .landing-preview-header {
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-700);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .landing-preview iframe {
+            width: 100%;
+            height: 400px;
+            border: none;
+        }
+
+        @media (max-width: 768px) {
+            .landing-preview iframe {
+                height: 300px;
+            }
+            .progress-steps {
+                font-size: 0.65rem;
+            }
+        }
+
         /* ═══════════════════════════════════════════════════════════════
            頁尾
            ═══════════════════════════════════════════════════════════════ */
@@ -1449,6 +1544,42 @@
         </div>
     </section>
 
+    <!-- 執行進度區 -->
+    <section class="section" id="progressSection" style="display: none;">
+        <div class="progress-container">
+            <div class="progress-header">
+                <span class="progress-phase" id="progressPhase">🎯 商業規劃</span>
+                <span class="progress-percent" id="progressPercent">0%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progressBar" style="width: 0%"></div>
+            </div>
+            <div class="progress-steps">
+                <div class="progress-step" id="step-planner">
+                    <span>🎯</span>
+                    <span>規劃</span>
+                </div>
+                <div class="progress-step" id="step-code">
+                    <span>💻</span>
+                    <span>網站</span>
+                </div>
+                <div class="progress-step" id="step-marketing">
+                    <span>📢</span>
+                    <span>內容</span>
+                </div>
+                <div class="progress-step" id="step-outreach">
+                    <span>🤝</span>
+                    <span>獲客</span>
+                </div>
+                <div class="progress-step" id="step-finance">
+                    <span>💰</span>
+                    <span>財務</span>
+                </div>
+            </div>
+            <p id="progressMessage" style="margin-top: 1rem; color: var(--gray-400); font-size: 0.875rem; text-align: center;"></p>
+        </div>
+    </section>
+
     <!-- 執行成果展示區 -->
     <section class="section" id="resultSection" style="display: none;">
         <div class="section-header">
@@ -1465,8 +1596,13 @@
             <!-- Landing Page 預覽 -->
             <div class="result-card" id="landingCard" style="display: none;">
                 <h3>🌐 商用 Landing Page <span class="badge">HTML</span></h3>
-                <div class="code-preview" id="landingCode">
-                    <button class="btn btn-copy" onclick="copyLandingCode()" style="margin-bottom:0.5rem;">📋 複製完整 Landing Page 代碼</button>
+                <div class="landing-preview">
+                    <div class="landing-preview-header">
+                        <span style="color: var(--gray-400); font-size: 0.875rem;">Прев'ю сторінки</span>
+                        <button class="btn btn-copy" onclick="copyLandingCode()">📋 Копіювати код</button>
+                    </div>
+                    <div id="landingPreview"></div>
+                    <div class="code-preview" id="landingCode" style="display: none;"></div>
                 </div>
             </div>
             <!-- 短影音行銷腳本 -->
@@ -1733,7 +1869,7 @@
             }
         }
 
-        // 啟動商業引擎
+        // 啟動商業引擎 (асинхронний режим)
         async function runDryRun() {
             const userId = document.getElementById('userId').value;
             const businessIdea = document.getElementById('businessIdea').value;
@@ -1753,8 +1889,14 @@
                 btn.textContent = '⏳ 執行中...';
             }
 
-            const overlay = document.getElementById('loadingOverlay');
-            overlay.classList.add('visible');
+            // Показати секцію прогресу
+            const progressSection = document.getElementById('progressSection');
+            progressSection.style.display = 'block';
+            document.getElementById('resultSection').style.display = 'none';
+
+            // Скинути прогрес
+            updateProgress(0, '準備中', 'Підготовка до запуску...');
+            resetProgressSteps();
 
             ['idea', 'planner', 'code', 'marketing', 'outreach', 'finance'].forEach(agent => {
                 setAgentStatus(agent, 'active', '工作中...');
@@ -1768,6 +1910,7 @@
             addLog('system', isDryRun ? 'warning' : 'success', `運行模式: ${isDryRun ? '🧪 乾跑模式' : '⚡ 真實模式'}`);
 
             try {
+                // Крок 1: Отримати job_id
                 const response = await fetch(`${API_BASE}/api/run`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -1780,26 +1923,67 @@
                 }
 
                 const data = await response.json();
-                addLog('orchestrator', 'success', `工作流完成 - 狀態: ${data.status}`);
-                addLog('orchestrator', 'info', `待審批項目: ${data.pending_approvals}`);
+                const jobId = data.job_id;
 
-                setAgentStatus('planner', 'idle', '完成');
-                setAgentStatus('code', 'idle', '完成');
-                setAgentStatus('marketing', 'idle', '完成');
-                setAgentStatus('outreach', 'idle', '完成');
-                setAgentStatus('finance', 'idle', '完成');
+                if (!jobId) {
+                    throw new Error('Не отримано job_id');
+                }
 
-                renderResults(data);
+                addLog('system', 'info', `Job створено: ${jobId}`);
+
+                // Крок 2: Полірування статусу кожні 3 секунди
+                const statusResponse = await fetch(`${API_BASE}/api/status/${jobId}`);
+                if (!statusResponse.ok) {
+                    throw new Error(`HTTP ${statusResponse.status}`);
+                }
+
+                let jobData = await statusResponse.json();
+
+                // Оновити прогрес
+                updateProgress(jobData.progress, jobData.current_phase, jobData.message);
+                updateProgressSteps(jobData.current_phase);
+
+                // Чекаємо завершення (максимум 5 хвилин)
+                const maxAttempts = 100;
+                let attempts = 0;
+
+                while (jobData.status !== 'completed' && jobData.status !== 'failed' && attempts < maxAttempts) {
+                    await sleep(3000);
+                    const retryResponse = await fetch(`${API_BASE}/api/status/${jobId}`);
+                    if (!retryResponse.ok) {
+                        throw new Error(`HTTP ${retryResponse.status}`);
+                    }
+                    jobData = await retryResponse.json();
+                    updateProgress(jobData.progress, jobData.current_phase, jobData.message);
+                    updateProgressSteps(jobData.current_phase);
+                    attempts++;
+                }
+
+                // Обробка результатів
+                if (jobData.status === 'completed') {
+                    addLog('orchestrator', 'success', `工作流完成 - 狀態: ${jobData.status}`);
+                    addLog('orchestrator', 'info', `Деталі: ${jobData.message}`);
+
+                    setAgentStatus('planner', 'idle', '完成');
+                    setAgentStatus('code', 'idle', '完成');
+                    setAgentStatus('marketing', 'idle', '完成');
+                    setAgentStatus('outreach', 'idle', '完成');
+                    setAgentStatus('finance', 'idle', '完成');
+
+                    renderResults(jobData);
+                } else {
+                    throw new Error(jobData.error || 'Робота не вдалася');
+                }
 
             } catch (error) {
                 addLog('system', 'error', `執行失敗: ${error.message}`);
-                console.error('Dry run error:', error);
+                console.error('Workflow error:', error);
+                updateProgress(0, 'Помилка', error.message);
                 setAgentStatus('planner', 'error', '錯誤');
-                setAgentStatus('code', 'error', '錯誤');
-                setAgentStatus('marketing', 'error', '錯誤');
-                setAgentStatus('finance', 'error', '錯誤');
+                setAgentStatus('code', 'error', 'Помилка');
+                setAgentStatus('marketing', 'error', 'Помилка');
+                setAgentStatus('finance', 'error', 'Помилка');
             } finally {
-                overlay.classList.remove('visible');
                 if (btn) {
                     btn.disabled = false;
                     btn.classList.remove('btn-disabled');
@@ -1808,8 +1992,57 @@
             }
         }
 
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function updateProgress(percent, phase, message) {
+            document.getElementById('progressBar').style.width = percent + '%';
+            document.getElementById('progressPercent').textContent = percent + '%';
+            document.getElementById('progressPhase').textContent = phase;
+            document.getElementById('progressMessage').textContent = message;
+        }
+
+        function updateProgressSteps(currentPhase) {
+            const steps = ['planner', 'code', 'marketing', 'outreach', 'finance'];
+            const phaseMap = {
+                '🎯 商業規劃': 0,
+                '💻 網站開發': 1,
+                '📢 內容生成': 2,
+                '🤝 獲客策略': 3,
+                '✅ 完成': 4
+            };
+
+            const currentIndex = phaseMap[currentPhase] !== undefined ? phaseMap[currentPhase] : -1;
+
+            steps.forEach((step, index) => {
+                const el = document.getElementById(`step-${step}`);
+                if (!el) return;
+
+                el.classList.remove('active', 'completed');
+
+                if (currentIndex >= 0 && index < currentIndex) {
+                    el.classList.add('completed');
+                } else if (index === currentIndex) {
+                    el.classList.add('active');
+                }
+            });
+        }
+
+        function resetProgressSteps() {
+            ['planner', 'code', 'marketing', 'outreach', 'finance'].forEach(step => {
+                const el = document.getElementById(`step-${step}`);
+                if (el) {
+                    el.classList.remove('active', 'completed');
+                }
+            });
+        }
+
         function renderResults(data) {
             const section = document.getElementById('resultSection');
+
+            // Сховати секцію прогресу
+            document.getElementById('progressSection').style.display = 'none';
 
             // 添加模式指示器
             const plan = data.business_plan || {};
@@ -1832,10 +2065,12 @@
             }
 
             if (data.landing_page_code && data.landing_page_code !== '') {
-                let code = data.landing_page_code;
-                if (code.length > 500) code = code.substring(0, 500) + '\n... (點擊複製按鈕取得完整版)';
-                document.getElementById('landingCode').textContent = code;
-                document.getElementById('landingCode').dataset.fullCode = data.landing_page_code;
+                const landingCode = data.landing_page_code;
+                // Створити iframe preview
+                const previewContainer = document.getElementById('landingPreview');
+                if (previewContainer) {
+                    previewContainer.innerHTML = '<iframe srcdoc="' + escapeHtml(landingCode) + '" title="Landing Page Preview"></iframe>';
+                }
                 document.getElementById('landingCard').style.display = 'block';
             } else {
                 document.getElementById('landingCard').style.display = 'none';
@@ -1932,6 +2167,12 @@
                 const btn = el.parentElement.querySelector('.btn-copy');
                 if (btn) { btn.textContent = '✅ 已複製！'; setTimeout(() => btn.textContent = '📋 複製完整代碼', 2000); }
             });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
         // 複製單封郵件

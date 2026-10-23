@@ -8,15 +8,20 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 import asyncio
 import json
+import uuid
 from datetime import datetime
 from pathlib import Path
 
 from agents.base import BusinessState
 from agents.orchestrator import OrchestratorAgent
 from config.settings import settings
+
+# ── Job 存儲（內存，實際部署建議用 Redis/PostgreSQL）─────────────────────
+_jobs: Dict[str, Dict[str, Any]] = {}
+
 
 app = FastAPI(
     title="StorePilot AI",
@@ -63,16 +68,20 @@ class ApprovalAction(BaseModel):
     comment: str = ""
 
 
-class WorkflowStatus(BaseModel):
-    status: str
-    metrics: dict
-    pending_approvals: int
-    audit_log_length: int
+class JobStatus(BaseModel):
+    job_id: str
+    status: str  # "pending", "running", "completed", "failed"
+    current_phase: str  # 當前階段
+    progress: int  # 0-100
+    message: str = ""
+    # 完成時返回的數據
     business_plan: dict = {}
     landing_page_code: str = ""
     deployment_url: str = ""
     content_queue: list = []
     outreach_emails: list = []
+    error: str = ""
+    metrics: dict = {}
 
 
 # ── WebSocket 實時推送 ──────────────────────────────────────────
@@ -125,20 +134,18 @@ async def root():
     }
 
 
-@app.post("/api/run", response_model=WorkflowStatus)
+@app.post("/api/run", response_model=JobStatus)
 async def run_workflow(input_data: BusinessInput):
     """
-    啟動自動化工作流
+    啟動自動化工作流（異步）
 
-    流程：
-    1. 初始化 BusinessState
-    2. 通過 LangGraph 圖執行完整工作流
-    3. 返回狀態摘要
+    返回 job_id，前端透過 /api/status/{job_id} 輪詢進度
     """
+    job_id = str(uuid.uuid4())
     initial_state: BusinessState = {
         "user_id": input_data.user_id,
         "business_idea": input_data.business_idea,
-        "profit_mode": input_data.profit_mode,  # 獲利模式
+        "profit_mode": input_data.profit_mode,
         "business_plan": {},
         "landing_page_code": "",
         "deployment_url": "",
@@ -151,41 +158,151 @@ async def run_workflow(input_data: BusinessInput):
         "metrics": {},
     }
 
+    # 初始化 job 記錄
+    _jobs[job_id] = {
+        "status": "pending",
+        "current_phase": "準備中",
+        "progress": 0,
+        "message": "工作流已建立，即將開始執行",
+        "state": initial_state,
+        "input": input_data.dict(),
+        "created_at": datetime.now().isoformat(),
+    }
+
+    # 在背景執行工作流
+    asyncio.create_task(_execute_workflow(job_id))
+
+    return JobStatus(
+        job_id=job_id,
+        status="pending",
+        current_phase="準備中",
+        progress=0,
+        message="工作流已提交，請透過 job_id 輪詢進度",
+    )
+
+
+async def _execute_workflow(job_id: str):
+    """在背景執行完整工作流，更新 job 狀態"""
+    job = _jobs[job_id]
+    state = job["state"]
+
+    def set_phase(phase: str, progress: int, message: str = ""):
+        job["status"] = "running"
+        job["current_phase"] = phase
+        job["progress"] = progress
+        if message:
+            job["message"] = message
+
     try:
-        if input_data.dry_run:
-            result = await _dry_run_workflow(initial_state)
-        else:
-            # 非乾跑模式：直接使用 Orchestrator（LangGraph 相容性問題時繞過）
-            from agents.orchestrator import OrchestratorAgent
-            orchestrator = OrchestratorAgent(initial_state)
-            result = await orchestrator.run()
+        # Phase 1: 規劃 (20%)
+        set_phase("🎯 商業規劃", 20, "正在分析商業構想，生成執行計劃...")
+        planner = PlannerAgent(state)
+        plan_result = await planner.run()
+        _merge_agent_result(state, plan_result)
 
-        await broadcast(result)
+        if "error" in plan_result:
+            raise Exception(plan_result["error"])
 
-        return WorkflowStatus(
-            status=result["metrics"].get("workflow_status", "unknown"),
-            metrics=result.get("metrics", {}),
-            pending_approvals=len(result.get("pending_approval", [])),
-            audit_log_length=len(result.get("audit_log", [])),
+        # Phase 2: 建站 (50%)
+        set_phase("💻 網站開發", 50, "正在生成 Landing Page...")
+        coder = CodeAgent(state)
+        code_result = await coder.run()
+        if code_result.get("code_generated"):
+            state["landing_page_code"] = code_result.get("code", "")
+        state["deployment_url"] = "dry-run: not deployed"
+
+        # Phase 3: 內容 (75%)
+        set_phase("📢 內容生成", 75, "正在生成 7 天社群內容...")
+        marketer = MarketingAgent(state)
+        marketing_result = await marketer.run()
+        _merge_agent_result(state, marketing_result)
+
+        # Phase 4: 獲客 (90%)
+        set_phase("🤝 獲客策略", 90, "正在生成開發郵件...")
+        outreach = OutreachAgent(state)
+        outreach_result = await outreach.run()
+        _merge_agent_result(state, outreach_result)
+
+        # 完成 (100%)
+        set_phase("✅ 完成", 100, "工作流執行完畢！")
+        total_tokens = sum(e.get("tokens", 0) for e in state["audit_log"])
+        state["metrics"] = {
+            "workflow_status": "completed",
+            "completed_at": datetime.now().isoformat(),
+            "pending_approvals": len(state["pending_approval"]),
+            "total_tokens_used": total_tokens,
+            "note": "乾跑模式：所有輸出均已進入審批隊列",
+        }
+        job["status"] = "completed"
+        job["result"] = state
+
+    except Exception as e:
+        job["status"] = "failed"
+        job["error"] = str(e)
+        job["message"] = f"執行失敗: {str(e)}"
+        logger.error(f"Job {job_id} failed: {e}")
+
+    # 觸發 WebSocket 廣播
+    await broadcast(state)
+
+
+def _merge_agent_result(state: dict, result: dict) -> None:
+    """將 Agent 结果合并到 state"""
+    for key, value in result.items():
+        if key == "audit_log" and isinstance(value, list):
+            state["audit_log"].extend(value)
+        elif key == "pending_approval":
+            if isinstance(value, list):
+                state["pending_approval"].extend(value)
+        elif key == "approved_items" and isinstance(value, list):
+            state["approved_items"].extend(value)
+        elif key == "content_plan" and isinstance(value, list):
+            state["content_queue"] = value
+        elif key not in {"error", "tokens", "code_generated", "code_length",
+                         "days", "posts_count", "emails_generated", "skipped"}:
+            state[key] = value
+
+
+@app.get("/api/status/{job_id}")
+async def get_job_status(job_id: str):
+    """查詢工作流進度"""
+    if job_id not in _jobs:
+        raise HTTPException(status_code=404, detail="Job not found")
+
+    job = _jobs[job_id]
+
+    if job["status"] == "completed":
+        result = job["result"]
+        return JobStatus(
+            job_id=job_id,
+            status="completed",
+            current_phase="完成",
+            progress=100,
+            message="工作流執行完畢",
             business_plan=result.get("business_plan", {}),
             landing_page_code=result.get("landing_page_code", ""),
             deployment_url=result.get("deployment_url", ""),
             content_queue=result.get("content_queue", []),
             outreach_emails=result.get("outreach_emails", []),
+            metrics=result.get("metrics", {}),
         )
-
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@app.get("/api/status/{user_id}")
-async def get_workflow_status(user_id: str):
-    """查詢指定用戶的工作流狀態（需接入持久化存儲）"""
-    return {
-        "user_id": user_id,
-        "status": "not_found",
-        "message": "狀態查詢接口（需接入 PostgreSQL 持久化存儲）"
-    }
+    elif job["status"] == "failed":
+        return JobStatus(
+            job_id=job_id,
+            status="failed",
+            current_phase="錯誤",
+            progress=job["progress"],
+            message=job.get("error", "未知錯誤"),
+            error=job.get("error", "未知錯誤"),
+        )
+    else:
+        return JobStatus(
+            job_id=job_id,
+            status=job["status"],
+            current_phase=job["current_phase"],
+            progress=job["progress"],
+            message=job["message"],
+        )
 
 
 @app.post("/api/approve")
