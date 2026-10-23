@@ -1524,7 +1524,7 @@
                 <p class="form-hint">💡 沒有想法？點擊導航欄的「💡 發現構想」按鈕</p>
             </div>
             <div style="display: flex; gap: 1rem;">
-                <button class="btn btn-primary" onclick="runDryRun()" style="flex: 1;">
+                <button class="btn btn-primary" id="runEngineBtn" onclick="runDryRun()" style="flex: 1;">
                     🚀 啟動 ROE 商業引擎
                 </button>
                 <button class="btn btn-secondary" onclick="discoverIdeas()">
@@ -1731,6 +1731,7 @@
         <div class="footer-links">
             <a href="mailto:support@mvp-agent-os.local">聯絡我們</a>
         </div>
+        <p style="font-size: 0.7rem; color: var(--gray-600); text-align: center; margin-top: 0.5rem;" id="buildInfo">v1.0.0 | 2026-10-23 13:44</p>
     </footer>
 
     <!-- 載入動畫 -->
@@ -1869,35 +1870,46 @@
             }
         }
 
-        // 啟動商業引擎 (асинхронний режим)
+        // 啟動商業引擎 (async polling mode with immediate feedback)
         async function runDryRun() {
-            const userId = document.getElementById('userId').value;
-            const businessIdea = document.getElementById('businessIdea').value;
-            const profitMode = document.getElementById('profitMode').value;
-            const runMode = document.getElementById('runMode').value;
-            const isDryRun = runMode === 'true';
-
-            if (!businessIdea) {
-                alert('請先輸入商業構想，或點擊「發現構想」讓我們幫你推薦');
-                return;
-            }
-
-            const btn = document.querySelector('button[onclick="runDryRun()"]');
+            // 立即更新按鈕狀態 - 確保用戶看到反饋
+            const btn = document.getElementById('runEngineBtn');
             if (btn) {
                 btn.disabled = true;
-                btn.classList.add('btn-disabled');
                 btn.textContent = '⏳ 執行中...';
             }
 
-            // Показати секцію прогресу
+            // 立即顯示進度區
             const progressSection = document.getElementById('progressSection');
-            progressSection.style.display = 'block';
-            document.getElementById('resultSection').style.display = 'none';
+            if (progressSection) {
+                progressSection.style.display = 'block';
+                progressSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            const resultSection = document.getElementById('resultSection');
+            if (resultSection) resultSection.style.display = 'none';
 
-            // Скинути прогрес
-            updateProgress(0, '準備中', 'Підготовка до запуску...');
+            // 立即更新進度顯示
+            updateProgress(5, '🎯 準備中', '正在驗證輸入...');
             resetProgressSteps();
 
+            // 獲取表單數據
+            const userId = (document.getElementById('userId') || {}).value || 'demo-user';
+            const businessIdea = (document.getElementById('businessIdea') || {}).value || '';
+            const profitMode = (document.getElementById('profitMode') || {}).value || '';
+            const runMode = (document.getElementById('runMode') || {}).value || 'true';
+            const isDryRun = runMode === 'true';
+
+            // 驗證輸入
+            if (!businessIdea) {
+                updateProgress(0, '❌ 錯誤', '請先輸入商業構想！');
+                if (btn) {
+                    btn.disabled = false;
+                    btn.textContent = '🚀 啟動 ROE 商業引擎';
+                }
+                return;
+            }
+
+            // 重置 Agent 狀態
             ['idea', 'planner', 'code', 'marketing', 'outreach', 'finance'].forEach(agent => {
                 setAgentStatus(agent, 'active', '工作中...');
             });
@@ -1910,7 +1922,9 @@
             addLog('system', isDryRun ? 'warning' : 'success', `運行模式: ${isDryRun ? '🧪 乾跑模式' : '⚡ 真實模式'}`);
 
             try {
-                // Крок 1: Отримати job_id
+                // Step 1: 提交 job
+                updateProgress(10, '📤 提交請求', '正在連接到後端...');
+                
                 const response = await fetch(`${API_BASE}/api/run`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -1919,51 +1933,41 @@
 
                 if (!response.ok) {
                     const errorData = await response.json().catch(() => ({}));
-                    throw new Error(errorData.detail || `HTTP ${response.status}`);
+                    throw new Error(errorData.detail || `HTTP ${response.status}: ${response.statusText}`);
                 }
 
                 const data = await response.json();
                 const jobId = data.job_id;
 
                 if (!jobId) {
-                    throw new Error('Не отримано job_id');
+                    throw new Error('後端未返回 job_id，請檢查後端日誌');
                 }
 
-                addLog('system', 'info', `Job створено: ${jobId}`);
+                addLog('system', 'success', `Job 已建立: ${jobId}`);
+                updateProgress(15, '✅ Job 建立成功', `Job ID: ${jobId.substring(0, 8)}...`);
 
-                // Крок 2: Полірування статусу кожні 3 секунди
-                const statusResponse = await fetch(`${API_BASE}/api/status/${jobId}`);
-                if (!statusResponse.ok) {
-                    throw new Error(`HTTP ${statusResponse.status}`);
-                }
-
-                let jobData = await statusResponse.json();
-
-                // Оновити прогрес
-                updateProgress(jobData.progress, jobData.current_phase, jobData.message);
-                updateProgressSteps(jobData.current_phase);
-
-                // Чекаємо завершення (максимум 5 хвилин)
-                const maxAttempts = 100;
-                let attempts = 0;
-
-                while (jobData.status !== 'completed' && jobData.status !== 'failed' && attempts < maxAttempts) {
-                    await sleep(3000);
-                    const retryResponse = await fetch(`${API_BASE}/api/status/${jobId}`);
-                    if (!retryResponse.ok) {
-                        throw new Error(`HTTP ${retryResponse.status}`);
+                // Step 2: 輪詢進度
+                updateProgress(20, '🎯 商業規劃', 'AI 正在分析商業構想...');
+                
+                let jobData = await pollJobStatus(jobId, 3000);
+                
+                // 持續輪詢直到完成
+                for (let i = 0; i < 100; i++) {
+                    if (jobData.status === 'completed') {
+                        break;
                     }
-                    jobData = await retryResponse.json();
-                    updateProgress(jobData.progress, jobData.current_phase, jobData.message);
-                    updateProgressSteps(jobData.current_phase);
-                    attempts++;
+                    if (jobData.status === 'failed') {
+                        throw new Error(jobData.error || '工作流執行失敗');
+                    }
+                    await sleep(3000);
+                    jobData = await pollJobStatus(jobId, 3000);
                 }
 
-                // Обробка результатів
+                // Step 3: 顯示結果
                 if (jobData.status === 'completed') {
+                    updateProgress(100, '✅ 完成', '工作流執行完畢！');
                     addLog('orchestrator', 'success', `工作流完成 - 狀態: ${jobData.status}`);
-                    addLog('orchestrator', 'info', `Деталі: ${jobData.message}`);
-
+                    
                     setAgentStatus('planner', 'idle', '完成');
                     setAgentStatus('code', 'idle', '完成');
                     setAgentStatus('marketing', 'idle', '完成');
@@ -1972,24 +1976,39 @@
 
                     renderResults(jobData);
                 } else {
-                    throw new Error(jobData.error || 'Робота не вдалася');
+                    throw new Error(jobData.error || '未知錯誤');
                 }
 
             } catch (error) {
-                addLog('system', 'error', `執行失敗: ${error.message}`);
                 console.error('Workflow error:', error);
-                updateProgress(0, 'Помилка', error.message);
+                updateProgress(0, '❌ 執行失敗', error.message);
+                addLog('system', 'error', `執行失敗: ${error.message}`);
                 setAgentStatus('planner', 'error', '錯誤');
-                setAgentStatus('code', 'error', 'Помилка');
-                setAgentStatus('marketing', 'error', 'Помилка');
-                setAgentStatus('finance', 'error', 'Помилка');
+                setAgentStatus('code', 'error', '錯誤');
+                setAgentStatus('marketing', 'error', '錯誤');
+                setAgentStatus('finance', 'error', '錯誤');
             } finally {
                 if (btn) {
                     btn.disabled = false;
-                    btn.classList.remove('btn-disabled');
                     btn.textContent = '🚀 啟動 ROE 商業引擎';
                 }
             }
+        }
+
+        // 輔助函數：輪詢 job 狀態
+        async function pollJobStatus(jobId, intervalMs) {
+            for (let i = 0; i < 20; i++) { // 最多嘗試 20 次
+                try {
+                    const response = await fetch(`${API_BASE}/api/status/${jobId}`);
+                    if (response.ok) {
+                        return await response.json();
+                    }
+                } catch (e) {
+                    console.warn('Polling error:', e);
+                }
+                await sleep(intervalMs || 1000);
+            }
+            throw new Error('無法獲取工作流狀態');
         }
 
         function sleep(ms) {
