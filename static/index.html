@@ -1494,6 +1494,7 @@
         <div class="ideas-grid" id="ideasContainer"></div>
     </section>
 
+    <!-- 商業構想區 -->
     <section class="section">
         <div class="section-header">
             <p class="section-label">Control Center</p>
@@ -1519,6 +1520,16 @@
                     </select>
                 </div>
                 <div class="form-group">
+                    <label class="form-label">你的售價（新台幣 NT$）</label>
+                    <input type="number" class="form-input" id="sellPrice" placeholder="例如：1280">
+                    <p class="form-hint">不填則使用 AI 估算價格</p>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">預估月銷量（件）</label>
+                    <input type="number" class="form-input" id="monthlyVolume" placeholder="例如：50">
+                    <p class="form-hint">不填則預設 50 件</p>
+                </div>
+                <div class="form-group" style="grid-column:1/-1;">
                     <label class="form-label">運行模式</label>
                     <select class="form-input" id="runMode">
                         <option value="true">🧪 乾跑模式（測試）</option>
@@ -1603,8 +1614,11 @@
                 <h3>🌐 商用 Landing Page <span class="badge">HTML</span></h3>
                 <div class="landing-preview">
                     <div class="landing-preview-header">
-                        <span style="color: var(--gray-400); font-size: 0.875rem;">Landing Page 预览</span>
-                        <button class="btn btn-copy" onclick="toggleFullscreenPreview()" style="margin-left: 0.5rem;">🖥️ 全屏预览</button>
+                        <span style="color: var(--gray-400); font-size: 0.875rem;">Landing Page 預覽</span>
+                        <div style="display:flex;gap:0.5rem;">
+                            <a id="previewLink" href="#" target="_blank" class="btn btn-copy" style="font-size:0.8rem;padding:0.4rem 0.8rem;text-decoration:none;">🔗 在新分頁開啟</a>
+                            <button class="btn btn-copy" onclick="toggleFullscreenPreview()" style="margin-left: 0.5rem;font-size:0.8rem;padding:0.4rem 0.8rem;">🖥️ 全屏預覽</button>
+                        </div>
                     </div>
                     <div id="landingPreview" style="min-height: 400px;"></div>
                     <div class="code-preview" id="landingCode" style="display: none;"></div>
@@ -1878,6 +1892,7 @@
         }
 
         // 啟動商業引擎 (async polling mode with immediate feedback)
+        let currentJobId = '';
         async function runDryRun() {
             // 立即更新按鈕狀態 - 確保用戶看到反饋
             const btn = document.getElementById('runEngineBtn');
@@ -1948,6 +1963,7 @@
 
                 const data = await response.json();
                 const jobId = data.job_id;
+                currentJobId = jobId;
 
                 if (!jobId) {
                     throw new Error('後端未返回 job_id，請檢查後端日誌');
@@ -1977,7 +1993,7 @@
                 if (jobData.status === 'completed') {
                     updateProgress(100, '✅ 完成', '工作流執行完畢！');
                     addLog('orchestrator', 'success', `工作流完成 - 狀態: ${jobData.status}`);
-                    
+
                     setAgentStatus('planner', 'idle', '完成');
                     setAgentStatus('code', 'idle', '完成');
                     setAgentStatus('marketing', 'idle', '完成');
@@ -2074,10 +2090,13 @@
         function renderResults(data) {
             const section = document.getElementById('resultSection');
 
-            // Сховати секцію прогресу
-            document.getElementById('progressSection').style.display = 'none';
+            // 獲取使用者輸入的售價和銷量
+            const sellPriceInput = document.getElementById('sellPrice')?.value;
+            const monthlyVolumeInput = document.getElementById('monthlyVolume')?.value;
+            const userInputPrice = sellPriceInput ? parseInt(sellPriceInput) : null;
+            const userInputVolume = monthlyVolumeInput ? parseInt(monthlyVolumeInput) : null;
 
-            // 添加模式指示器
+            // 讀取計畫中的價格和銷量
             const plan = data.business_plan || {};
             const isFallback = plan.mode === 'fallback' || data.tokens === 0;
             const modeBadge = isFallback ?
@@ -2097,107 +2116,120 @@
                 document.getElementById('planCard').style.display = 'none';
             }
 
-            if (data.landing_page_code && data.landing_page_code !== '') {
-                const landingCode = data.landing_page_code;
-                // 建立 iframe preview
+            // Landing Page 預覽：改用後端路由
+            if (currentJobId && data.landing_page_code && data.landing_page_code !== '') {
+                const previewUrl = `${API_BASE}/preview/${currentJobId}`;
                 const previewContainer = document.getElementById('landingPreview');
                 if (previewContainer) {
-                    previewContainer.innerHTML = '<iframe srcdoc="' + escapeHtml(landingCode) + '" title="Landing Page Preview"></iframe>';
+                    previewContainer.innerHTML = `<iframe src="${previewUrl}" title="Landing Page Preview" sandbox="allow-scripts allow-same-origin" style="width:100%;height:500px;border:none;"></iframe>`;
+                }
+                const previewLink = document.getElementById('previewLink');
+                if (previewLink) {
+                    previewLink.href = previewUrl;
                 }
                 document.getElementById('landingCard').style.display = 'block';
             } else {
-                document.getElementById('landingCard').style.display = 'none';
+                document.getElementById('landingCard').style.display = 'block';
                 const previewContainer = document.getElementById('landingPreview');
                 if (previewContainer) {
-                    previewContainer.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--gray-500);">⚠️ 網站代碼生成失敗，請稍後再試。</div>';
+                    previewContainer.innerHTML = '<p style="color: #ef4444; text-align: center; padding: 2rem;">⚠️ 網站代碼生成失敗，請稍後再試。</p>';
+                }
+                if (document.getElementById('previewLink')) {
+                    document.getElementById('previewLink').style.display = 'none';
                 }
             }
 
+            // 行銷腳本：TikTok 格式
             if (data.content_queue && data.content_queue.length > 0) {
-                // marketing_agent 返回的格式：{day, twitter: {copy, hashtags, image_prompt}, linkedin: {copy, ...}}
-                document.getElementById('contentQueue').innerHTML = data.content_queue.map(item => {
-                    const day = item.day || '';
-                    const twitter = item.twitter || {};
-                    const linkedin = item.linkedin || {};
-                    const twitterCopy = (twitter.copy || '').substring(0, 200);
-                    const linkedinCopy = (linkedin.copy || '').substring(0, 200);
-                    return '<div class="content-item">' +
-                        '<h4>Day ' + day + ' - 短影音行銷腳本</h4>' +
-                        '<div style="margin-top:0.5rem;padding:0.5rem;background:rgba(255,255,255,0.05);border-radius:6px;">' +
-                        '<div style="color:var(--gold);font-size:0.8rem;margin-bottom:0.3rem;">🐦 Twitter/X</div>' +
-                        '<p style="margin:0;">' + twitterCopy + (twitterCopy.length >= 200 ? '...' : '') + '</p>' +
-                        '</div>' +
-                        '<div style="margin-top:0.5rem;padding:0.5rem;background:rgba(255,255,255,0.05);border-radius:6px;">' +
-                        '<div style="color:var(--blue);font-size:0.8rem;margin-bottom:0.3rem;">💼 LinkedIn</div>' +
-                        '<p style="margin:0;">' + linkedinCopy + (linkedinCopy.length >= 200 ? '...' : '') + '</p>' +
-                        '</div>' +
-                        '</div>';
+                document.getElementById('contentQueue').innerHTML = data.content_queue.map((item, idx) => {
+                    const title = item.title || `腳本 ${idx + 1}`;
+                    const hook = item.hook_3s || '';
+                    const cta = item.cta || '';
+                    const music = item.music_style || '';
+                    const hashtags = (item.hashtags || []).join(' ');
+                    const storyboard = item.storyboard || [];
+
+                    const storyboardHtml = storyboard.map(scene =>
+                        `<div style="margin:4px 0;padding:6px;background:rgba(255,255,255,0.05);border-radius:4px;font-size:0.85rem;">
+                            <strong>畫面：</strong>${scene.visual || ''}<br>
+                            <strong>旁白：</strong>${scene.narration || ''} <span style="color:var(--gray-500)">(${scene.duration_sec || 0}s)</span>
+                        </div>`
+                    ).join('');
+
+                    return `
+                        <div class="content-item" style="margin-bottom:1rem;">
+                            <h4>📱 ${idx + 1}. ${title}</h4>
+                            ${hook ? `<div style="border-left:3px solid #FFD700;padding:6px 10px;margin:5px 0;background:rgba(255,215,0,0.1);"><strong>🪝 前3秒鉤子：</strong>${hook}</div>` : ''}
+                            ${storyboardHtml ? `<div style="border-left:3px solid #00B4D8;padding:6px 10px;margin:5px 0;"><strong>🎬 分鏡表：</strong>${storyboardHtml}</div>` : ''}
+                            ${cta ? `<div style="border-left:3px solid #10B981;padding:6px 10px;margin:5px 0;"><strong>📢 行動呼籲：</strong>${cta}</div>` : ''}
+                            ${music ? `<div style="font-size:0.8rem;color:var(--gray-400);margin:3px 0;">🎵 ${music}</div>` : ''}
+                            ${hashtags ? `<div style="font-size:0.8rem;color:var(--gray-400);">🏷️ ${hashtags}</div>` : ''}
+                        </div>
+                    `;
                 }).join('');
                 document.getElementById('marketingCard').style.display = 'block';
             } else {
                 document.getElementById('marketingCard').style.display = 'none';
             }
 
-            // 分潤試算
-            if (data.business_plan) {
-                const plan = data.business_plan;
-                // 優先使用結構化數值，fallback 到文字解析
-                let priceMonthly = null;
-                let currency = plan.currency || 'TWD';
-                let platformFeePercent = parseFloat(plan.platform_fee_percent) || window.PLATFORM_FEE || 8;
-
+            // 分潤試算：使用使用者輸入或 AI 估算
+            let priceMonthly = userInputPrice;
+            if (!priceMonthly) {
+                // 從 business_plan 提取價格
                 if (plan.price_twd_monthly && !isNaN(plan.price_twd_monthly)) {
                     priceMonthly = parseFloat(plan.price_twd_monthly);
                 } else if (plan.price_usd_monthly && !isNaN(plan.price_usd_monthly)) {
                     priceMonthly = parseFloat(plan.price_usd_monthly);
                 } else if (plan.pricing) {
-                    // fallback: 從文字解析數字
                     const numericMatch = plan.pricing.match(/(\d+\.?\d*)/);
                     priceMonthly = numericMatch ? parseFloat(numericMatch[1]) : 1280;
                 } else {
                     priceMonthly = 1280;
                 }
-
-                const platformFee = (priceMonthly * (platformFeePercent / 100)).toFixed(2);
-                const userPayout = (priceMonthly * (1 - platformFeePercent / 100)).toFixed(2);
-                const symbol = currency === 'TWD' ? 'NT$' : '$';
-                const currencyLabel = currency === 'TWD' ? '新台幣' : '美元';
-
-                document.getElementById('financeContent').innerHTML = `
-                    <div class="finance-grid">
-                        <div class="finance-item">
-                            <div class="finance-label">預估月銷量</div>
-                            <div class="finance-value" style="color:var(--gold)">50 件</div>
-                        </div>
-                        <div class="finance-item">
-                            <div class="finance-label">單價（${currencyLabel}）</div>
-                            <div class="finance-value" style="color:var(--gold)">${symbol}${priceMonthly.toLocaleString()}</div>
-                        </div>
-                        <div class="finance-item">
-                            <div class="finance-label">月營收</div>
-                            <div class="finance-value" style="color:var(--gold)">${symbol}${(priceMonthly * 50).toLocaleString()}</div>
-                        </div>
-                        <div class="finance-item">
-                            <div class="finance-label">平台服務費（${platformFeePercent.toFixed(0)}%）</div>
-                            <div class="finance-value" style="color:var(--error)">-${symbol}${platformFee}</div>
-                        </div>
-                        <div class="finance-item">
-                            <div class="finance-label">你的淨收入（每月）</div>
-                            <div class="finance-value" style="color:var(--success)">${symbol}${userPayout}</div>
-                        </div>
-                        <div class="finance-item">
-                            <div class="finance-label">年淨收入（估算）</div>
-                            <div class="finance-value" style="color:var(--success)">${symbol}${(parseFloat(userPayout) * 12).toLocaleString()}</div>
-                        </div>
-                    </div>
-                    <p style="font-size:0.85rem;color:var(--gray-400);margin-top:1rem">
-                        💡 以上為 AI 估算，僅供參考，非真實數據。實際收益取決於真實銷售量與平台費率。
-                    </p>
-                `;
-                document.getElementById('financeCard').style.display = 'block';
-            } else {
-                document.getElementById('financeCard').style.display = 'none';
             }
+
+            const monthlyVolume = userInputVolume || 50;
+            const platformFeePercent = window.PLATFORM_FEE || 8;
+            const monthlyRevenue = priceMonthly * monthlyVolume;
+            const platformFee = monthlyRevenue * (platformFeePercent / 100);
+            const netIncome = monthlyRevenue - platformFee;
+            const annualNetIncome = netIncome * 12;
+
+            const priceLabel = userInputPrice ? 'NT$ ' + priceMonthly.toLocaleString() : 'NT$ ' + priceMonthly.toLocaleString() + ' <span style="font-size:0.7rem;color:var(--warning)">(AI 估算)</span>';
+            const volumeLabel = userInputVolume ? monthlyVolume + ' 件' : '50 件 <span style="font-size:0.7rem;color:var(--warning)">(預設)</span>';
+
+            document.getElementById('financeContent').innerHTML = `
+                <div class="finance-grid">
+                    <div class="finance-item">
+                        <div class="finance-label">預估月銷量</div>
+                        <div class="finance-value" style="color:var(--gold)">${volumeLabel}</div>
+                    </div>
+                    <div class="finance-item">
+                        <div class="finance-label">單價</div>
+                        <div class="finance-value" style="color:var(--gold)">${priceLabel}</div>
+                    </div>
+                    <div class="finance-item">
+                        <div class="finance-label">月營收</div>
+                        <div class="finance-value" style="color:var(--gold)">NT$ ${monthlyRevenue.toLocaleString()}</div>
+                    </div>
+                    <div class="finance-item">
+                        <div class="finance-label">平台服務費（${platformFeePercent}%）</div>
+                        <div class="finance-value" style="color:var(--error)">-NT$ ${platformFee.toFixed(2)}</div>
+                    </div>
+                    <div class="finance-item">
+                        <div class="finance-label">你的淨收入（每月）</div>
+                        <div class="finance-value" style="color:var(--success)">NT$ ${netIncome.toFixed(2)}</div>
+                    </div>
+                    <div class="finance-item">
+                        <div class="finance-label">年淨收入（估算）</div>
+                        <div class="finance-value" style="color:var(--success)">NT$ ${annualNetIncome.toFixed(2)}</div>
+                    </div>
+                </div>
+                <p style="font-size:0.85rem;color:var(--gray-400);margin-top:1rem">
+                    💡 ${userInputPrice ? '以上計算基於您輸入的售價。' : '以上為 AI 估算價格，僅供參考。'} 實際收益取決於真實銷售量與平台費率。
+                </p>
+            `;
+            document.getElementById('financeCard').style.display = 'block';
 
             section.style.display = 'block';
             section.scrollIntoView({ behavior: 'smooth' });
@@ -2205,19 +2237,10 @@
 
         // 全屏预览切换
         function toggleFullscreenPreview() {
-            const preview = document.getElementById('landingPreview');
-            if (!preview || !preview.querySelector('iframe')) {
-                alert('暂无预览内容');
-                return;
-            }
-            const iframe = preview.querySelector('iframe');
-            if (iframe.srcdoc) {
-                // 创建新窗口显示完整页面
-                const newWindow = window.open('', '_blank');
-                if (newWindow) {
-                    newWindow.document.write(iframe.srcdoc);
-                    newWindow.document.close();
-                }
+            if (currentJobId) {
+                window.open(`${API_BASE}/preview/${currentJobId}`, '_blank');
+            } else {
+                alert('暫無預覽內容');
             }
         }
 

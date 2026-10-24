@@ -25,6 +25,7 @@ from loguru import logger
 
 # ── Job 存儲（內存，實際部署建議用 Redis/PostgreSQL）─────────────────────
 _jobs: Dict[str, Dict[str, Any]] = {}
+_latest_job_id: str = ""
 
 
 app = FastAPI(
@@ -173,6 +174,9 @@ async def run_workflow(input_data: BusinessInput):
 
     # 在背景執行工作流
     asyncio.create_task(_execute_workflow(job_id))
+
+    global _latest_job_id
+    _latest_job_id = job_id
 
     return JobStatus(
         job_id=job_id,
@@ -349,6 +353,22 @@ async def get_cost_summary():
             cost_tracker.estimate_cost(budget.global_daily_usage, "deepseek-chat"), 4
         ),
     }
+
+
+@app.get("/preview/{job_id}")
+async def preview_landing_page(job_id: str):
+    """回傳指定 job 的 Landing Page HTML 原始碼"""
+    if job_id not in _jobs:
+        raise HTTPException(status_code=404, detail="Job not found")
+
+    job = _jobs[job_id]
+    code = job["state"].get("landing_page_code", "")
+
+    if not code:
+        raise HTTPException(status_code=404, detail="Landing page code not found")
+
+    from fastapi.responses import HTMLResponse
+    return HTMLResponse(content=code)
 
 
 @app.get("/api/ideas")
