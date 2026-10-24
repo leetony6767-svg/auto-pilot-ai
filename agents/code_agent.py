@@ -111,27 +111,44 @@ class CodeAgent(BaseAgent):
     def _build_code_prompt(self) -> str:
         """根據商業計劃構建代碼生成提示"""
         plan = self.plan
-        price = plan.get("price_twd_monthly", 1280)
-        price_str = f"NT$ {price}/月" if price else "請根據定價策略設定"
+        sell_price = self.state.get("sell_price") or plan.get("price_twd_monthly", 1280)
+        product_name = plan.get("product_name", "產品名稱")
+        price_str = f"NT$ {sell_price}"
+
         return f"""
+產品名稱：{product_name}
 產品定位：{plan.get('positioning', 'SaaS 產品')}
 目標受眾：{plan.get('target_audience', '技術創業者')}
 核心功能：{', '.join(plan.get('core_features', ['功能 A', '功能 B', '功能 C']))}
-價格策略：{plan.get('pricing', price_str)}
 品牌色調：{plan.get('brand_colors', '藍色系')}
+用戶設定售價：{price_str}
 
-請生成一個完整的、響應式的 HTML Landing Page（單檔案，包含所有 CSS 和 JS），要求：
-1. 使用純 HTML + CSS（內聯樣式），不需要外部框架
-2. 響應式設計：在手機、平板、桌面都能完美顯示
-3. 必須包含以下區塊：
-   - Hero Section：大標題、副標題、CTA 按鈕
-   - 賣點區塊（3-4 個核心優勢）
-   - 商品與價格區塊：明確標示「{price_str}」價格
-   - FAQ 區塊（3-5 個常見問題）
-   - 購買按鈕（醒目，帶有購買動詞）
-   - Footer
-4. 現代化 UI：漸變色、微動畫、卡片式布局
-5. 使用中文內容，符合台灣市場喜好
+請生成一個完整的、響應式的 HTML Landing Page（單檔案，包含所有 CSS 和 JS），嚴格遵守以下規範：
+
+【硬性規定】
+1. 全部使用繁體中文（台灣用語），絕對不得使用簡體字
+2. 商品價格必須使用 {price_str}，不得編造其他價格
+3. 頁面標題和Logo必須使用「{product_name}」，與商業藍圖完全一致
+4. 禁止編造聯絡資訊：地址、電話、Email、營業時間一律寫「待填寫」或「請聯繫客服」
+5. 禁止編造顧客見證、評價、銷量數據
+6. 社群按鈕如有網址才顯示，沒有就隱藏
+7. 不使用外部圖片連結，用 CSS 漸層、SVG 或 emoji 做視覺
+8. 全部使用內嵌 CSS，單一 HTML 檔案可獨立運作
+
+【設計要求】
+- 手機優先（Mobile First）響應式設計
+- 首屏：大標題、一句吸引人的副標、明確的購買按鈕
+- 賣點區塊：3-4 個具體優勢（不要空泛形容詞）
+- 商品與價格區塊：明確標示售價 {price_str}
+- 購買流程：清晰的 CTA 按鈕
+- FAQ 區塊：3-5 個常見問題
+- 頁尾：基本的版權聲明即可
+
+【UI 品質】
+- 配色與字型一致，符合行業特性
+- 留白充足，圓角與陰影統一
+- 字級層次清楚
+- 手機底部固定一個「立即訂購」按鈕
 
 只返回完整的 HTML 代碼，不需要解釋。確保代碼能在 iframe 中直接渲染。
         """.strip()

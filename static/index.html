@@ -1953,7 +1953,14 @@
                 const response = await fetch(`${API_BASE}/api/run`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ user_id: userId, business_idea: businessIdea, dry_run: isDryRun, profit_mode: profitMode })
+                    body: JSON.stringify({
+                        user_id: userId,
+                        business_idea: businessIdea,
+                        dry_run: isDryRun,
+                        profit_mode: profitMode,
+                        sell_price: sellPrice,
+                        monthly_volume: monthlyVolume
+                    })
                 });
 
                 if (!response.ok) {

@@ -65,6 +65,8 @@ class BusinessInput(BaseModel):
     business_idea: str
     dry_run: bool = False  # 乾跑模式：只生成草稿，不實際部署/發送
     profit_mode: Optional[str] = None  # 獲利模式：e-commerce, content-marketing, b2b-sales, digital-products, data-analysis, task-automation
+    sell_price: Optional[int] = None  # 用戶售價(新台幣)，不填則使用 AI 估算
+    monthly_volume: Optional[int] = None  # 預估月銷量，不填則預設 50
 
 
 class ApprovalAction(BaseModel):
@@ -150,6 +152,8 @@ async def run_workflow(input_data: BusinessInput):
         "user_id": input_data.user_id,
         "business_idea": input_data.business_idea,
         "profit_mode": input_data.profit_mode,
+        "sell_price": input_data.sell_price,
+        "monthly_volume": input_data.monthly_volume,
         "business_plan": {},
         "landing_page_code": "",
         "deployment_url": "",
