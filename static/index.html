@@ -987,6 +987,25 @@
             .progress-steps {
                 font-size: 0.65rem;
             }
+            /* 手機版：分潤試算單欄排列 */
+            .finance-grid {
+                grid-template-columns: 1fr;
+            }
+            .finance-item {
+                width: 100%;
+                box-sizing: border-box;
+            }
+            .finance-value {
+                font-size: 1.2rem;
+            }
+            /* 手機版：內容項目垂直排列 */
+            .content-item {
+                margin-bottom: 1rem;
+            }
+            /* 手機版：結果卡片 */
+            .result-card {
+                margin-bottom: 1rem;
+            }
         }
 
         /* ═══════════════════════════════════════════════════════════════
@@ -2080,7 +2099,7 @@
 
             if (data.landing_page_code && data.landing_page_code !== '') {
                 const landingCode = data.landing_page_code;
-                // Створити iframe preview
+                // 建立 iframe preview
                 const previewContainer = document.getElementById('landingPreview');
                 if (previewContainer) {
                     previewContainer.innerHTML = '<iframe srcdoc="' + escapeHtml(landingCode) + '" title="Landing Page Preview"></iframe>';
@@ -2088,12 +2107,32 @@
                 document.getElementById('landingCard').style.display = 'block';
             } else {
                 document.getElementById('landingCard').style.display = 'none';
+                const previewContainer = document.getElementById('landingPreview');
+                if (previewContainer) {
+                    previewContainer.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--gray-500);">⚠️ 網站代碼生成失敗，請稍後再試。</div>';
+                }
             }
 
             if (data.content_queue && data.content_queue.length > 0) {
-                document.getElementById('contentQueue').innerHTML = data.content_queue.slice(0, 5).map(item =>
-                    '<div class="content-item"><h4>' + (item.day || '') + ' - ' + (item.title || item.subject || '') + '</h4><p>' + ((item.content || '').substring(0, 200)) + ((item.content || '').length > 200 ? '...' : '') + '</p></div>'
-                ).join('');
+                // marketing_agent 返回的格式：{day, twitter: {copy, hashtags, image_prompt}, linkedin: {copy, ...}}
+                document.getElementById('contentQueue').innerHTML = data.content_queue.map(item => {
+                    const day = item.day || '';
+                    const twitter = item.twitter || {};
+                    const linkedin = item.linkedin || {};
+                    const twitterCopy = (twitter.copy || '').substring(0, 200);
+                    const linkedinCopy = (linkedin.copy || '').substring(0, 200);
+                    return '<div class="content-item">' +
+                        '<h4>Day ' + day + ' - 短影音行銷腳本</h4>' +
+                        '<div style="margin-top:0.5rem;padding:0.5rem;background:rgba(255,255,255,0.05);border-radius:6px;">' +
+                        '<div style="color:var(--gold);font-size:0.8rem;margin-bottom:0.3rem;">🐦 Twitter/X</div>' +
+                        '<p style="margin:0;">' + twitterCopy + (twitterCopy.length >= 200 ? '...' : '') + '</p>' +
+                        '</div>' +
+                        '<div style="margin-top:0.5rem;padding:0.5rem;background:rgba(255,255,255,0.05);border-radius:6px;">' +
+                        '<div style="color:var(--blue);font-size:0.8rem;margin-bottom:0.3rem;">💼 LinkedIn</div>' +
+                        '<p style="margin:0;">' + linkedinCopy + (linkedinCopy.length >= 200 ? '...' : '') + '</p>' +
+                        '</div>' +
+                        '</div>';
+                }).join('');
                 document.getElementById('marketingCard').style.display = 'block';
             } else {
                 document.getElementById('marketingCard').style.display = 'none';
