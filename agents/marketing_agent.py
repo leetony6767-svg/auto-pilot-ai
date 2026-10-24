@@ -130,11 +130,13 @@ class MarketingAgent(BaseAgent):
 
         tokens = response.usage.total_tokens if response.usage else 0
         content = response.choices[0].message.content if response.choices else ""
-        match = re.search(r'\[[\s\S]*\]', content)
-        if match:
-            content_plan = json.loads(match.group())
-        else:
-            # 降级：手動構造
+        from agents.utils import parse_llm_json
+        success, content_plan, error = parse_llm_json(content)
+        if not success:
+            logger.warning(f"[{self.name}] JSON 解析失敗: {error}，使用 fallback")
+            content_plan = self._generate_fallback_content(days)
+        elif not isinstance(content_plan, list):
+            # 確保返回的是列表
             content_plan = self._generate_fallback_content(days)
 
         # 添加元數據

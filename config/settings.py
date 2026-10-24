@@ -50,7 +50,8 @@ class Settings(BaseSettings):
     ]
 
     # ── 平台營收抽成配置（基於 Polsia 商業模式）────────────────────
-    # Polsia 模式：訂閱 $49/月 + 收入抽成 20% + 廣告支出抽成 20%
+    # 可透過 PLATFORM_FEE_PERCENT 環境變數覆蓋（預設 8%）
+    platform_fee_percent: float = float(os.getenv("PLATFORM_FEE_PERCENT", "8"))
     platform_revenue_share: float = 0.20      # 平台抽成比例 20%
     user_revenue_share: float = 0.80          # 用戶留存比例 80%
     ad_spend_share: float = 0.20              # 廣告支出抽成 20%

@@ -211,6 +211,10 @@ async def _execute_workflow(job_id: str):
         code_result = await coder.run()
         if code_result.get("code_generated"):
             state["landing_page_code"] = code_result.get("code", "")
+            logger.info(f"landing_page_code 長度: {len(state['landing_page_code'])} 字節")
+        else:
+            logger.warning(f"code_agent 未生成代碼，error: {code_result.get('error')}")
+            state["landing_page_code"] = ""
         state["deployment_url"] = "dry-run: not deployed"
 
         # Phase 3: 內容 (75%)

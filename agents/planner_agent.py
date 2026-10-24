@@ -49,7 +49,9 @@ class PlannerAgent(BaseAgent):
               "go_to_market": "Go-to-Market 策略",
               "day1_actions": ["第1天要做的3件事"],
               "day7_actions": ["第7天要做的3件事"],
-              "success_metrics": ["關鍵成功指標"]
+              "success_metrics": ["關鍵成功指標"],
+              "platform_fee_percent": 8,
+              "platform_revenue_share": 0.20
             }}
 
             請確保計劃具體、可執行，並針對該商業領域提出專業建議。"""
@@ -73,18 +75,13 @@ class PlannerAgent(BaseAgent):
 
             # 解析 JSON（處理 markdown 程式碼塊包裹）
             content = response.choices[0].message.content if response.choices else ""
-            # 移除 markdown 程式碼塊
-            import re as _re
-            json_str = _re.sub(r'^```(?:json)?\s*|\s*```$', '', content.strip(), flags=_re.MULTILINE)
-            match = _re.search(r'\{[\s\S]*\}', json_str)
-            if match:
-                try:
-                    plan = json.loads(match.group())
-                except json.JSONDecodeError:
-                    # 嘗試找到最外層 JSON
-                    plan = {"raw_response": json_str}
+            from agents.utils import parse_llm_json
+            success, plan, error = parse_llm_json(content)
+            if not success:
+                logger.warning(f"[{self.name}] JSON 解析失敗: {error}")
+                plan = {"raw_response": content}
             else:
-                plan = {"raw_response": json_str}
+                plan = plan
 
             self.log(tokens=tokens, status="plan_generated")
             logger.info(f"[{self.name}] 計劃生成完成: {plan.get('product_name', '未知產品')}")

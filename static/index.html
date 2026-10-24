@@ -2105,7 +2105,7 @@
                 // 優先使用結構化數值，fallback 到文字解析
                 let priceMonthly = null;
                 let currency = plan.currency || 'TWD';
-                let platformFeePercent = parseFloat(plan.platform_fee_percent) || 20;
+                let platformFeePercent = parseFloat(plan.platform_fee_percent) || window.PLATFORM_FEE || 8;
 
                 if (plan.price_twd_monthly && !isNaN(plan.price_twd_monthly)) {
                     priceMonthly = parseFloat(plan.price_twd_monthly);
