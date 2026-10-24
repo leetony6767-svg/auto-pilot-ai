@@ -1921,6 +1921,32 @@
             const runMode = (document.getElementById('runMode') || {}).value || 'true';
             const isDryRun = runMode === 'true';
 
+            // 讀取售價和月銷量（可選，但需驗證）
+            const sellPriceRaw = document.getElementById('sellPrice')?.value;
+            const monthlyVolumeRaw = document.getElementById('monthlyVolume')?.value;
+            let sellPrice = null;
+            let monthlyVolume = null;
+
+            if (sellPriceRaw && sellPriceRaw.trim() !== '') {
+                const parsedPrice = parseInt(sellPriceRaw, 10);
+                if (isNaN(parsedPrice) || parsedPrice <= 0) {
+                    updateProgress(0, '❌ 錯誤', '售價必須是正數！');
+                    if (btn) { btn.disabled = false; btn.textContent = '🚀 啟動 ROE 商業引擎'; }
+                    return;
+                }
+                sellPrice = parsedPrice;
+            }
+
+            if (monthlyVolumeRaw && monthlyVolumeRaw.trim() !== '') {
+                const parsedVolume = parseInt(monthlyVolumeRaw, 10);
+                if (isNaN(parsedVolume) || parsedVolume <= 0) {
+                    updateProgress(0, '❌ 錯誤', '月銷量必須是正數！');
+                    if (btn) { btn.disabled = false; btn.textContent = '🚀 啟動 ROE 商業引擎'; }
+                    return;
+                }
+                monthlyVolume = parsedVolume;
+            }
+
             // 驗證輸入
             if (!businessIdea) {
                 updateProgress(0, '❌ 錯誤', '請先輸入商業構想！');
@@ -1965,7 +1991,9 @@
 
                 if (!response.ok) {
                     const errorData = await response.json().catch(() => ({}));
-                    throw new Error(errorData.detail || `HTTP ${response.status}: ${response.statusText}`);
+                    // 統一錯誤格式處理函式
+                    const errorMsg = formatErrorMessage(errorData);
+                    throw new Error(errorMsg);
                 }
 
                 const data = await response.json();
@@ -2046,6 +2074,49 @@
                 await sleep(intervalMs || 1000);
             }
             throw new Error('無法獲取工作流狀態');
+        }
+
+        // 統一錯誤格式處理：字串、陣列、物件都能顯示
+        function formatErrorMessage(data) {
+            if (!data || !data.detail) {
+                return `HTTP ${data?.status_code || '未知'} 錯誤`;
+            }
+
+            const detail = data.detail;
+
+            // 如果是字串，直接返回
+            if (typeof detail === 'string') {
+                return detail;
+            }
+
+            // 如果是陣列（FastAPI 的 validation errors）
+            if (Array.isArray(detail)) {
+                return detail.map(err => {
+                    const loc = err.loc ? err.loc.join(' → ') : 'Unknown';
+                    const msg = err.msg || err.message || '驗證失敗';
+                    return `⚠️ ${loc}: ${msg}`;
+                }).join('\n');
+            }
+
+            // 如果是物件，嘗試提取訊息
+            if (typeof detail === 'object') {
+                // 如果是自定義格式 {detail: "msg", raw_errors: [...]}
+                if (detail.raw_errors && Array.isArray(detail.raw_errors)) {
+                    return detail.raw_errors.map(err => {
+                        const loc = err.loc ? err.loc.join(' → ') : 'Unknown';
+                        const msg = err.msg || err.message || '驗證失敗';
+                        return `⚠️ ${loc}: ${msg}`;
+                    }).join('\n');
+                }
+                // 否則嘗試序列化為字串
+                try {
+                    return JSON.stringify(detail, null, 2);
+                } catch {
+                    return String(detail);
+                }
+            }
+
+            return String(detail);
         }
 
         function sleep(ms) {

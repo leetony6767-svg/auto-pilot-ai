@@ -7,7 +7,7 @@ from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional, List, Dict, Any
 import asyncio
 import json
@@ -65,8 +65,8 @@ class BusinessInput(BaseModel):
     business_idea: str
     dry_run: bool = False  # 乾跑模式：只生成草稿，不實際部署/發送
     profit_mode: Optional[str] = None  # 獲利模式：e-commerce, content-marketing, b2b-sales, digital-products, data-analysis, task-automation
-    sell_price: Optional[int] = None  # 用戶售價(新台幣)，不填則使用 AI 估算
-    monthly_volume: Optional[int] = None  # 預估月銷量，不填則預設 50
+    sell_price: Optional[int] = Field(default=None, ge=1, description="用戶售價(新台幣)，不填則使用 AI 估算")
+    monthly_volume: Optional[int] = Field(default=None, ge=1, description="預估月銷量，不填則預設 50")
 
 
 class ApprovalAction(BaseModel):
@@ -138,6 +138,41 @@ async def root():
             "GET /api/cost-summary": "獲取成本統計",
         }
     }
+
+
+# 自定義錯誤處理器：將 Pydantic 驗證錯誤轉換為友好的訊息
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request, exc: HTTPException):
+    """處理 HTTP 異常，返回統一的 JSON 格式"""
+    from fastapi.responses import JSONResponse
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": exc.detail, "status_code": exc.status_code}
+    )
+
+
+# FastAPI 內建驗證錯誤處理器
+from fastapi.exceptions import RequestValidationError
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request, exc: RequestValidationError):
+    """處理 Pydantic 驗證錯誤，轉換為友好的錯誤訊息"""
+    from fastapi.responses import JSONResponse
+    errors = exc.errors()
+    # 將錯誤轉換為易讀的格式
+    error_messages = []
+    for err in errors:
+        loc = " -> ".join(str(x) for x in err.get("loc", []))
+        msg = err.get("msg", "")
+        error_messages.append(f"⚠️ {loc}: {msg}")
+    
+    detail_text = "\n".join(error_messages) if error_messages else str(errors)
+    logger.warning(f"驗證錯誤: {detail_text}")
+    
+    return JSONResponse(
+        status_code=422,
+        content={"detail": detail_text, "raw_errors": errors}
+    )
 
 
 @app.post("/api/run", response_model=JobStatus)
