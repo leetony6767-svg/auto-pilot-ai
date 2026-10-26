@@ -1408,7 +1408,6 @@
                 <option value="zh-TW">🇹🇼 繁中</option>
                 <option value="en">🇺🇸 EN</option>
                 <option value="id">🇮🇩 ID</option>
-                <option value="zh-TW+id">🌐 雙語</option>
             </select>
             <button class="btn btn-primary" onclick="discoverIdeas()" data-i18n="nav_find_ideas">💡 發現構想</button>
         </div>
@@ -1930,9 +1929,11 @@
         // 初始化语言
         function initLanguage() {
             const saved = localStorage.getItem('spe-language') || 'zh-TW';
-            setLanguage(saved);
-            document.getElementById('languageSelect').value = saved;
-            document.getElementById('langSelector').value = saved;
+            // zh-TW+id 是輸出語言選項，不是介面語言，自動降級為 zh-TW
+            const safeLang = (saved === 'zh-TW+id') ? 'zh-TW' : saved;
+            setLanguage(safeLang);
+            document.getElementById('languageSelect').value = currentLanguage;
+            document.getElementById('langSelector').value = safeLang;
         }
 
         // 应用语言（扩展 i18n.js 的 applyLanguage）
@@ -2507,13 +2508,21 @@
             addLog('system', 'success', '提示：點擊「發現構想」開始');
             checkServerConnection();
 
-            // 監聽語言選擇器變化
+            // 監聽語言選擇器變化（表單）
             const langSelect = document.getElementById('languageSelect');
             if (langSelect) {
                 langSelect.value = currentLanguage;
                 langSelect.addEventListener('change', (e) => {
                     currentLanguage = e.target.value;
                     localStorage.setItem('spe-language', currentLanguage);
+                });
+            }
+
+            // 監聽介面上拉語言選擇器變化，同步到表單
+            const navLangSelect = document.getElementById('langSelector');
+            if (navLangSelect) {
+                navLangSelect.addEventListener('change', (e) => {
+                    if (langSelect) langSelect.value = e.target.value;
                 });
             }
 
