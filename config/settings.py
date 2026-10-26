@@ -68,20 +68,18 @@ class Settings(BaseSettings):
     # 匯率參考
     exchange_rate_twd_usd: float = 0.031     # 1 TWD ≈ 0.031 USD
 
-    # ── 收款銀行帳戶配置 ───────────────────────────────────────────
-    bank_name: str = "國泰世華銀行"
-    bank_code: str = "013"
-    account_number: str = "117-50-605328-0"
-    account_name: str = "李國榮"
-
-    # ── 加密貨幣收款配置（OKX USDT）──────────────────────────────
-    # 國外客戶收款方式
-    usdt_supported: bool = True
-    usdt_networks: list[str] = ["TRC20", "Polygon"]
-    usdt_wallet_address: str = "TMCRCb8vm9Jo96ndHjNUT81aP4PtVnwnt3"  # TRC20 地址
-    usdt_wallet_polygon: str = "0xYourPolygonWalletAddressHere1234567890ABCDEF"  # Polygon 地址
-    usdt_price_monthly: float = 49.0  # $49 USD 等值 USDT
-    usdt_payment_note: str = "請匯款至以下 USDT 地址，並附上訂單號作為備註"
+    # ── 收款配置（暂未启用）─────────────────────────────────────────
+    # 线上支付功能尚未部署，以下字段仅作占位，不暴露真实账户信息
+    bank_name: str = ""
+    bank_code: str = ""
+    account_number: str = ""
+    account_name: str = ""
+    usdt_supported: bool = False
+    usdt_networks: list[str] = []
+    usdt_wallet_address: str = ""  # TRC20 地址
+    usdt_wallet_polygon: str = ""  # Polygon 地址
+    usdt_price_monthly: float = 0.0
+    usdt_payment_note: str = ""
 
     class Config:
         env_file = ".env"
