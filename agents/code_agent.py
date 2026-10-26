@@ -152,13 +152,14 @@ class CodeAgent(BaseAgent):
 
 【硬性規定】
 1. {lang_instruction}
-2. 商品價格必須使用 {price_str}，不得編造其他價格
-3. 頁面標題和Logo必須使用「{product_name}」，與商業藍圖完全一致
-4. 禁止編造聯絡資訊：地址、電話、Email、營業時間一律寫「待填寫」（英文：To be filled by the store，印尼文：Akan diisi oleh toko）
-5. 禁止編造顧客見證、評價、銷量數據
-6. 社群按鈕如有網址才顯示，沒有就隱藏
-7. 不使用外部圖片連結，用 CSS 漸層、SVG 或 emoji 做視覺
-8. 全部使用內嵌 CSS，單一 HTML 檔案可獨立運作
+2. 【重要】商品價格必須嚴格使用 {price_str}，這是用戶設定的價格，你絕對不可以更改價格或換成其他幣別
+3. 如果頁面有多個品項，以 {price_str} 為基準價格
+4. 頁面標題和Logo必須使用「{product_name}」，與商業藍圖完全一致
+5. 禁止編造聯絡資訊：地址、電話、Email、營業時間一律寫「待填寫」（英文：To be filled by the store，印尼文：Akan diisi oleh toko）
+6. 禁止編造顧客見證、評價、銷量數據
+7. 社群按鈕如有網址才顯示，沒有就隱藏
+8. 不使用外部圖片連結，用 CSS 漸層、SVG 或 emoji 做視覺
+9. 全部使用內嵌 CSS，單一 HTML 檔案可獨立運作
 
 {bilingual_instruction}
 【設計要求】
