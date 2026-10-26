@@ -2565,41 +2565,12 @@
         }
 
         
-        // 載入付款資訊
+        // 載入付款資訊（已移除銀行和加密貨幣收款功能）
         async function loadPaymentInfo() {
-            const loading = document.getElementById('paymentLoading');
-            if (loading) loading.style.display = 'block';
-
-            try {
-                // 載入銀行資訊
-                const bankRes = await fetch(`${API_BASE}/api/bank-account`);
-                const bankData = await bankRes.json();
-                if (bankData.bank_name) document.getElementById('bankName').textContent = bankData.bank_name;
-                if (bankData.bank_code) document.getElementById('bankCode').textContent = bankData.bank_code;
-                if (bankData.account_number) document.getElementById('accountNumber').textContent = bankData.account_number;
-                if (bankData.account_name) document.getElementById('accountName').textContent = bankData.account_name;
-
-                // 載入價格資訊
-                const pricingRes = await fetch(`${API_BASE}/api/pricing`);
-                const pricingData = await pricingRes.json();
-                if (pricingData.prices.twd) {
-                    document.getElementById('twdPrice').textContent = `NT$ ${pricingData.prices.twd.monthly.toLocaleString()}`;
-                    document.getElementById('twdYearly').textContent = `NT$ ${pricingData.prices.twd.yearly.toLocaleString()}`;
-                }
-
-                // 載入加密貨幣資訊
-                const cryptoRes = await fetch(`${API_BASE}/api/crypto-payment`);
-                const cryptoData = await cryptoRes.json();
-                if (cryptoData.supported) {
-                    document.getElementById('usdtMonthly').textContent = `${cryptoData.price_monthly} USDT`;
-                    document.getElementById('usdtYearly').textContent = `${cryptoData.price_yearly} USDT`;
-                    window.cryptoPaymentData = cryptoData;
-                    switchNetwork();
-                }
-            } catch (e) {
-                console.error('Failed to load payment info:', e);
-            } finally {
-                if (loading) loading.style.display = 'none';
+            // 此功能暫時移除，後續重新設計
+            const paymentSection = document.getElementById('paymentSection');
+            if (paymentSection) {
+                paymentSection.style.display = 'none';
             }
         }
 
