@@ -442,7 +442,7 @@ async def get_business_ideas(count: int = 3, category: Optional[str] = None, pro
     }
 
 
-# ── 订阅价格与收款信息端点 ────────────────────────────────────────
+# ── 订阅价格端点 ────────────────────────────────────────
 @app.get("/api/pricing")
 async def get_pricing():
     """獲取訂閱價格資訊（雙幣別）"""
@@ -466,40 +466,6 @@ async def get_pricing():
                 "save_percentage": round((1 - settings.price_usd_yearly / (settings.price_usd_monthly * 12)) * 100, 1),
             },
         },
-        "exchange_rate": settings.exchange_rate_twd_usd,
-    }
-
-
-@app.get("/api/bank-account")
-async def get_bank_account():
-    """獲取收款銀行帳戶資訊"""
-    from config.settings import settings
-
-    return {
-        "bank_name": settings.bank_name,
-        "bank_code": settings.bank_code,
-        "account_number": settings.account_number,
-        "account_name": settings.account_name,
-    }
-
-
-@app.get("/api/crypto-payment")
-async def get_crypto_payment():
-    """獲取加密貨幣收款資訊（OKX USDT）"""
-    from config.settings import settings
-
-    return {
-        "supported": settings.usdt_supported,
-        "currency": "USDT",
-        "networks": settings.usdt_networks,
-        "wallets": {
-            "TRC20": settings.usdt_wallet_address,
-            "Polygon": settings.usdt_wallet_polygon,
-        },
-        "price_monthly": settings.usdt_price_monthly,
-        "price_yearly": settings.price_usd_yearly,
-        "payment_note": settings.usdt_payment_note,
-        "supported_exchanges": ["OKX", "Binance", "Bybit", "KuCoin"],
     }
 
 
