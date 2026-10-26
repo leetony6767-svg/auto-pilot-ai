@@ -1918,6 +1918,7 @@
         let currentJobId = '';
         let currentLanguage = 'zh-TW';
         let currentCurrency = 'TWD';
+        let currentSelectedCurrency = 'TWD'; // 全局變量，供 renderResults 使用
 
         // 币种符号映射
         const CURRENCY_SYMBOLS = {
@@ -2024,6 +2025,7 @@
             // 讀取語言和幣別
             const language = document.getElementById('languageSelect')?.value || 'zh-TW';
             const currency = document.getElementById('currencySelect')?.value || 'TWD';
+            currentSelectedCurrency = currency; // 存到全局變量
 
             // 驗證輸入
             if (!businessIdea) {
@@ -2396,8 +2398,8 @@
             const netIncome = monthlyRevenue - platformFee;
             const annualNetIncome = netIncome * 12;
 
-            const currencySymbol = CURRENCY_SYMBOLS[currency] || 'NT$';
-            const isIDR = currency === 'IDR';
+            const currencySymbol = CURRENCY_SYMBOLS[currentSelectedCurrency] || 'NT$';
+            const isIDR = currentSelectedCurrency === 'IDR';
             const priceLabel = userInputPrice
                 ? `${currencySymbol} ${priceMonthly.toLocaleString()}`
                 : `${currencySymbol} ${priceMonthly.toLocaleString()} <span style="font-size:0.7rem;color:var(--warning)">(${t('finance_ai_estimate')})</span>`;
