@@ -2346,8 +2346,8 @@
                             </div>
                             <div id="script-content-${idx}">
                         `;
-                        if (hook) html += `<div style="border-left:3px solid #FFD700;padding:6px 10px;margin:5px 0;background:rgba(255,215,0,0.1);"><strong>🪝 前3秒鉤子：</strong>${hook}</div>`;
-                        if (storyboardHtml) html += `<div style="border-left:3px solid #00B4D8;padding:6px 10px;margin:5px 0;"><strong>🎬 分鏡表：</strong>${storyboardHtml}</div>`;
+                        if (hook) html += `<div style="border-left:3px solid #FFD700;padding:6px 10px;margin:5px 0;background:rgba(255,215,0,0.1);"><strong>🪝 ${t('marketing_hook')}：</strong>${hook}</div>`;
+                        if (storyboardHtml) html += `<div style="border-left:3px solid #00B4D8;padding:6px 10px;margin:5px 0;"><strong>🎬 ${t('marketing_storyboard')}：</strong>${storyboardHtml}</div>`;
                         if (cta) html += `<div style="border-left:3px solid #10B981;padding:6px 10px;margin:5px 0;"><strong>📢 行動呼籲：</strong>${cta}</div>`;
                         if (music) html += `<div style="font-size:0.8rem;color:var(--gray-400);margin:3px 0;">🎵 ${music}</div>`;
                         if (hashtags) html += `<div style="font-size:0.8rem;color:var(--gray-400);">🏷️ ${hashtags}</div>`;
@@ -2360,8 +2360,8 @@
                         html += `</div>`;
                     } else {
                         // 单语模式
-                        if (hook) html += `<div style="border-left:3px solid #FFD700;padding:6px 10px;margin:5px 0;background:rgba(255,215,0,0.1);"><strong>🪝 前3秒鉤子：</strong>${hook}</div>`;
-                        if (storyboardHtml) html += `<div style="border-left:3px solid #00B4D8;padding:6px 10px;margin:5px 0;"><strong>🎬 分鏡表：</strong>${storyboardHtml}</div>`;
+                        if (hook) html += `<div style="border-left:3px solid #FFD700;padding:6px 10px;margin:5px 0;background:rgba(255,215,0,0.1);"><strong>🪝 ${t('marketing_hook')}：</strong>${hook}</div>`;
+                        if (storyboardHtml) html += `<div style="border-left:3px solid #00B4D8;padding:6px 10px;margin:5px 0;"><strong>🎬 ${t('marketing_storyboard')}：</strong>${storyboardHtml}</div>`;
                         if (cta) html += `<div style="border-left:3px solid #10B981;padding:6px 10px;margin:5px 0;"><strong>📢 行動呼籲：</strong>${cta}</div>`;
                         if (music) html += `<div style="font-size:0.8rem;color:var(--gray-400);margin:3px 0;">🎵 ${music}</div>`;
                         if (hashtags) html += `<div style="font-size:0.8rem;color:var(--gray-400);">🏷️ ${hashtags}</div>`;
