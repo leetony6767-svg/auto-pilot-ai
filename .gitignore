@@ -13,3 +13,6 @@ server.log
 server_test.log
 temp_test.js
 tests/
+
+test-*.js
+test-*.png
