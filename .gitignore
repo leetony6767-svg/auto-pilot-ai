@@ -4,3 +4,12 @@ storepilot-frontend/
 output/
 __pycache__/
 *.pyc
+
+# Secrets and logs
+DEPLOYMENT_COMPLETE.md
+PERMANENT-URL-GUIDE.md
+backend.log
+server.log
+server_test.log
+temp_test.js
+tests/

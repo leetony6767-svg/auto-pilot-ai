@@ -1935,40 +1935,20 @@
             document.getElementById('langSelector').value = saved;
         }
 
-        // 应用语言
+        // 应用语言（扩展 i18n.js 的 applyLanguage）
         function applyLanguage() {
-            // 文字内容
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                el.textContent = t(key);
-            });
-            // HTML内容
-            document.querySelectorAll('[data-i18n-html]').forEach(el => {
-                const key = el.getAttribute('data-i18n-html');
-                el.innerHTML = t(key);
-            });
-            // Placeholder
-            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-                const key = el.getAttribute('data-i18n-placeholder');
-                el.placeholder = t(key);
-            });
-            // 页面标题
-            const titleEl = document.getElementById('pageTitle');
-            if (titleEl) titleEl.textContent = t('nav_title') || 'StorePilot AI';
-            // 导航列状态
-            const statusText = document.querySelector('.navbar-status span:last-child');
-            if (statusText) statusText.textContent = t('nav_status_running');
-            // 语言选择器
-            const langSelect = document.getElementById('langSelector');
-            if (langSelect) langSelect.value = currentLang;
-            // 更新Agent状态显示
+            // 调用 i18n.js 的基础实现
+            if (typeof window._applyLanguage === 'function') {
+                window._applyLanguage();
+            }
+            // 更新 Agent 状态显示
             ['planner', 'code', 'marketing', 'finance', 'idea'].forEach(agent => {
                 const el = document.getElementById(`agent-${agent}`);
                 if (el && el.classList.contains('idle')) {
                     el.textContent = t('agent_status_idle');
                 }
             });
-            // 更新Ticker
+            // 更新 Ticker
             const tickerSpans = document.querySelectorAll('.ticker-content span');
             if (tickerSpans.length >= 5) {
                 tickerSpans[0].textContent = t('ticker_service');
