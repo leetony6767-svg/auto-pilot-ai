@@ -1,55 +1,6 @@
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-*.egg-info/
-dist/
-build/
-.pytest_cache/
-venv/
-env/
-.venv/
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*.sublime-*
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Environment variables (CRITICAL: never commit secrets)
+﻿nul
+storepilot-frontend/
 .env
-.env.local
-.env.*.local
-
-# Storage (will be created at runtime)
-storage/chroma_db/
-storage/sessions/
-storage/*.db
-
-# Output
 output/
-*.md
-!README.md
-!STARTUP.md
-
-# Logs
-*.log
-server.log
-
-# Test
-tests/
-.conftest.py
-conftest.py
-
-# WorkBuddy AI
-.workbuddy-ai/
-
-# Jupyter
-.ipynb_checkpoints/
+__pycache__/
+*.pyc

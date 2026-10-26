@@ -462,62 +462,6 @@ const i18n = {
     }
 };
 
-// 當前語言（從 localStorage 讀取，預設 zh-TW）
-let currentLang = localStorage.getItem('spe-language') || 'zh-TW';
-
-/**
- * 獲取翻譯文本
- */
-function t(key, vars = {}) {
-    const text = (i18n[currentLang] && i18n[currentLang][key]) ||
-                 (i18n['zh-TW'][key]) || key;
-    let result = text;
-    for (const [k, v] of Object.entries(vars)) {
-        result = result.replace(new RegExp('\\{' + k + '\\}', 'g'), v);
-    }
-    return result;
-}
-
-/**
- * 設定語言
- */
-function setLanguage(lang) {
-    if (!i18n[lang]) return;
-    currentLang = lang;
-    localStorage.setItem('spe-language', lang);
-    applyLanguage();
-}
-
-/**
- * 將語言應用到所有帶有 data-i18n 屬性的元素
- */
-function applyLanguage() {
-    // 文字內容
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        el.textContent = t(key);
-    });
-    // HTML 內容
-    document.querySelectorAll('[data-i18n-html]').forEach(el => {
-        const key = el.getAttribute('data-i18n-html');
-        el.innerHTML = t(key);
-    });
-    // Placeholder
-    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-        const key = el.getAttribute('data-i18n-placeholder');
-        el.placeholder = t(key);
-    });
-    // 頁面標題
-    const titleEl = document.getElementById('pageTitle');
-    if (titleEl) titleEl.textContent = t('nav_title') || 'StorePilot AI';
-    // 導航列狀態
-    const statusText = document.querySelector('.navbar-status span:last-child');
-    if (statusText) statusText.textContent = t('nav_status_running');
-    // 語言選擇器
-    const langSelect = document.getElementById('langSelector');
-    if (langSelect) langSelect.value = currentLang;
-}
-
 // 頁面載入完成後應用語言
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', applyLanguage);
