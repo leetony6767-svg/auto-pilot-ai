@@ -138,7 +138,7 @@ Return JSON array:
                 "zh-TW": "所有內容使用繁體中文（台灣用語），絕對不得使用簡體字",
                 "en": "All content must be in English (US)",
                 "id": "All content must be in natural, conversational Bahasa Indonesia",
-            }.get(lang, lang_instruction["zh-TW"])
+            }.get(lang, "所有內容使用繁體中文（台灣用語），絕對不得使用簡體字")
 
             prompt = f"""You are a top-tier TikTok content marketing expert.
 

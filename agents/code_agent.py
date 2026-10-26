@@ -124,7 +124,7 @@ class CodeAgent(BaseAgent):
             "en": "All content must be in English (US)",
             "id": "Semua konten harus dalam Bahasa Indonesia yang natural dan sehari-hari",
             "zh-TW+id": "全部使用繁體中文（台灣用語），絕對不得使用簡體字。雙語模式下需包含 id 區塊",
-        }.get(lang, lang_instruction["zh-TW"])
+        }.get(lang, "全部使用繁體中文（台灣用語），絕對不得使用簡體字")
 
         bilingual_instruction = ""
         if is_bilingual:
