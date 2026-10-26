@@ -60,13 +60,18 @@ active_connections: List[WebSocket] = []
 
 
 # ── API 數據模型 ────────────────────────────────────────────────
+# 合法語言清單（含雙語）
+_VALID_LANGUAGES = {"zh-TW", "en", "id", "zh-TW+id"}
+
 class BusinessInput(BaseModel):
     user_id: str
     business_idea: str
     dry_run: bool = False  # 乾跑模式：只生成草稿，不實際部署/發送
     profit_mode: Optional[str] = None  # 獲利模式：e-commerce, content-marketing, b2b-sales, digital-products, data-analysis, task-automation
-    sell_price: Optional[int] = Field(default=None, ge=1, description="用戶售價(新台幣)，不填則使用 AI 估算")
+    sell_price: Optional[int] = Field(default=None, ge=1, description="用戶售價，不填則使用 AI 估算")
     monthly_volume: Optional[int] = Field(default=None, ge=1, description="預估月銷量，不填則預設 50")
+    language: str = "zh-TW"  # 輸出語言：zh-TW / en / id / zh-TW+id（雙語）
+    currency: str = "TWD"    # 幣別：TWD / USD / IDR
 
 
 class ApprovalAction(BaseModel):
@@ -189,6 +194,8 @@ async def run_workflow(input_data: BusinessInput):
         "profit_mode": input_data.profit_mode,
         "sell_price": input_data.sell_price,
         "monthly_volume": input_data.monthly_volume,
+        "language": input_data.language if input_data.language in _VALID_LANGUAGES else "zh-TW",
+        "currency": input_data.currency if input_data.currency in ("TWD", "USD", "IDR") else "TWD",
         "business_plan": {},
         "landing_page_code": "",
         "deployment_url": "",

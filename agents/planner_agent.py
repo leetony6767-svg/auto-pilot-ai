@@ -27,6 +27,8 @@ class PlannerAgent(BaseAgent):
         try:
             from openai import AsyncOpenAI
 
+            lang = self.state.get("language", "zh-TW")
+            lang_name = {"zh-TW": "繁體中文", "en": "English", "id": "Bahasa Indonesia", "zh-TW+id": "繁體中文+Bahasa Indonesia"}.get(lang, "繁體中文")
             prompt = f"""你是一位經驗豐富的創業顧問和產品經理。
             用戶想要創辦一家公司，想法是：
 
@@ -51,9 +53,10 @@ class PlannerAgent(BaseAgent):
               "day7_actions": ["第7天要做的3件事"],
               "success_metrics": ["關鍵成功指標"],
               "platform_fee_percent": 8,
-              "platform_revenue_share": 0.20
+              "platform_revenue_share": 0.92
             }}
 
+            注意：product_name、pricing、value_proposition 請使用 {lang_name} 輸出。
             請確保計劃具體、可執行，並針對該商業領域提出專業建議。"""
 
             client = AsyncOpenAI(

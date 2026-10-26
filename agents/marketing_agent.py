@@ -59,70 +59,133 @@ class MarketingAgent(BaseAgent):
         """生成 5 支不同切角的 TikTok 短影音腳本"""
         from openai import AsyncOpenAI
 
+        lang = self.state.get("language", "zh-TW")
+        is_bilingual = lang == "zh-TW+id"
+
         brand_tone = self.plan.get("brand_tone", "專業但有親和力")
         product_name = self.plan.get("product_name", "AgentOS")
         positioning = self.plan.get("positioning", "")
         target_audience = self.plan.get("target_audience", "")
-        pricing_info = self.plan.get("pricing", "NT$ 1,280/月")
+        currency = self.state.get("currency", "TWD")
+        sell_price = self.state.get("sell_price") or self.plan.get("price_twd_monthly", 1280)
+        currency_symbol = {"TWD": "NT$", "USD": "$", "IDR": "Rp"}.get(currency, "NT$")
+        pricing_info = f"{currency_symbol} {sell_price}"
         price_value = self._extract_price_value(pricing_info)
 
-        prompt = f"""你是一位顶级的 TikTok 内容营销专家，擅长创作高完播率、高互动率的短视频脚本。
+        if is_bilingual:
+            prompt = f"""You are a top-tier TikTok content marketing expert.
 
-請為以下產品創作 5 支 TikTok 短影音腳本，每支 15-30 秒。
+Create 5 TikTok short video scripts (15-30 seconds each) in BOTH Traditional Chinese and Bahasa Indonesia.
 
-產品：{product_name}
-定位：{positioning}
-目標受眾：{target_audience}
-品牌調性：{brand_tone}
-價格：{pricing_info}
+Product: {product_name}
+Positioning: {positioning}
+Target Audience: {target_audience}
+Brand Tone: {brand_tone}
+Price: {pricing_info}
 
-🎯 5 支腳本必須各有不同切角：
-1. 痛點型 — 直击用户痛点，引发共鸣
-2. 開箱展示型 — 展示產品實際效果
-3. 對比型 — 使用前 vs 使用後強烈對比
-4. 情境故事型 — 真實生活場景代入
-5. 限時優惠型 — 創造緊迫感和 FOMO
+Each script MUST include content in both languages:
+- "zh-TW": full script in Traditional Chinese (no Simplified Chinese)
+- "id": full script in natural, conversational Indonesian (like how Indonesians in Taiwan would speak)
 
-⚠️ 每個腳本必須包含以下結構：
+5 angles required:
+1. Pain point type (痛點型 / Tipe Masalah)
+2. Unboxing/showcase type (開箱展示型 / Tipe Unboxing)
+3. Comparison type (對比型 / Tipe Perbandingan)
+4. Story type (情境故事型 / Tipe Cerita)
+5. Limited offer type (限時優惠型 / Tipe Penawaran Terbatas)
 
-【前3秒鉤子】一句會讓人立即停下來看的話（絕對不能在開頭說「大家好」、「今天來介紹」這種無聊開場）
+Each script structure:
+- hook_3s_zh / hook_3s_id: 3-second hook in each language
+- storyboard: array of {{visual, narration_zh, narration_id, duration_sec}}
+- total_duration_sec: 15-30
+- cta_zh / cta_id: call to action in each language
+- music_style: suggested BGM style
+- hashtags: 5-8 trending tags
+- ad_copies: 3 ad copies (title + body + cta) for each language
 
-【分鏡表】（每個鏡頭包含）：
-- 畫面描述（視覺內容）
-- 旁白或字幕文字
-- 秒數（總長 15-30 秒）
+IMPORTANT rules:
+- Product name "{product_name}" and price "{pricing_info}" must be IDENTICAL in both languages
+- NO fabricated testimonials, fake reviews, or false sales claims
+- Indonesian text should sound natural and conversational, not machine-translated
+- Each script 15-30 seconds, fast-paced
 
-【行動呼籲 CTA】明確告訴觀眾下一步動作
-
-【建議配樂風格】適合的 BGM 類型（如： upbeat pop, lo-fi hip hop, trending sounds）
-
-【建議 hashtag】5-8 個熱門標籤
-
-📌 嚴格要求：
-- 用目標客群的口吻，具體描述產品細節
-- 避免空泛形容詞（如「完美相遇」「日常哲學」）
-- 避免硬湊的口號
-- 內容要有趣、有節奏感、適合 TikTok 短影音形式
-- 絕對不能編造顧客見證、虛假評價、虛假銷量或療效保證
-- 每支腳本約 15-30 秒，節奏要快
-
-同時輸出 3 組廣告文案（標題 + 內文 + 行動呼籲），每組字數適合 TikTok 廣告（標題 ≤30 字，內文 ≤125 字）。
-
-返回 JSON 數組，格式：
+Return JSON array:
 [{{
-  "title": "痛點型：每天被工作淹沒？",
+  "title": "pain_point type title",
   "angle": "pain_point",
-  "hook_3s": "前3秒鉤子文案",
+  "zh-TW": {{
+    "hook_3s": "前3秒鉤子",
+    "storyboard": [{{"visual": "...", "narration": "...", "duration_sec": 5}}],
+    "total_duration_sec": 25,
+    "cta": "行動呼籲",
+    "music_style": "...",
+    "hashtags": ["#hashtag1"],
+    "ad_copies": [{{"title": "...", "body": "...", "cta": "..."}}]
+  }},
+  "id": {{
+    "hook_3s": "hook dalam Bahasa Indonesia",
+    "storyboard": [{{"visual": "...", "narration": "...", "duration_sec": 5}}],
+    "total_duration_sec": 25,
+    "cta": "CTA dalam Bahasa Indonesia",
+    "music_style": "...",
+    "hashtags": ["#hashtag1"],
+    "ad_copies": [{{"title": "...", "body": "...", "cta": "..."}}]
+  }}
+}}]"""
+        else:
+            lang_name = {"zh-TW": "繁體中文", "en": "English", "id": "Bahasa Indonesia"}.get(lang, "繁體中文")
+            lang_instruction = {
+                "zh-TW": "所有內容使用繁體中文（台灣用語），絕對不得使用簡體字",
+                "en": "All content must be in English (US)",
+                "id": "All content must be in natural, conversational Bahasa Indonesia",
+            }.get(lang, lang_instruction["zh-TW"])
+
+            prompt = f"""You are a top-tier TikTok content marketing expert.
+
+Create 5 TikTok short video scripts (15-30 seconds each) in {lang_name}.
+
+Product: {product_name}
+Positioning: {positioning}
+Target Audience: {target_audience}
+Brand Tone: {brand_tone}
+Price: {pricing_info}
+
+🎯 5 scripts must each have a different angle:
+1. Pain point type — hit the user's pain point
+2. Unboxing/showcase type — show actual product effect
+3. Comparison type — before vs after strong contrast
+4. Story type — real-life scenario
+5. Limited offer type — create urgency and FOMO
+
+⚠️ Each script MUST include:
+- hook_3s: a 3-second hook that makes people stop scrolling
+- storyboard: array of {{visual, narration, duration_sec}} (total 15-30s)
+- cta: clear call to action
+- music_style: suggested BGM
+- hashtags: 5-8 trending tags
+- ad_copies: 3 ad copies (title + body + cta), suitable for TikTok ads
+
+📌 Strict rules:
+- Use target audience's tone, describe product details concretely
+- Avoid empty adjectives
+- NEVER fabricate testimonials, fake reviews, false sales, or health claims
+- {lang_instruction}
+
+Return JSON array:
+[{{
+  "title": "angle type: title",
+  "angle": "pain_point",
+  "hook_3s": "3-second hook copy",
   "storyboard": [
-    {{"visual": "畫面描述", "narration": "旁白或字幕", "duration_sec": 5}},
-    {{"visual": "畫面描述", "narration": "旁白或字幕", "duration_sec": 5}}
+    {{"visual": "visual description", "narration": "narration/subtitle", "duration_sec": 5}},
+    {{"visual": "visual description", "narration": "narration/subtitle", "duration_sec": 5}}
   ],
   "total_duration_sec": 25,
-  "cta": "行動呼籲文字",
-  "music_style": "建議配樂風格",
+  "cta": "call to action text",
+  "music_style": "suggested BGM style",
   "hashtags": ["#hashtag1", "#hashtag2"],
   "ad_copies": [
-    {{"title": "廣告標題", "body": "廣告內文", "cta": "行動呼籲"}}
+    {{"title": "ad title", "body": "ad body", "cta": "call to action"}}
   ]
 }}]"""
 

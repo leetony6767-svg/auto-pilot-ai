@@ -1,344 +1,526 @@
-"""
-多語言支援模組 - StorePilot AI
-支援: 繁體中文 (zh-TW), 英文 (en), 印尼文 (id)
-"""
+/**
+ * StorePilot AI - i18n 多語言翻譯檔
+ * 支援：繁體中文 (zh-TW)、English (en)、Bahasa Indonesia (id)
+ */
 
-class I18n:
-    def __init__(self):
-        self.current_lang = "zh-TW"
-        self.translations = {
-            "zh-TW": {
-                # 導航列
-                "navbar.title": "StorePilot AI",
-                "navbar.subtitle": "AI 在你睡覺時替你運營商店",
-                "navbar.dashboard": "儀表板",
-                "navbar.analyze": "逆向分析",
-                "navbar.pricing": "定價方案",
-                "navbar.status": "運行狀態",
-                "navbar.logs": "執行日誌",
-                "navbar.settings": "設定",
+const i18n = {
+    'zh-TW': {
+        nav_status_running: '系統運行中',
+        nav_find_ideas: '💡 發現構想',
+        nav_start: '▶️ 開始使用',
+        ticker_service: '🚀 StorePilot AI 系統就緒 — 已為 12,847 家公司提供 AI 自動化營運服務',
+        ticker_new_ideas: '📊 今日新增：3 個新商業構想推薦',
+        ticker_response_time: '⚡ Agent 平均響應時間：< 2.3 秒',
+        ticker_fee: '💰 平台營收抽成：8% | 用戶留存：92%',
+        ticker_approval: '🔒 所有外部操作需人工審批',
+        hero_label: 'AI 驅動的全自動商業引擎',
+        hero_title: '在你睡覺時<br/>替你運營商店',
+        hero_subtitle: '描述你的商業構想，AI 團隊會自動生成商業計劃、Landing Page、行銷腳本與財務預測',
+        hero_btn_start: '🚀 啟動 ROE 商業引擎',
+        hero_btn_ideas: '💡 探索商業構想',
+        agent_idea_name: '創意發現 Agent',
+        agent_idea_desc: '商業構想推薦',
+        agent_planner_name: '規劃 Agent',
+        agent_planner_desc: '商業藍圖生成',
+        agent_code_name: '編碼 Agent',
+        agent_code_desc: '網站代碼生成',
+        agent_marketing_name: '行銷 Agent',
+        agent_marketing_desc: 'TikTok 腳本創作',
+        agent_finance_name: '財務 Agent',
+        agent_finance_desc: '收入預測分析',
+        agent_status_idle: '就緒',
+        agent_status_active: '工作中...',
+        agent_status_done: '完成',
+        agent_status_error: '錯誤',
+        control_label: 'Control Center',
+        control_title: '啟動你的 AI 團隊',
+        control_desc: '描述你想經營的業務，AI 會幫你從零開始運作',
+        label_user_id: '你的身份標識',
+        placeholder_user_id: '例如：zhang-san',
+        label_profit_mode: '獲利模式',
+        profit_mode_auto: '自動推薦',
+        profit_mode_ecommerce: '🛒 電商自動化',
+        profit_mode_content: '📱 內容營銷',
+        profit_mode_b2b: '💼 B2B 獲客開發',
+        profit_mode_digital: '📦 數位產品',
+        profit_mode_data: '📊 數據分析',
+        profit_mode_task: '⚙️ 任務自動化',
+        label_run_mode: '運行模式',
+        run_mode_dry: '🧪 乾跑模式（測試）',
+        run_mode_live: '⚡ 真實模式（生產）',
+        hint_run_mode: '乾跑模式：生成草稿，不實際部署；真實模式：完整執行流程（需配置 Agnes API Key）',
+        label_language: '輸出語言',
+        lang_zh_tw: '繁體中文',
+        lang_en: 'English',
+        lang_id: 'Bahasa Indonesia',
+        lang_bilingual: '雙語（繁中 + 印尼文）',
+        hint_language: '所有生成內容（網站、文案、財務說明）將使用此語言',
+        label_sell_price: '你的售價',
+        placeholder_sell_price: '例如：1280',
+        hint_sell_price: '不填則使用 AI 估算價格',
+        label_currency: '幣別',
+        currency_twd: 'TWD 新台幣',
+        currency_usd: 'USD 美元',
+        currency_idr: 'IDR 印尼盾',
+        label_monthly_volume: '預估月銷量（件）',
+        placeholder_monthly_volume: '例如：50',
+        hint_monthly_volume: '不填則預設 50 件',
+        label_business_idea: '商業構想描述',
+        placeholder_business_idea: '描述你想創立的業務，或點擊「發現構想」讓我們幫你推薦...',
+        hint_business_idea: '💡 沒有想法？點擊導航欄的「💡 發現構想」按鈕',
+        btn_run_engine: '🚀 啟動 ROE 商業引擎',
+        btn_discover_ideas: '💡 發現構想',
+        progress_preparing: '🎯 準備中',
+        progress_prep_msg: '正在驗證輸入...',
+        progress_submit: '📤 提交請求',
+        progress_submit_msg: '正在連接到後端...',
+        progress_plan: '🎯 商業規劃',
+        progress_plan_msg: 'AI 正在分析商業構想...',
+        progress_website: '💻 網站生成',
+        progress_website_msg: 'AI 正在生成 Landing Page...',
+        progress_content: '🎬 內容創作',
+        progress_content_msg: 'AI 正在撰寫行銷腳本...',
+        progress_finance: '💰 財務試算',
+        progress_finance_msg: 'AI 正在計算收入預測...',
+        progress_complete: '✅ 完成',
+        progress_complete_msg: '工作流執行完畢！',
+        error_blank_idea: '請先輸入商業構想！',
+        error_price_positive: '售價必須是正數！',
+        error_volume_positive: '月銷量必須是正數！',
+        error_generic: '執行失敗，請稍後再試。',
+        result_label: 'Your Business Assets',
+        result_title: '🎉 你的商業資產已準備就緒',
+        result_desc: '以下是 ROE 引擎為你打造的全套賺錢工具，直接可用',
+        result_plan_title: '💼 商業執行藍圖',
+        result_landing_title: '🌐 商用 Landing Page',
+        result_landing_preview_label: 'Landing Page 預覽',
+        result_landing_empty: '⚠️ 網站代碼生成失敗，請稍後再試。',
+        result_landing_new_tab: '🔗 在新分頁開啟',
+        result_landing_fullscreen: '🖥️ 全屏預覽',
+        result_marketing_title: '🎬 爆款短影音行銷腳本',
+        result_finance_title: '💰 平台分潤試算',
+        finance_label_volume: '預估月銷量',
+        finance_label_price: '單價',
+        finance_label_revenue: '月營收',
+        finance_label_fee: '平台服務費',
+        finance_label_net: '你的淨收入（每月）',
+        finance_label_annual: '年淨收入（估算）',
+        finance_hint: '💡 以上為 AI 估算，僅供參考，非真實數據。實際收益取決於真實銷售量與平台費率。',
+        finance_hint_user: '以上計算基於您輸入的售價。',
+        finance_hint_ai: '以上為 AI 估算價格，僅供參考。',
+        finance_hint_end: '實際收益取決於真實銷售量與平台費率。',
+        finance_ai_estimate: '(AI 估算)',
+        finance_default: '(預設)',
+        payment_label: 'Payment Methods',
+        payment_title: '訂閱與付款',
+        payment_desc: '選擇適合您的付款方式，支援國內銀行轉帳與國際加密貨幣',
+        payment_bank_title: '國內銀行轉帳',
+        payment_bank_region: '適用地區：台灣',
+        payment_crypto_title: 'OKX USDT 加密貨幣',
+        payment_crypto_region: '適用地區：國際客戶',
+        payment_crypto_desc: 'Fast & Low Fee via USDT (OKX Supported)',
+        payment_monthly: '月度訂閱',
+        payment_yearly: '年度訂閱',
+        payment_save: '省 16.7%',
+        payment_bank_name: '銀行：',
+        payment_bank_code: '代號：',
+        payment_account: '帳號：',
+        payment_account_name: '戶名：',
+        payment_copy_btn: '📋 複製帳號資訊',
+        payment_copy_success: '✅ 帳號資訊已複製到剪貼簿',
+        payment_wallet_trc20: 'TRC20 網路',
+        payment_wallet_polygon: 'Polygon 網路',
+        payment_wallet_label: '錢包地址',
+        payment_note: '支付時請註明訂單號，以利對帳',
+        payment_exchanges: '支援交易所',
+        ideas_label: 'Recommended Ideas',
+        ideas_title: '💡 推薦商業構想',
+        ideas_desc: 'AI 為您精選的商業機會，點擊採用或繼續自訂',
+        ideas_empty: '暫無推薦構想',
+        ideas_btn_use: '採用此構想',
+        ideas_btn_copy: '複製',
+        ideas_source: '來源',
+        ideas_category: '類別',
+        ideas_profit_mode: '獲利模式',
+        footer_text: '© 2024 StorePilot AI — AI 在你睡覺時替你運營商店',
+        err_connection: '無法連接到後端，請檢查網路連線',
+        err_polling: '無法獲取工作流狀態',
+        err_job_no_id: '後端未返回 job_id，請檢查後端日誌',
+        err_workflow_failed: '工作流執行失敗',
+        err_unknown: '未知錯誤',
+        err_network: '網路錯誤，請檢查連線後重試',
+        code_preview_toggle: '顯示原始碼',
+        code_preview_close: '隱藏原始碼',
+        copy_to_clipboard: '複製',
+        copied: '已複製！',
+        lang_selector_zh: '中文',
+        lang_selector_id: 'Indonesia',
+    },
+    'en': {
+        nav_status_running: 'System Online',
+        nav_find_ideas: '💡 Discover Ideas',
+        nav_start: '▶️ Get Started',
+        ticker_service: '🚀 StorePilot AI Ready — Serving 12,847+ businesses with AI automation',
+        ticker_new_ideas: '📊 Today: 3 new business ideas recommended',
+        ticker_response_time: '⚡ Agent avg response time: < 2.3s',
+        ticker_fee: '💰 Platform fee: 8% | User retention: 92%',
+        ticker_approval: '🔒 All external actions require human approval',
+        hero_label: 'AI-Powered Fully Automated Business Engine',
+        hero_title: 'Your store runs<br/>while you sleep',
+        hero_subtitle: 'Describe your business idea and our AI team will generate a business plan, landing page, marketing scripts, and financial projections',
+        hero_btn_start: '🚀 Launch ROE Engine',
+        hero_btn_ideas: '💡 Discover Ideas',
+        agent_idea_name: 'Idea Discovery Agent',
+        agent_idea_desc: 'Business idea recommendations',
+        agent_planner_name: 'Planner Agent',
+        agent_planner_desc: 'Business blueprint generation',
+        agent_code_name: 'Code Agent',
+        agent_code_desc: 'Website code generation',
+        agent_marketing_name: 'Marketing Agent',
+        agent_marketing_desc: 'TikTok script creation',
+        agent_finance_name: 'Finance Agent',
+        agent_finance_desc: 'Revenue prediction analysis',
+        agent_status_idle: 'Ready',
+        agent_status_active: 'Working...',
+        agent_status_done: 'Done',
+        agent_status_error: 'Error',
+        control_label: 'Control Center',
+        control_title: 'Launch Your AI Team',
+        control_desc: 'Describe the business you want to run, and AI will handle everything from scratch',
+        label_user_id: 'Your Identity',
+        placeholder_user_id: 'e.g., john-doe',
+        label_profit_mode: 'Profit Mode',
+        profit_mode_auto: 'Auto Recommend',
+        profit_mode_ecommerce: '🛒 E-commerce Automation',
+        profit_mode_content: '📱 Content Marketing',
+        profit_mode_b2b: '💼 B2B Lead Generation',
+        profit_mode_digital: '📦 Digital Products',
+        profit_mode_data: '📊 Data Analytics',
+        profit_mode_task: '⚙️ Task Automation',
+        label_run_mode: 'Run Mode',
+        run_mode_dry: '🧪 Dry Run (Test)',
+        run_mode_live: '⚡ Live Mode (Production)',
+        hint_run_mode: 'Dry Run: generates drafts only; Live Mode: full execution (requires Agnes API Key)',
+        label_language: 'Output Language',
+        lang_zh_tw: '繁體中文',
+        lang_en: 'English',
+        lang_id: 'Bahasa Indonesia',
+        lang_bilingual: 'Bilingual (ZH + ID)',
+        hint_language: 'All generated content (website, copy, financials) will use this language',
+        label_sell_price: 'Your Selling Price',
+        placeholder_sell_price: 'e.g., 1280',
+        hint_sell_price: 'Leave blank for AI estimated price',
+        label_currency: 'Currency',
+        currency_twd: 'TWD New Taiwan Dollar',
+        currency_usd: 'USD US Dollar',
+        currency_idr: 'IDR Indonesian Rupiah',
+        label_monthly_volume: 'Estimated Monthly Volume (units)',
+        placeholder_monthly_volume: 'e.g., 50',
+        hint_monthly_volume: 'Default is 50 units if left blank',
+        label_business_idea: 'Business Idea Description',
+        placeholder_business_idea: 'Describe the business you want to start, or click "Discover Ideas" for recommendations...',
+        hint_business_idea: '💡 No ideas? Click the "💡 Discover Ideas" button in the navbar',
+        btn_run_engine: '🚀 Launch ROE Engine',
+        btn_discover_ideas: '💡 Discover Ideas',
+        progress_preparing: '🎯 Preparing',
+        progress_prep_msg: 'Validating input...',
+        progress_submit: '📤 Submitting',
+        progress_submit_msg: 'Connecting to backend...',
+        progress_plan: '🎯 Business Planning',
+        progress_plan_msg: 'AI is analyzing your business idea...',
+        progress_website: '💻 Website Generation',
+        progress_website_msg: 'AI is generating your Landing Page...',
+        progress_content: '🎬 Content Creation',
+        progress_content_msg: 'AI is writing marketing scripts...',
+        progress_finance: '💰 Financial Projection',
+        progress_finance_msg: 'AI is calculating revenue forecast...',
+        progress_complete: '✅ Complete',
+        progress_complete_msg: 'Workflow finished!',
+        error_blank_idea: 'Please enter a business idea first!',
+        error_price_positive: 'Selling price must be a positive number!',
+        error_volume_positive: 'Monthly volume must be a positive number!',
+        error_generic: 'Execution failed, please try again later.',
+        result_label: 'Your Business Assets',
+        result_title: '🎉 Your Business Assets Are Ready',
+        result_desc: 'Here are all the earning tools built by the ROE engine for you',
+        result_plan_title: '💼 Business Execution Blueprint',
+        result_landing_title: '🌐 Commercial Landing Page',
+        result_landing_preview_label: 'Landing Page Preview',
+        result_landing_empty: '⚠️ Website code generation failed, please try again later.',
+        result_landing_new_tab: '🔗 Open in new tab',
+        result_landing_fullscreen: '🖥️ Fullscreen preview',
+        result_marketing_title: '🎬 Viral Short Video Marketing Scripts',
+        result_finance_title: '💰 Revenue Share Calculator',
+        finance_label_volume: 'Est. Monthly Volume',
+        finance_label_price: 'Unit Price',
+        finance_label_revenue: 'Monthly Revenue',
+        finance_label_fee: 'Platform Fee',
+        finance_label_net: 'Your Net Income (Monthly)',
+        finance_label_annual: 'Annual Net Income (Est.)',
+        finance_hint: '💡 Estimates only, for reference. Actual revenue depends on real sales and platform fees.',
+        finance_hint_user: 'Calculations are based on your entered price.',
+        finance_hint_ai: 'These are AI estimated prices for reference only.',
+        finance_hint_end: 'Actual revenue depends on real sales volume and platform fees.',
+        finance_ai_estimate: '(AI Est.)',
+        finance_default: '(Default)',
+        payment_label: 'Payment Methods',
+        payment_title: 'Subscription & Payment',
+        payment_desc: 'Choose your preferred payment method, supports bank transfer and crypto',
+        payment_bank_title: 'Bank Transfer (Taiwan)',
+        payment_bank_region: 'Region: Taiwan',
+        payment_crypto_title: 'OKX USDT Crypto',
+        payment_crypto_region: 'Region: International',
+        payment_crypto_desc: 'Fast & Low Fee via USDT (OKX Supported)',
+        payment_monthly: 'Monthly',
+        payment_yearly: 'Yearly',
+        payment_save: 'Save 16.7%',
+        payment_bank_name: 'Bank:',
+        payment_bank_code: 'Code:',
+        payment_account: 'Account:',
+        payment_account_name: 'Account Name:',
+        payment_copy_btn: '📋 Copy Account Info',
+        payment_copy_success: '✅ Account info copied to clipboard',
+        payment_wallet_trc20: 'TRC20 Network',
+        payment_wallet_polygon: 'Polygon Network',
+        payment_wallet_label: 'Wallet Address',
+        payment_note: 'Please include order number when paying for reconciliation',
+        payment_exchanges: 'Supported Exchanges',
+        ideas_label: 'Recommended Ideas',
+        ideas_title: '💡 Recommended Business Ideas',
+        ideas_desc: 'AI-curated business opportunities, click to adopt or continue customizing',
+        ideas_empty: 'No ideas available',
+        ideas_btn_use: 'Use This Idea',
+        ideas_btn_copy: 'Copy',
+        ideas_source: 'Source',
+        ideas_category: 'Category',
+        ideas_profit_mode: 'Profit Mode',
+        footer_text: '© 2024 StorePilot AI — Your store runs while you sleep',
+        err_connection: 'Cannot connect to backend, please check your network',
+        err_polling: 'Cannot fetch workflow status',
+        err_job_no_id: 'Backend did not return job_id, check server logs',
+        err_workflow_failed: 'Workflow execution failed',
+        err_unknown: 'Unknown error',
+        err_network: 'Network error, please check connection and retry',
+        code_preview_toggle: 'Show Source Code',
+        code_preview_close: 'Hide Source Code',
+        copy_to_clipboard: 'Copy',
+        copied: 'Copied!',
+        lang_selector_zh: '中文',
+        lang_selector_id: 'Indonesia',
+    },
+    'id': {
+        nav_status_running: 'Sistem Aktif',
+        nav_find_ideas: '💡 Temukan Ide',
+        nav_start: '▶️ Mulai',
+        ticker_service: '🚀 StorePilot AI Siap — Melayani 12,847+ bisnis dengan otomatisasi AI',
+        ticker_new_ideas: '📊 Hari ini: 3 ide bisnis baru direkomendasikan',
+        ticker_response_time: '⚡ Waktu respon Agent rata-rata: < 2.3 detik',
+        ticker_fee: '💰 Fee platform: 8% | Retensi pengguna: 92%',
+        ticker_approval: '🔒 Semua tindakan eksternal memerlukan persetujuan manual',
+        hero_label: 'Mesin Bisnis Otomatis Berbasis AI',
+        hero_title: 'Toko Anda berjalan<br/>sambil Anda tidur',
+        hero_subtitle: 'Jelaskan ide bisnis Anda dan tim AI kami akan membuat rencana bisnis, landing page, skrip pemasaran, dan proyeksi keuangan',
+        hero_btn_start: '🚀 Mulai Mesin ROE',
+        hero_btn_ideas: '💡 Temukan Ide',
+        agent_idea_name: 'Agent Penemu Ide',
+        agent_idea_desc: 'Rekomendasi ide bisnis',
+        agent_planner_name: 'Agent Perencana',
+        agent_planner_desc: 'Pembuatan cetak biru bisnis',
+        agent_code_name: 'Agent Pemrogram',
+        agent_code_desc: 'Pembuatan kode website',
+        agent_marketing_name: 'Agent Pemasaran',
+        agent_marketing_desc: 'Pembuatan skrip TikTok',
+        agent_finance_name: 'Agent Keuangan',
+        agent_finance_desc: 'Analisis prediksi pendapatan',
+        agent_status_idle: 'Siap',
+        agent_status_active: 'Bekerja...',
+        agent_status_done: 'Selesai',
+        agent_status_error: 'Error',
+        control_label: 'Pusat Kontrol',
+        control_title: 'Luncurkan Tim AI Anda',
+        control_desc: 'Jelaskan bisnis yang ingin Anda jalankan, AI akan menangani semuanya dari nol',
+        label_user_id: 'Identitas Anda',
+        placeholder_user_id: 'contoh: john-doe',
+        label_profit_mode: 'Mode Keuntungan',
+        profit_mode_auto: 'Auto Rekomendasi',
+        profit_mode_ecommerce: '🛒 Otomasi E-commerce',
+        profit_mode_content: '📱 Pemasaran Konten',
+        profit_mode_b2b: '💼 Generasi Lead B2B',
+        profit_mode_digital: '📦 Produk Digital',
+        profit_mode_data: '📊 Analisis Data',
+        profit_mode_task: '⚙️ Otomasi Tugas',
+        label_run_mode: 'Mode Jalankan',
+        run_mode_dry: '🧪 Mode Uji (Dry Run)',
+        run_mode_live: '⚡ Mode Langsung (Produksi)',
+        hint_run_mode: 'Mode Uji: hanya membuat draf; Mode Langsung: eksekusi penuh (memerlukan Agnes API Key)',
+        label_language: 'Bahasa Output',
+        lang_zh_tw: '繁體中文',
+        lang_en: 'English',
+        lang_id: 'Bahasa Indonesia',
+        lang_bilingual: 'Dwi-bahasa (ZH + ID)',
+        hint_language: 'Semua konten yang dihasilkan (website, copy, keuangan) akan menggunakan bahasa ini',
+        label_sell_price: 'Harga Jual Anda',
+        placeholder_sell_price: 'contoh: 1280',
+        hint_sell_price: 'Kosongkan untuk harga estimasi AI',
+        label_currency: 'Mata Uang',
+        currency_twd: 'TWD Dolar Taiwan Baru',
+        currency_usd: 'USD Dolar Amerika',
+        currency_idr: 'IDR Rupiah Indonesia',
+        label_monthly_volume: 'Estimasi Volume Bulanan (unit)',
+        placeholder_monthly_volume: 'contoh: 50',
+        hint_monthly_volume: 'Default 50 unit jika kosong',
+        label_business_idea: 'Deskripsi Ide Bisnis',
+        placeholder_business_idea: 'Jelaskan bisnis yang ingin Anda bangun, atau klik "Temukan Ide" untuk rekomendasi...',
+        hint_business_idea: '💡 Tidak ada ide? Klik tombol "💡 Temukan Ide" di navbar',
+        btn_run_engine: '🚀 Mulai Mesin ROE',
+        btn_discover_ideas: '💡 Temukan Ide',
+        progress_preparing: '🎯 Mempersiapkan',
+        progress_prep_msg: 'Memvalidasi input...',
+        progress_submit: '📤 Mengirim',
+        progress_submit_msg: 'Menghubungkan ke backend...',
+        progress_plan: '🎯 Perencanaan Bisnis',
+        progress_plan_msg: 'AI sedang menganalisis ide bisnis Anda...',
+        progress_website: '💻 Pembuatan Website',
+        progress_website_msg: 'AI sedang membuat Landing Page Anda...',
+        progress_content: '🎬 Pembuatan Konten',
+        progress_content_msg: 'AI sedang menulis skrip pemasaran...',
+        progress_finance: '💰 Proyeksi Keuangan',
+        progress_finance_msg: 'AI sedang menghitung perkiraan pendapatan...',
+        progress_complete: '✅ Selesai',
+        progress_complete_msg: 'Alur kerja selesai!',
+        error_blank_idea: 'Silakan masukkan ide bisnis terlebih dahulu!',
+        error_price_positive: 'Harga jual harus angka positif!',
+        error_volume_positive: 'Volume bulanan harus angka positif!',
+        error_generic: 'Eksekusi gagal, silakan coba lagi nanti.',
+        result_label: 'Aset Bisnis Anda',
+        result_title: '🎉 Aset Bisnis Anda Siap',
+        result_desc: 'Berikut adalah semua alat penghasilan yang dibuat oleh mesin ROE untuk Anda',
+        result_plan_title: '💼 Cetak Biru Eksekusi Bisnis',
+        result_landing_title: '🌐 Landing Page Komersial',
+        result_landing_preview_label: 'Pratinjau Landing Page',
+        result_landing_empty: '⚠️ Gagal membuat kode website, silakan coba lagi nanti.',
+        result_landing_new_tab: '🔗 Buka di tab baru',
+        result_landing_fullscreen: '🖥️ Pratinjau layar penuh',
+        result_marketing_title: '🎬 Skrip Pemasaran Video Pendek Viral',
+        result_finance_title: '💰 Kalkulator Bagi Hasil',
+        finance_label_volume: 'Est. Volume Bulanan',
+        finance_label_price: 'Harga Satuan',
+        finance_label_revenue: 'Pendapatan Bulanan',
+        finance_label_fee: 'Fee Platform',
+        finance_label_net: 'Pendapatan Bersih Anda (Bulanan)',
+        finance_label_annual: 'Pendapatan Bersih Tahunan (Est.)',
+        finance_hint: '💡 Hanya perkiraan, untuk referensi. Pendapatan aktual tergantung pada penjualan nyata dan fee platform.',
+        finance_hint_user: 'Perhitungan berdasarkan harga yang Anda masukkan.',
+        finance_hint_ai: 'Ini adalah estimasi AI untuk referensi.',
+        finance_hint_end: 'Pendapatan aktual tergantung pada volume penjualan nyata dan fee platform.',
+        finance_ai_estimate: '(Est. AI)',
+        finance_default: '(Default)',
+        payment_label: 'Metode Pembayaran',
+        payment_title: 'Langganan & Pembayaran',
+        payment_desc: 'Pilih metode pembayaran yang Anda inginkan, mendukung transfer bank dan crypto',
+        payment_bank_title: 'Transfer Bank (Taiwan)',
+        payment_bank_region: 'Wilayah: Taiwan',
+        payment_crypto_title: 'OKX USDT Crypto',
+        payment_crypto_region: 'Wilayah: Internasional',
+        payment_crypto_desc: 'Cepat & Fee Rendah via USDT (Dukungan OKX)',
+        payment_monthly: 'Bulanan',
+        payment_yearly: 'Tahunan',
+        payment_save: 'Hemat 16.7%',
+        payment_bank_name: 'Bank:',
+        payment_bank_code: 'Kode:',
+        payment_account: 'Rekening:',
+        payment_account_name: 'Nama Rekening:',
+        payment_copy_btn: '📋 Salin Info Rekening',
+        payment_copy_success: '✅ Info rekening disalin ke clipboard',
+        payment_wallet_trc20: 'Jaringan TRC20',
+        payment_wallet_polygon: 'Jaringan Polygon',
+        payment_wallet_label: 'Alamat Dompet',
+        payment_note: 'Silakan sertakan nomor pesanan saat membayar untuk rekonsiliasi',
+        payment_exchanges: 'Exchange yang Didukung',
+        ideas_label: 'Ide Direkomendasikan',
+        ideas_title: '💡 Ide Bisnis Direkomendasikan',
+        ideas_desc: 'Peluang bisnis kurasi AI, klik untuk mengadopsi atau lanjutkan menyesuaikan',
+        ideas_empty: 'Tidak ada ide tersedia',
+        ideas_btn_use: 'Gunakan Ide Ini',
+        ideas_btn_copy: 'Salin',
+        ideas_source: 'Sumber',
+        ideas_category: 'Kategori',
+        ideas_profit_mode: 'Mode Keuntungan',
+        footer_text: '© 2024 StorePilot AI — Toko Anda berjalan sambil Anda tidur',
+        err_connection: 'Tidak dapat terhubung ke backend, periksa koneksi Anda',
+        err_polling: 'Tidak dapat mengambil status alur kerja',
+        err_job_no_id: 'Backend tidak mengembalikan job_id, periksa log server',
+        err_workflow_failed: 'Eksekusi alur kerja gagal',
+        err_unknown: 'Kesalahan tidak diketahui',
+        err_network: 'Kesalahan jaringan, periksa koneksi dan coba lagi',
+        code_preview_toggle: 'Tampilkan Kode Sumber',
+        code_preview_close: 'Sembunyikan Kode Sumber',
+        copy_to_clipboard: 'Salin',
+        copied: 'Disalin!',
+        lang_selector_zh: '中文',
+        lang_selector_id: 'Indonesia',
+    }
+};
 
-                # 標題與說明
-                "hero.title": "自動運營你的電子商務商店",
-                "hero.subtitle": "AI Agent 在您睡眠時自動執行市場分析、產品定價、行銷推廣和客戶開發",
-                "hero.start": "開始自動化",
-                "hero.demo": "觀看演示",
+// 當前語言（從 localStorage 讀取，預設 zh-TW）
+let currentLang = localStorage.getItem('spe-language') || 'zh-TW';
 
-                # 功能卡片
-                "feature.1.title": "智能市場分析",
-                "feature.1.desc": "自動分析目標市場趨勢、競爭對手定價和消費者行為",
-                "feature.2.title": "動態定價策略",
-                "feature.2.desc": "基於市場數據自動調整價格，最大化利潤率",
-                "feature.3.title": "自動行銷推廣",
-                "feature.3.desc": "生成並發布社交媒體內容，管理廣告活動",
-                "feature.4.title": "客戶開發",
-                "feature.4.desc": "自動識別潛在客戶並發起個性化 outreach",
+/**
+ * 獲取翻譯文本
+ */
+function t(key, vars = {}) {
+    const text = (i18n[currentLang] && i18n[currentLang][key]) ||
+                 (i18n['zh-TW'][key]) || key;
+    let result = text;
+    for (const [k, v] of Object.entries(vars)) {
+        result = result.replace(new RegExp('\\{' + k + '\\}', 'g'), v);
+    }
+    return result;
+}
 
-                # 操作按鈕
-                "btn.run": "啟動自動化工作流",
-                "btn.stop": "停止運行",
-                "btn.analyze": "開始逆向分析",
-                "btn.submit": "提交目標",
-                "btn.reset": "重置",
-                "btn.copy": "複製",
-                "btn.start": "開始運行",
-                "btn.pause": "暫停",
-                "btn.resume": "繼續",
+/**
+ * 設定語言
+ */
+function setLanguage(lang) {
+    if (!i18n[lang]) return;
+    currentLang = lang;
+    localStorage.setItem('spe-language', lang);
+    applyLanguage();
+}
 
-                # 狀態訊息
-                "status.idle": "待機中",
-                "status.running": "運行中",
-                "status.paused": "已暫停",
-                "status.completed": "已完成",
-                "status.error": "發生錯誤",
+/**
+ * 將語言應用到所有帶有 data-i18n 屬性的元素
+ */
+function applyLanguage() {
+    // 文字內容
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        el.textContent = t(key);
+    });
+    // HTML 內容
+    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+        const key = el.getAttribute('data-i18n-html');
+        el.innerHTML = t(key);
+    });
+    // Placeholder
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        el.placeholder = t(key);
+    });
+    // 頁面標題
+    const titleEl = document.getElementById('pageTitle');
+    if (titleEl) titleEl.textContent = t('nav_title') || 'StorePilot AI';
+    // 導航列狀態
+    const statusText = document.querySelector('.navbar-status span:last-child');
+    if (statusText) statusText.textContent = t('nav_status_running');
+    // 語言選擇器
+    const langSelect = document.getElementById('langSelector');
+    if (langSelect) langSelect.value = currentLang;
+}
 
-                # 定價資訊
-                "pricing.monthly": "每月方案",
-                "pricing.twd": "NT$ 1,568/月",
-                "pricing.usd": "$49/月",
-                "pricing.annual": "年付方案",
-                "pricing.annual_discount": "年付享 8 折優惠",
-                "pricing.twd_annual": "NT$ 12,600/年",
-                "pricing.usd_annual": "$392/年",
-
-                # 支付資訊
-                "payment.usdt": "USDT 加密貨幣支付",
-                "payment.wallet": "錢包地址",
-                "payment.bank": "銀行轉帳",
-                "payment.bank_name": "國泰世華銀行",
-                "payment.account": "帳號: 117-50-605328-0",
-
-                # 日誌
-                "log.analysis": "分析階段",
-                "log.strategy": "策略制定",
-                "log.execution": "執行階段",
-                "log.complete": "任務完成",
-                "log.cost": "Token 成本",
-
-                # 設定了
-                "settings.language": "語言設定",
-                "settings.api_key": "API Key",
-                "settings.theme": "主題",
-                "settings.dark": "深色模式",
-                "settings.light": "浅色模式",
-
-                # 側邊欄
-                "sidebar.title": "StorePilot AI 控制台",
-                "sidebar.workspace": "工作區",
-                "sidebar.user": "使用者",
-                "sidebar.help": "幫助",
-                "sidebar.docs": "文件",
-                "sidebar.support": "支援",
-                "sidebar.logout": "登出",
-
-                # 分析功能
-                "analyze.title": "逆向工程分析",
-                "analyze.target": "輸入目標 URL",
-                "analyze.placeholder": "https://example.com",
-                "analyze.result": "分析結果",
-                "analyze.tech_stack": "技術棧",
-                "analyze.api_endpoints": "API 端點",
-                "analyze.features": "功能列表",
-                "analyze.suggestions": "改進建議",
-
-                # 系統資訊
-                "system.name": "StorePilot AI",
-                "system.version": "版本 0.1.0",
-                "system.status": "系統狀態",
-                "system.health": "健康檢查",
-                "system.uptime": "運行時間",
-            },
-            "en": {
-                # Navigation
-                "navbar.title": "StorePilot AI",
-                "navbar.subtitle": "AI runs your store while you sleep",
-                "navbar.dashboard": "Dashboard",
-                "navbar.analyze": "Analysis",
-                "navbar.pricing": "Pricing",
-                "navbar.status": "Status",
-                "navbar.logs": "Logs",
-                "navbar.settings": "Settings",
-
-                # Hero Section
-                "hero.title": "Automate Your E-commerce Store",
-                "hero.subtitle": "AI Agents automatically perform market analysis, pricing, marketing, and lead generation while you sleep",
-                "hero.start": "Start Automation",
-                "hero.demo": "Watch Demo",
-
-                # Feature Cards
-                "feature.1.title": "Smart Market Analysis",
-                "feature.1.desc": "Automatically analyze market trends, competitor pricing, and consumer behavior",
-                "feature.2.title": "Dynamic Pricing Strategy",
-                "feature.2.desc": "Automatically adjust prices based on market data to maximize profit margins",
-                "feature.3.title": "Automated Marketing",
-                "feature.3.desc": "Generate and publish social media content, manage ad campaigns",
-                "feature.4.title": "Lead Generation",
-                "feature.4.desc": "Automatically identify potential customers and initiate personalized outreach",
-
-                # Buttons
-                "btn.run": "Start Workflow",
-                "btn.stop": "Stop",
-                "btn.analyze": "Start Analysis",
-                "btn.submit": "Submit",
-                "btn.reset": "Reset",
-                "btn.copy": "Copy",
-                "btn.start": "Start",
-                "btn.pause": "Pause",
-                "btn.resume": "Resume",
-
-                # Status
-                "status.idle": "Idle",
-                "status.running": "Running",
-                "status.paused": "Paused",
-                "status.completed": "Completed",
-                "status.error": "Error",
-
-                # Pricing
-                "pricing.monthly": "Monthly Plan",
-                "pricing.twd": "NT$ 1,568/month",
-                "pricing.usd": "$49/month",
-                "pricing.annual": "Annual Plan",
-                "pricing.annual_discount": "Get 20% off with annual billing",
-                "pricing.twd_annual": "NT$ 12,600/year",
-                "pricing.usd_annual": "$392/year",
-
-                # Payment
-                "payment.usdt": "USDT Crypto Payment",
-                "payment.wallet": "Wallet Address",
-                "payment.bank": "Bank Transfer",
-                "payment.bank_name": "Cathay United Bank",
-                "payment.account": "Account: 117-50-605328-0",
-
-                # Logs
-                "log.analysis": "Analysis Phase",
-                "log.strategy": "Strategy Phase",
-                "log.execution": "Execution Phase",
-                "log.complete": "Task Completed",
-                "log.cost": "Token Cost",
-
-                # Settings
-                "settings.language": "Language",
-                "settings.api_key": "API Key",
-                "settings.theme": "Theme",
-                "settings.dark": "Dark Mode",
-                "settings.light": "Light Mode",
-
-                # Sidebar
-                "sidebar.title": "StorePilot AI Console",
-                "sidebar.workspace": "Workspace",
-                "sidebar.user": "User",
-                "sidebar.help": "Help",
-                "sidebar.docs": "Docs",
-                "sidebar.support": "Support",
-                "sidebar.logout": "Logout",
-
-                # Analysis
-                "analyze.title": "Reverse Engineering Analysis",
-                "analyze.target": "Enter Target URL",
-                "analyze.placeholder": "https://example.com",
-                "analyze.result": "Analysis Result",
-                "analyze.tech_stack": "Tech Stack",
-                "analyze.api_endpoints": "API Endpoints",
-                "analyze.features": "Features",
-                "analyze.suggestions": "Suggestions",
-
-                # System
-                "system.name": "StorePilot AI",
-                "system.version": "Version 0.1.0",
-                "system.status": "System Status",
-                "system.health": "Health Check",
-                "system.uptime": "Uptime",
-            },
-            "id": {
-                # Navigasi
-                "navbar.title": "StorePilot AI",
-                "navbar.subtitle": "AI mengoperasikan toko Anda saat Anda tidur",
-                "navbar.dashboard": "Dasbor",
-                "navbar.analyze": "Analisis",
-                "navbar.pricing": "Harga",
-                "navbar.status": "Status",
-                "navbar.logs": "Catatan",
-                "navbar.settings": "Pengaturan",
-
-                # Hero Section
-                "hero.title": "Otomatisasi Toko E-commerce Anda",
-                "hero.subtitle": "AI Agents secara otomatis melakukan analisis pasar, penentuan harga, pemasaran, dan pengadaan pelanggan saat Anda tidur",
-                "hero.start": "Mulai Otomasi",
-                "hero.demo": "Lihat Demo",
-
-                # Feature Cards
-                "feature.1.title": "Analisis Pasar Cerdas",
-                "feature.1.desc": "Secara otomatis menganalisis tren pasar, harga pesaing, dan perilaku konsumen",
-                "feature.2.title": "Strategi Harga Dinamis",
-                "feature.2.desc": "Secara otomatis menyesuaikan harga berdasarkan data pasar untuk memaksimalkan margin keuntungan",
-                "feature.3.title": "Pemasaran Otomatis",
-                "feature.3.desc": "Menghasilkan dan memposting konten media sosial, mengelola kampanye iklan",
-                "feature.4.title": "Pengadaan Calon Pelanggan",
-                "feature.4.desc": "Secara otomatis mengidentifikasi calon pelanggan dan memulai outreach yang dipersonalisasi",
-
-                # Buttons
-                "btn.run": "Mulai Alur Kerja",
-                "btn.stop": "Berhenti",
-                "btn.analyze": "Mulai Analisis",
-                "btn.submit": "Kirim",
-                "btn.reset": "Reset",
-                "btn.copy": "Salin",
-                "btn.start": "Mulai",
-                "btn.pause": "Jeda",
-                "btn.resume": "Lanjutkan",
-
-                # Status
-                "status.idle": "Siaga",
-                "status.running": "Berjalan",
-                "status.paused": "Dijeda",
-                "status.completed": "Selesai",
-                "status.error": "Kesalahan",
-
-                # Pricing
-                "pricing.monthly": "Rencana Bulanan",
-                "pricing.twd": "NT$ 1,568/bulan",
-                "pricing.usd": "$49/bulan",
-                "pricing.annual": "Rencana Tahunan",
-                "pricing.annual_discount": "Dapatkan diskon 20% dengan tagihan tahunan",
-                "pricing.twd_annual": "NT$ 12,600/tahun",
-                "pricing.usd_annual": "$392/tahun",
-
-                # Payment
-                "payment.usdt": "Pembayaran Kripto USDT",
-                "payment.wallet": "Alamat Dompet",
-                "payment.bank": "Transfer Bank",
-                "payment.bank_name": "Bank Cathay United",
-                "payment.account": "Rekening: 117-50-605328-0",
-
-                # Logs
-                "log.analysis": "Fase Analisis",
-                "log.strategy": "Fase Strategi",
-                "log.execution": "Fase Eksekusi",
-                "log.complete": "Tugas Selesai",
-                "log.cost": "Biaya Token",
-
-                # Settings
-                "settings.language": "Bahasa",
-                "settings.api_key": "API Key",
-                "settings.theme": "Tema",
-                "settings.dark": "Mode Gelap",
-                "settings.light": "Mode Terang",
-
-                # Sidebar
-                "sidebar.title": "Konsol StorePilot AI",
-                "sidebar.workspace": "Ruang Kerja",
-                "sidebar.user": "Pengguna",
-                "sidebar.help": "Bantuan",
-                "sidebar.docs": "Dokumentasi",
-                "sidebar.support": "Dukungan",
-                "sidebar.logout": "Keluar",
-
-                # Analysis
-                "analyze.title": "Analisis Rekayasa Balik",
-                "analyze.target": "Masukkan URL Target",
-                "analyze.placeholder": "https://contoh.com",
-                "analyze.result": "Hasil Analisis",
-                "analyze.tech_stack": "Tumpukan Teknologi",
-                "analyze.api_endpoints": "Endpoint API",
-                "analyze.features": "Fitur",
-                "analyze.suggestions": "Saran",
-
-                # System
-                "system.name": "StorePilot AI",
-                "system.version": "Versi 0.1.0",
-                "system.status": "Status Sistem",
-                "system.health": "Pemeriksaan Kesehatan",
-                "system.uptime": "Waktu Aktif",
-            }
-        }
-
-    def get(self, key: str) -> str:
-        """Get translation for key in current language"""
-        return self.translations.get(self.current_lang, {}).get(key, key)
-
-    def set_language(self, lang: str):
-        """Set current language"""
-        if lang in self.translations:
-            self.current_lang = lang
-
-    def get_available_languages(self) -> list:
-        """Get list of available languages"""
-        return [
-            {"code": "zh-TW", "name": "繁體中文", "native": "繁體中文"},
-            {"code": "en", "name": "English", "native": "English"},
-            {"code": "id", "name": "Bahasa Indonesia", "native": "Bahasa Indonesia"},
-        ]
-
-
-# 全局實例
-i18n = I18n()
-
-
-def t(key: str) -> str:
-    """快捷函數：獲取翻譯"""
-    return i18n.get(key)
-
-
-def set_lang(lang: str):
-    """設定當前語言"""
-    i18n.set_language(lang)
+// 頁面載入完成後應用語言
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', applyLanguage);
+} else {
+    applyLanguage();
+}

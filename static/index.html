@@ -1404,7 +1404,13 @@
             <span>系統運行中</span>
         </div>
         <div class="navbar-actions">
-                        <button class="btn btn-primary" onclick="discoverIdeas()">💡 發現構想</button>
+            <select id="langSelector" onchange="setLanguage(this.value)" style="background:transparent;color:var(--gray-300);border:1px solid var(--gray-600);border-radius:6px;padding:0.375rem 0.5rem;font-size:0.875rem;cursor:pointer;">
+                <option value="zh-TW">🇹🇼 繁中</option>
+                <option value="en">🇺🇸 EN</option>
+                <option value="id">🇮🇩 ID</option>
+                <option value="zh-TW+id">🌐 雙語</option>
+            </select>
+            <button class="btn btn-primary" onclick="discoverIdeas()" data-i18n="nav_find_ideas">💡 發現構想</button>
         </div>
     </nav>
 
@@ -1504,52 +1510,66 @@
         <div class="control-panel">
             <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
                 <div class="form-group">
-                    <label class="form-label">你的身份標識</label>
+                    <label class="form-label" data-i18n="label_user_id">你的身份標識</label>
                     <input type="text" class="form-input" id="userId" placeholder="例如：zhang-san" value="demo-user">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">獲利模式</label>
+                    <label class="form-label" data-i18n="label_profit_mode">獲利模式</label>
                     <select class="form-input" id="profitMode">
-                        <option value="">自動推薦</option>
-                        <option value="e-commerce">🛒 電商自動化</option>
-                        <option value="content-marketing">📱 內容營銷</option>
-                        <option value="b2b-sales">💼 B2B 獲客開發</option>
-                        <option value="digital-products">📦 數位產品</option>
-                        <option value="data-analysis">📊 數據分析</option>
-                        <option value="task-automation">⚙️ 任務自動化</option>
+                        <option value="" data-i18n="profit_mode_auto">自動推薦</option>
+                        <option value="e-commerce" data-i18n="profit_mode_ecommerce">🛒 電商自動化</option>
+                        <option value="content-marketing" data-i18n="profit_mode_content">📱 內容營銷</option>
+                        <option value="b2b-sales" data-i18n="profit_mode_b2b">💼 B2B 獲客開發</option>
+                        <option value="digital-products" data-i18n="profit_mode_digital">📦 數位產品</option>
+                        <option value="data-analysis" data-i18n="profit_mode_data">📊 數據分析</option>
+                        <option value="task-automation" data-i18n="profit_mode_task">⚙️ 任務自動化</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">你的售價（新台幣 NT$）</label>
-                    <input type="number" class="form-input" id="sellPrice" placeholder="例如：1280">
-                    <p class="form-hint">不填則使用 AI 估算價格</p>
+                    <label class="form-label" data-i18n="label_currency">幣別</label>
+                    <select class="form-input" id="currencySelect">
+                        <option value="TWD" data-i18n="currency_twd">TWD 新台幣</option>
+                        <option value="USD" data-i18n="currency_usd">USD 美元</option>
+                        <option value="IDR" data-i18n="currency_idr">IDR 印尼盾</option>
+                    </select>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">預估月銷量（件）</label>
-                    <input type="number" class="form-input" id="monthlyVolume" placeholder="例如：50">
-                    <p class="form-hint">不填則預設 50 件</p>
+                    <label class="form-label" data-i18n="label_sell_price">你的售價</label>
+                    <input type="number" class="form-input" id="sellPrice" placeholder="例如：1280" data-i18n-placeholder="placeholder_sell_price">
+                    <p class="form-hint" data-i18n="hint_sell_price">不填則使用 AI 估算價格</p>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" data-i18n="label_monthly_volume">預估月銷量（件）</label>
+                    <input type="number" class="form-input" id="monthlyVolume" placeholder="例如：50" data-i18n-placeholder="placeholder_monthly_volume">
+                    <p class="form-hint" data-i18n="hint_monthly_volume">不填則預設 50 件</p>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" data-i18n="label_language">輸出語言</label>
+                    <select class="form-input" id="languageSelect">
+                        <option value="zh-TW" data-i18n="lang_zh_tw">繁體中文</option>
+                        <option value="en" data-i18n="lang_en">English</option>
+                        <option value="id" data-i18n="lang_id">Bahasa Indonesia</option>
+                        <option value="zh-TW+id" data-i18n="lang_bilingual">雙語（繁中 + 印尼文）</option>
+                    </select>
+                    <p class="form-hint" data-i18n="hint_language">所有生成內容（網站、文案、財務說明）將使用此語言</p>
                 </div>
                 <div class="form-group" style="grid-column:1/-1;">
-                    <label class="form-label">運行模式</label>
+                    <label class="form-label" data-i18n="label_run_mode">運行模式</label>
                     <select class="form-input" id="runMode">
-                        <option value="true">🧪 乾跑模式（測試）</option>
-                        <option value="false">⚡ 真實模式（生產）</option>
+                        <option value="true" data-i18n="run_mode_dry">🧪 乾跑模式（測試）</option>
+                        <option value="false" data-i18n="run_mode_live">⚡ 真實模式（生產）</option>
                     </select>
-                    <p class="form-hint">乾跑模式：生成草稿，不實際部署；真實模式：完整執行流程（需配置 Agnes API Key）</p>
+                    <p class="form-hint" data-i18n="hint_run_mode">乾跑模式：生成草稿，不實際部署；真實模式：完整執行流程（需配置 Agnes API Key）</p>
                 </div>
             </div>
             <div class="form-group">
-                <label class="form-label">商業構想描述</label>
-                <textarea class="form-input" id="businessIdea" placeholder="描述你想創立的業務，或點擊「發現構想」讓我們幫你推薦..."></textarea>
-                <p class="form-hint">💡 沒有想法？點擊導航欄的「💡 發現構想」按鈕</p>
+                <label class="form-label" data-i18n="label_business_idea">商業構想描述</label>
+                <textarea class="form-input" id="businessIdea" placeholder="描述你想創立的業務，或點擊「發現構想」讓我們幫你推薦..." data-i18n-placeholder="placeholder_business_idea"></textarea>
+                <p class="form-hint" data-i18n="hint_business_idea">💡 沒有想法？點擊導航欄的「💡 發現構想」按鈕</p>
             </div>
             <div style="display: flex; gap: 1rem;">
-                <button class="btn btn-primary" id="runEngineBtn" onclick="runDryRun()" style="flex: 1;">
-                    🚀 啟動 ROE 商業引擎
-                </button>
-                <button class="btn btn-secondary" onclick="discoverIdeas()">
-                    💡 發現構想
-                </button>
+                <button class="btn btn-primary" id="runEngineBtn" onclick="runDryRun()" style="flex: 1;" data-i18n="btn_run_engine">🚀 啟動 ROE 商業引擎</button>
+                <button class="btn btn-secondary" onclick="discoverIdeas()" data-i18n="btn_discover_ideas">💡 發現構想</button>
             </div>
         </div>
     </section>
@@ -1893,6 +1913,77 @@
 
         // 啟動商業引擎 (async polling mode with immediate feedback)
         let currentJobId = '';
+        let currentLanguage = 'zh-TW';
+        let currentCurrency = 'TWD';
+
+        // 币种符号映射
+        const CURRENCY_SYMBOLS = {
+            'TWD': 'NT$',
+            'USD': '$',
+            'IDR': 'Rp'
+        };
+
+        // 初始化语言
+        function initLanguage() {
+            const saved = localStorage.getItem('spe-language') || 'zh-TW';
+            setLanguage(saved);
+            document.getElementById('languageSelect').value = saved;
+            document.getElementById('langSelector').value = saved;
+        }
+
+        // 应用语言
+        function applyLanguage() {
+            // 文字内容
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                el.textContent = t(key);
+            });
+            // HTML内容
+            document.querySelectorAll('[data-i18n-html]').forEach(el => {
+                const key = el.getAttribute('data-i18n-html');
+                el.innerHTML = t(key);
+            });
+            // Placeholder
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                el.placeholder = t(key);
+            });
+            // 页面标题
+            const titleEl = document.getElementById('pageTitle');
+            if (titleEl) titleEl.textContent = t('nav_title') || 'StorePilot AI';
+            // 导航列状态
+            const statusText = document.querySelector('.navbar-status span:last-child');
+            if (statusText) statusText.textContent = t('nav_status_running');
+            // 语言选择器
+            const langSelect = document.getElementById('langSelector');
+            if (langSelect) langSelect.value = currentLang;
+            // 更新Agent状态显示
+            ['planner', 'code', 'marketing', 'finance', 'idea'].forEach(agent => {
+                const el = document.getElementById(`agent-${agent}`);
+                if (el && el.classList.contains('idle')) {
+                    el.textContent = t('agent_status_idle');
+                }
+            });
+            // 更新Ticker
+            const tickerSpans = document.querySelectorAll('.ticker-content span');
+            if (tickerSpans.length >= 5) {
+                tickerSpans[0].textContent = t('ticker_service');
+                tickerSpans[1].textContent = t('ticker_new_ideas');
+                tickerSpans[2].textContent = t('ticker_response_time');
+                tickerSpans[3].textContent = t('ticker_fee');
+                tickerSpans[4].textContent = t('ticker_approval');
+            }
+            // 更新按钮文本
+            const runBtn = document.getElementById('runEngineBtn');
+            if (runBtn) runBtn.textContent = t('btn_run_engine');
+            const discoverBtn = document.querySelector('.btn-secondary');
+            if (discoverBtn) discoverBtn.textContent = t('btn_discover_ideas');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initLanguage();
+            loadPaymentInfo();
+        });
         async function runDryRun() {
             // 立即更新按鈕狀態 - 確保用戶看到反饋
             const btn = document.getElementById('runEngineBtn');
@@ -1930,8 +2021,8 @@
             if (sellPriceRaw && sellPriceRaw.trim() !== '') {
                 const parsedPrice = parseInt(sellPriceRaw, 10);
                 if (isNaN(parsedPrice) || parsedPrice <= 0) {
-                    updateProgress(0, '❌ 錯誤', '售價必須是正數！');
-                    if (btn) { btn.disabled = false; btn.textContent = '🚀 啟動 ROE 商業引擎'; }
+                    updateProgress(0, '❌ 錯誤', t('error_price_positive'));
+                    if (btn) { btn.disabled = false; btn.textContent = t('btn_run_engine'); }
                     return;
                 }
                 sellPrice = parsedPrice;
@@ -1940,12 +2031,16 @@
             if (monthlyVolumeRaw && monthlyVolumeRaw.trim() !== '') {
                 const parsedVolume = parseInt(monthlyVolumeRaw, 10);
                 if (isNaN(parsedVolume) || parsedVolume <= 0) {
-                    updateProgress(0, '❌ 錯誤', '月銷量必須是正數！');
-                    if (btn) { btn.disabled = false; btn.textContent = '🚀 啟動 ROE 商業引擎'; }
+                    updateProgress(0, '❌ 錯誤', t('error_volume_positive'));
+                    if (btn) { btn.disabled = false; btn.textContent = t('btn_run_engine'); }
                     return;
                 }
                 monthlyVolume = parsedVolume;
             }
+
+            // 讀取語言和幣別
+            const language = document.getElementById('languageSelect')?.value || 'zh-TW';
+            const currency = document.getElementById('currencySelect')?.value || 'TWD';
 
             // 驗證輸入
             if (!businessIdea) {
@@ -1985,7 +2080,9 @@
                         dry_run: isDryRun,
                         profit_mode: profitMode,
                         sell_price: sellPrice,
-                        monthly_volume: monthlyVolume
+                        monthly_volume: monthlyVolume,
+                        language: language,
+                        currency: currency
                     })
                 });
 
@@ -2217,15 +2314,24 @@
                 }
             }
 
-            // 行銷腳本：TikTok 格式
+            // 行銷腳本：TikTok 格式（支持雙語）
             if (data.content_queue && data.content_queue.length > 0) {
                 document.getElementById('contentQueue').innerHTML = data.content_queue.map((item, idx) => {
                     const title = item.title || `腳本 ${idx + 1}`;
-                    const hook = item.hook_3s || '';
-                    const cta = item.cta || '';
-                    const music = item.music_style || '';
-                    const hashtags = (item.hashtags || []).join(' ');
-                    const storyboard = item.storyboard || [];
+                    const isBilingual = currentLanguage === 'zh-TW+id';
+
+                    // 处理双语内容
+                    const zhContent = item['zh-TW'] || item;
+                    const idContent = item['id'] || {};
+
+                    const hook = zhContent.hook_3s || item.hook_3s || '';
+                    const hookId = idContent.hook_3s || '';
+                    const cta = zhContent.cta || item.cta || '';
+                    const ctaId = idContent.cta || '';
+                    const music = zhContent.music_style || item.music_style || '';
+                    const hashtags = (zhContent.hashtags || item.hashtags || []).join(' ');
+                    const storyboard = zhContent.storyboard || item.storyboard || [];
+                    const storyboardId = idContent.storyboard || [];
 
                     const storyboardHtml = storyboard.map(scene =>
                         `<div style="margin:4px 0;padding:6px;background:rgba(255,255,255,0.05);border-radius:4px;font-size:0.85rem;">
@@ -2234,16 +2340,50 @@
                         </div>`
                     ).join('');
 
-                    return `
-                        <div class="content-item" style="margin-bottom:1rem;">
+                    const storyboardHtmlId = storyboardId.map(scene =>
+                        `<div style="margin:4px 0;padding:6px;background:rgba(255,255,255,0.05);border-radius:4px;font-size:0.85rem;">
+                            <strong>Gambar：</strong>${scene.visual || ''}<br>
+                            <strong>Narasi：</strong>${scene.narration || ''} <span style="color:var(--gray-500)">(${scene.duration_sec || 0}s)</span>
+                        </div>`
+                    ).join('');
+
+                    let html = `
+                        <div class="content-item" style="margin-bottom:1rem; border:1px solid var(--gray-700); border-radius:8px; padding:1rem;">
                             <h4>📱 ${idx + 1}. ${title}</h4>
-                            ${hook ? `<div style="border-left:3px solid #FFD700;padding:6px 10px;margin:5px 0;background:rgba(255,215,0,0.1);"><strong>🪝 前3秒鉤子：</strong>${hook}</div>` : ''}
-                            ${storyboardHtml ? `<div style="border-left:3px solid #00B4D8;padding:6px 10px;margin:5px 0;"><strong>🎬 分鏡表：</strong>${storyboardHtml}</div>` : ''}
-                            ${cta ? `<div style="border-left:3px solid #10B981;padding:6px 10px;margin:5px 0;"><strong>📢 行動呼籲：</strong>${cta}</div>` : ''}
-                            ${music ? `<div style="font-size:0.8rem;color:var(--gray-400);margin:3px 0;">🎵 ${music}</div>` : ''}
-                            ${hashtags ? `<div style="font-size:0.8rem;color:var(--gray-400);">🏷️ ${hashtags}</div>` : ''}
-                        </div>
                     `;
+
+                    if (isBilingual) {
+                        // 双语模式：显示语言切换按钮和内容
+                        html += `
+                            <div style="display:flex;gap:0.5rem;margin-bottom:0.5rem;">
+                                <button onclick="toggleScriptLang(${idx},'zh')" class="btn btn-copy" style="font-size:0.75rem;padding:0.25rem 0.5rem;" id="btn-zh-${idx}">中文</button>
+                                <button onclick="toggleScriptLang(${idx},'id')" class="btn btn-copy" style="font-size:0.75rem;padding:0.25rem 0.5rem;" id="btn-id-${idx}">Indonesia</button>
+                            </div>
+                            <div id="script-content-${idx}">
+                        `;
+                        if (hook) html += `<div style="border-left:3px solid #FFD700;padding:6px 10px;margin:5px 0;background:rgba(255,215,0,0.1);"><strong>🪝 前3秒鉤子：</strong>${hook}</div>`;
+                        if (storyboardHtml) html += `<div style="border-left:3px solid #00B4D8;padding:6px 10px;margin:5px 0;"><strong>🎬 分鏡表：</strong>${storyboardHtml}</div>`;
+                        if (cta) html += `<div style="border-left:3px solid #10B981;padding:6px 10px;margin:5px 0;"><strong>📢 行動呼籲：</strong>${cta}</div>`;
+                        if (music) html += `<div style="font-size:0.8rem;color:var(--gray-400);margin:3px 0;">🎵 ${music}</div>`;
+                        if (hashtags) html += `<div style="font-size:0.8rem;color:var(--gray-400);">🏷️ ${hashtags}</div>`;
+                        html += `</div>`;
+                        html += `<div id="script-content-id-${idx}" style="display:none;">`;
+                        if (hookId) html += `<div style="border-left:3px solid #FFD700;padding:6px 10px;margin:5px 0;background:rgba(255,215,0,0.1);"><strong>🪝 3 Detik Hook：</strong>${hookId}</div>`;
+                        if (storyboardHtmlId) html += `<div style="border-left:3px solid #00B4D8;padding:6px 10px;margin:5px 0;"><strong>🎬 Storyboard：</strong>${storyboardHtmlId}</div>`;
+                        if (ctaId) html += `<div style="border-left:3px solid #10B981;padding:6px 10px;margin:5px 0;"><strong>📢 Call to Action：</strong>${ctaId}</div>`;
+                        if (music) html += `<div style="font-size:0.8rem;color:var(--gray-400);margin:3px 0;">🎵 ${music}</div>`;
+                        html += `</div>`;
+                    } else {
+                        // 单语模式
+                        if (hook) html += `<div style="border-left:3px solid #FFD700;padding:6px 10px;margin:5px 0;background:rgba(255,215,0,0.1);"><strong>🪝 前3秒鉤子：</strong>${hook}</div>`;
+                        if (storyboardHtml) html += `<div style="border-left:3px solid #00B4D8;padding:6px 10px;margin:5px 0;"><strong>🎬 分鏡表：</strong>${storyboardHtml}</div>`;
+                        if (cta) html += `<div style="border-left:3px solid #10B981;padding:6px 10px;margin:5px 0;"><strong>📢 行動呼籲：</strong>${cta}</div>`;
+                        if (music) html += `<div style="font-size:0.8rem;color:var(--gray-400);margin:3px 0;">🎵 ${music}</div>`;
+                        if (hashtags) html += `<div style="font-size:0.8rem;color:var(--gray-400);">🏷️ ${hashtags}</div>`;
+                    }
+
+                    html += `</div>`;
+                    return html;
                 }).join('');
                 document.getElementById('marketingCard').style.display = 'block';
             } else {
@@ -2273,38 +2413,44 @@
             const netIncome = monthlyRevenue - platformFee;
             const annualNetIncome = netIncome * 12;
 
-            const priceLabel = userInputPrice ? 'NT$ ' + priceMonthly.toLocaleString() : 'NT$ ' + priceMonthly.toLocaleString() + ' <span style="font-size:0.7rem;color:var(--warning)">(AI 估算)</span>';
-            const volumeLabel = userInputVolume ? monthlyVolume + ' 件' : '50 件 <span style="font-size:0.7rem;color:var(--warning)">(預設)</span>';
+            const currencySymbol = CURRENCY_SYMBOLS[currency] || 'NT$';
+            const isIDR = currency === 'IDR';
+            const priceLabel = userInputPrice
+                ? `${currencySymbol} ${priceMonthly.toLocaleString()}`
+                : `${currencySymbol} ${priceMonthly.toLocaleString()} <span style="font-size:0.7rem;color:var(--warning)">(${t('finance_ai_estimate')})</span>`;
+            const volumeLabel = userInputVolume
+                ? `${monthlyVolume} ${t('label_monthly_volume').replace('預估月銷量', '').replace('Est. Monthly Volume', '').replace('estimasi volume bulanan', '') || '件'}`
+                : `${monthlyVolume} ${t('finance_default')}`;
 
             document.getElementById('financeContent').innerHTML = `
                 <div class="finance-grid">
                     <div class="finance-item">
-                        <div class="finance-label">預估月銷量</div>
+                        <div class="finance-label">${t('finance_label_volume')}</div>
                         <div class="finance-value" style="color:var(--gold)">${volumeLabel}</div>
                     </div>
                     <div class="finance-item">
-                        <div class="finance-label">單價</div>
+                        <div class="finance-label">${t('finance_label_price')}</div>
                         <div class="finance-value" style="color:var(--gold)">${priceLabel}</div>
                     </div>
                     <div class="finance-item">
-                        <div class="finance-label">月營收</div>
-                        <div class="finance-value" style="color:var(--gold)">NT$ ${monthlyRevenue.toLocaleString()}</div>
+                        <div class="finance-label">${t('finance_label_revenue')}</div>
+                        <div class="finance-value" style="color:var(--gold)">${currencySymbol} ${isIDR ? monthlyRevenue.toLocaleString() : monthlyRevenue.toLocaleString()}</div>
                     </div>
                     <div class="finance-item">
-                        <div class="finance-label">平台服務費（${platformFeePercent}%）</div>
-                        <div class="finance-value" style="color:var(--error)">-NT$ ${platformFee.toFixed(2)}</div>
+                        <div class="finance-label">${t('finance_label_fee')}</div>
+                        <div class="finance-value" style="color:var(--error)">-${currencySymbol} ${isIDR ? platformFee.toLocaleString() : platformFee.toFixed(2)}</div>
                     </div>
                     <div class="finance-item">
-                        <div class="finance-label">你的淨收入（每月）</div>
-                        <div class="finance-value" style="color:var(--success)">NT$ ${netIncome.toFixed(2)}</div>
+                        <div class="finance-label">${t('finance_label_net')}</div>
+                        <div class="finance-value" style="color:var(--success)">${currencySymbol} ${isIDR ? netIncome.toLocaleString() : netIncome.toFixed(2)}</div>
                     </div>
                     <div class="finance-item">
-                        <div class="finance-label">年淨收入（估算）</div>
-                        <div class="finance-value" style="color:var(--success)">NT$ ${annualNetIncome.toFixed(2)}</div>
+                        <div class="finance-label">${t('finance_label_annual')}</div>
+                        <div class="finance-value" style="color:var(--success)">${currencySymbol} ${isIDR ? annualNetIncome.toLocaleString() : annualNetIncome.toFixed(2)}</div>
                     </div>
                 </div>
                 <p style="font-size:0.85rem;color:var(--gray-400);margin-top:1rem">
-                    💡 ${userInputPrice ? '以上計算基於您輸入的售價。' : '以上為 AI 估算價格，僅供參考。'} 實際收益取決於真實銷售量與平台費率。
+                    💡 ${userInputPrice ? t('finance_hint_user').replace('{currency}', currencySymbol) : t('finance_hint_ai')} ${t('finance_hint_end')}
                 </p>
             `;
             document.getElementById('financeCard').style.display = 'block';
@@ -2318,7 +2464,27 @@
             if (currentJobId) {
                 window.open(`${API_BASE}/preview/${currentJobId}`, '_blank');
             } else {
-                alert('暫無預覽內容');
+                alert(t('result_landing_empty'));
+            }
+        }
+
+        // 双语脚本切换
+        function toggleScriptLang(idx, lang) {
+            const zhEl = document.getElementById(`script-content-${idx}`);
+            const idEl = document.getElementById(`script-content-id-${idx}`);
+            const btnZh = document.getElementById(`btn-zh-${idx}`);
+            const btnId = document.getElementById(`btn-id-${idx}`);
+            if (!zhEl || !idEl) return;
+            if (lang === 'zh') {
+                zhEl.style.display = 'block';
+                idEl.style.display = 'none';
+                if (btnZh) btnZh.style.opacity = '1';
+                if (btnId) btnId.style.opacity = '0.5';
+            } else {
+                zhEl.style.display = 'none';
+                idEl.style.display = 'block';
+                if (btnZh) btnZh.style.opacity = '0.5';
+                if (btnId) btnId.style.opacity = '1';
             }
         }
 
@@ -2350,10 +2516,30 @@
 
         // 頁面載入完成
         document.addEventListener('DOMContentLoaded', () => {
+            initLanguage();
             addLog('system', 'success', 'StorePilot AI 前端已載入');
             addLog('system', 'success', 'API 端點: http://localhost:8000');
             addLog('system', 'success', '提示：點擊「發現構想」開始');
             checkServerConnection();
+
+            // 監聽語言選擇器變化
+            const langSelect = document.getElementById('languageSelect');
+            if (langSelect) {
+                langSelect.value = currentLanguage;
+                langSelect.addEventListener('change', (e) => {
+                    currentLanguage = e.target.value;
+                    localStorage.setItem('spe-language', currentLanguage);
+                });
+            }
+
+            // 監聽幣別選擇器變化
+            const currencySelect = document.getElementById('currencySelect');
+            if (currencySelect) {
+                currencySelect.value = currentCurrency;
+                currencySelect.addEventListener('change', (e) => {
+                    currentCurrency = e.target.value;
+                });
+            }
         });
 
         // 檢查伺服器連線狀態

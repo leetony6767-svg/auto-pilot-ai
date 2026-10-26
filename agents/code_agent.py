@@ -113,7 +113,31 @@ class CodeAgent(BaseAgent):
         plan = self.plan
         sell_price = self.state.get("sell_price") or plan.get("price_twd_monthly", 1280)
         product_name = plan.get("product_name", "產品名稱")
-        price_str = f"NT$ {sell_price}"
+        currency = self.state.get("currency", "TWD")
+        lang = self.state.get("language", "zh-TW")
+        is_bilingual = lang == "zh-TW+id"
+        currency_symbol = {"TWD": "NT$", "USD": "$", "IDR": "Rp"}.get(currency, "NT$")
+        price_str = f"{currency_symbol} {sell_price}"
+
+        lang_instruction = {
+            "zh-TW": "全部使用繁體中文（台灣用語），絕對不得使用簡體字",
+            "en": "All content must be in English (US)",
+            "id": "Semua konten harus dalam Bahasa Indonesia yang natural dan sehari-hari",
+            "zh-TW+id": "全部使用繁體中文（台灣用語），絕對不得使用簡體字。雙語模式下需包含 id 區塊",
+        }.get(lang, lang_instruction["zh-TW"])
+
+        bilingual_instruction = ""
+        if is_bilingual:
+            bilingual_instruction = """
+【雙語模式特殊規範】
+- 頁面需包含語言切換按鈕（中文 / Indonesia），預設顯示中文
+- 所有文字內容都必須有兩個版本：繁體中文和 Bahasa Indonesia
+- 價格、品牌名稱、公司名稱在兩種語言中必須完全一致，不可翻譯
+- 未填寫的聯絡資料：中文寫「待店家填寫」，印尼文寫「Akan diisi oleh toko」
+- 使用 data-lang="zh-TW" 和 data-lang="id" 屬性標記不同語言的內容
+- 切換語言時只用前端 JavaScript 切換 visibility，不重新請求 AI
+- 印尼文要用日常、自然的口語，像在台灣生活的印尼人會看懂的說法，不要逐字硬翻
+"""
 
         return f"""
 產品名稱：{product_name}
@@ -122,19 +146,21 @@ class CodeAgent(BaseAgent):
 核心功能：{', '.join(plan.get('core_features', ['功能 A', '功能 B', '功能 C']))}
 品牌色調：{plan.get('brand_colors', '藍色系')}
 用戶設定售價：{price_str}
+幣別：{currency}
 
 請生成一個完整的、響應式的 HTML Landing Page（單檔案，包含所有 CSS 和 JS），嚴格遵守以下規範：
 
 【硬性規定】
-1. 全部使用繁體中文（台灣用語），絕對不得使用簡體字
+1. {lang_instruction}
 2. 商品價格必須使用 {price_str}，不得編造其他價格
 3. 頁面標題和Logo必須使用「{product_name}」，與商業藍圖完全一致
-4. 禁止編造聯絡資訊：地址、電話、Email、營業時間一律寫「待填寫」或「請聯繫客服」
+4. 禁止編造聯絡資訊：地址、電話、Email、營業時間一律寫「待填寫」（英文：To be filled by the store，印尼文：Akan diisi oleh toko）
 5. 禁止編造顧客見證、評價、銷量數據
 6. 社群按鈕如有網址才顯示，沒有就隱藏
 7. 不使用外部圖片連結，用 CSS 漸層、SVG 或 emoji 做視覺
 8. 全部使用內嵌 CSS，單一 HTML 檔案可獨立運作
 
+{bilingual_instruction}
 【設計要求】
 - 手機優先（Mobile First）響應式設計
 - 首屏：大標題、一句吸引人的副標、明確的購買按鈕
