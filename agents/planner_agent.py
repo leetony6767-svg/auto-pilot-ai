@@ -28,7 +28,20 @@ class PlannerAgent(BaseAgent):
             from openai import AsyncOpenAI
 
             lang = self.state.get("language", "zh-TW")
+            currency = self.state.get("currency", "TWD")
+            sell_price = self.state.get("sell_price") or 1280
             lang_name = {"zh-TW": "繁體中文", "en": "English", "id": "Bahasa Indonesia", "zh-TW+id": "繁體中文+Bahasa Indonesia"}.get(lang, "繁體中文")
+
+            # 根據幣別設置價格提示
+            if currency == "TWD":
+                price_hint = f"建議月費為 NT$ {sell_price}"
+            elif currency == "USD":
+                price_hint = f"Suggested monthly price is ${sell_price}"
+            elif currency == "IDR":
+                price_hint = f"Harga bulanan yang disarankan adalah Rp {sell_price:,}"
+            else:
+                price_hint = f"Suggested monthly price: {currency} {sell_price}"
+
             prompt = f"""你是一位經驗豐富的創業顧問和產品經理。
             用戶想要創辦一家公司，想法是：
 
@@ -43,9 +56,9 @@ class PlannerAgent(BaseAgent):
               "core_features": ["核心功能1", "核心功能2", "核心功能3"],
               "value_proposition": "價值主張",
               "pricing": "定價策略",
-              "price_twd_monthly": 1280,
-              "price_usd_monthly": 42,
-              "currency": "TWD",
+              "price_twd_monthly": {sell_price},
+              "price_usd_monthly": {sell_price},
+              "currency": "{currency}",
               "brand_tone": "品牌調性",
               "brand_colors": "推薦配色方案",
               "go_to_market": "Go-to-Market 策略",
